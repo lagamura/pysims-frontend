@@ -4,22 +4,23 @@
       <!--not working centered-->
       <h3 class="pb-5">Results of your Simulation</h3>
     </div>
-    <div class="row mb-3">
-      <div class="col-md-4 themed-grid-col">
-        Here Posts component deactivated for debugging purposes
+    <div class="row mb-2">
+      <div>
+        <!-- No col class here because it is on component. THIS needs to be refactored and fixed properly for consistency-->
+        <DataChartComp />
       </div>
-      <div class="col-md-4 themed-grid-col">
-        <p>Line Chart to be implemented</p>
-        <LineChart />
-      </div>
+    </div>
+    <div class="row mb-2">
+      <h3>ChartExample Component</h3>
+      <ChartExample />
     </div>
   </div>
 </template>
 
 <script setup>
 import ResultsGraph from "../components/ResultsGraph.vue";
-import ResultsGraphVue from "../components/ResultsGraphVue.vue";
-import BarChart from "../components/BarChart.vue";
-import LineChart from "../components/LineChart.vue";
 import Posts from "../components/Posts.vue";
+import DataChartComp from "../components/DataChartComp.vue";
+import ChartExample from "../components/ChartExample.vue";
+import BarChart from "../components/BarChart.vue";
 </script>
