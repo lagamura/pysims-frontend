@@ -10,10 +10,6 @@
         <DataChartComp />
       </div>
     </div>
-    <div class="row mb-2">
-      <h3>ChartExample Component</h3>
-      <ChartExample />
-    </div>
   </div>
 </template>
 
