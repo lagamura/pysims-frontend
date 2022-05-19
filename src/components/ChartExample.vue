@@ -1,5 +1,5 @@
 <template>
-  <canvas id="myChart" width="400" height="400"></canvas>
+  <canvas id="myChart" width="300" height="300"></canvas>
 </template>
 <script setup>
 import { ref, reactive, onMounted, computed, toRef } from "vue";
@@ -7,11 +7,14 @@ import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
 
 const props = defineProps({
-  simResults: Object,
+  simResults: Object | String,
 }); //'title','data'
-const sim_results = toRef(props, "simResults");
-console.log(sim_results);
+//const sim_results = toRef(props, "simResults");
+// console.log("sim_results is:", sim_results);
+// console.log("sim_results cumulative case is", sim_results["cumulative cases"]);
 console.log(props.simResults);
+
+//console.log(props.simResults);
 
 // const datasetsArray = [
 //   {
@@ -30,16 +33,30 @@ console.log(props.simResults);
 //   });
 // }
 
+const Dataset = [];
+
+// Dataset.push({
+//   label: "Foo Label",
+//   backgroundColor: "rgb(255, 99, 132)",
+//   borderColor: "rgb(255, 99, 132)",
+//   data: props.simResults["cumulative cases"],
+// });
+
+for (var key of Object.keys(props.simResults)) {
+  if (key.toUpperCase() != key) {
+    // in order to avoid constant values
+    Dataset.push({
+      label: key,
+      backgroundColor: getRandomColor(),
+      borderColor: self.backgroundColor,
+      data: props.simResults[key],
+    });
+  }
+}
+
 const data = {
   //labels: props.labels,
-  datasets: [
-    {
-      label: "Foo Label",
-      backgroundColor: "rgb(255, 99, 132)",
-      borderColor: "rgb(255, 99, 132)",
-      data: sim_results["cumulative cases"],
-    },
-  ],
+  datasets: Dataset,
 };
 
 onMounted(() => {
@@ -48,7 +65,17 @@ onMounted(() => {
   const myChart = new Chart(ctx, {
     type: "line",
     data: data,
-    options: {},
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: "Simulation Results",
+        },
+        legend: {
+          position: "bottom",
+        },
+      },
+    },
   });
 });
 

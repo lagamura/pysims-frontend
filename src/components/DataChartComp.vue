@@ -1,60 +1,66 @@
 <template>
-  <div class="row mb-3">
-    <div class="col-md-4 themed-grid-col">
+  <div class="row mb-3 justify-content-center">
+    <div class="col">
+      <button @click="getJsonData">Fetch Data</button>
+
       <h3>Simulation Variables</h3>
       <li v-for="vars in simulVars">
         {{ vars }}
       </li>
     </div>
-    <div class="col-md-4 themed-grid-col">
-      <h3>Simulation Results</h3>
-      <button @click="getJsonData">Fetch Data</button>
+    <div class="col">
       <!-- Conditional Rendering of the component -->
-      <ChartExample v-if="state.flag" :sim-results="state.sim_results" />
+      <ChartExample v-if="flag" :sim-results="JsonObj" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive, onMounted, computed, watch } from "vue";
+import { onMounted, computed, watch, ref } from "vue";
 import ChartExample from "./ChartExample.vue";
 
-const state = reactive({
-  flag: false,
-  sim_results: [],
-});
+// const state = reactive({
+//   flag: false,
+//   sim_results: [],
+// });
 
-function getJsonData(event) {
+let flag = ref(false);
+let data = ref("");
+const JsonObj = ref(null);
+
+const url = "http://127.0.0.1:8000/get_simul_res_json/1";
+
+async function getJsonData(event) {
   // this needs to run asychronous
   if (event) {
     //console.log("button event triggered");
 
-    fetch("http://127.0.0.1:8000/get_simul_res_json/1")
-      .then((response) => response.json())
-      .then((data) => {
-        state.sim_results = JSON.parse(data);
-        console.log(state.sim_results);
-      });
-    state.flag = true;
+    try {
+      const response = await fetch(url);
+      data.value = await response.json();
+      JsonObj.value = JSON.parse(data.value);
+      flag.value = true;
+
+      //console.log("SimulVars are:", simulVars.value);
+    } catch (error) {
+      console.log("Error! Could not reach the API. " + error);
+    }
   }
 }
 
 // instead, use a getter:
-watch(
-  () => state.sim_results,
-  (sim_results) => {
-    console.log(`sim_results is: ${sim_results}`)
-  }
-)
+watch(data, (newData) => {
+  console.log(`newData are ${newData}`);
+});
 
 onMounted(() => {
   getJsonData();
 });
 
 const simulVars = computed(() => {
-  console.log("Computed property triggered");
-
-  return Object.keys(state.sim_results);
+  if (JsonObj.value) {
+    return Object.keys(JsonObj.value);
+  }
 });
 </script>
 
