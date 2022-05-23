@@ -2,53 +2,30 @@
   <canvas id="myChart" width="300" height="300"></canvas>
 </template>
 <script setup>
-import { ref, reactive, onMounted, computed, toRef } from "vue";
+import {onMounted} from "vue";
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
 
 const props = defineProps({
   simResults: Object | String,
-}); //'title','data'
-//const sim_results = toRef(props, "simResults");
-// console.log("sim_results is:", sim_results);
-// console.log("sim_results cumulative case is", sim_results["cumulative cases"]);
+});
+
 console.log(props.simResults);
 
-//console.log(props.simResults);
-
-// const datasetsArray = [
-//   {
-//     label: String(Object.keys(columns)[0]),
-//     backgroundColor: "rgb(255, 99, 132)",
-//     borderColor: "rgb(255, 99, 132)",
-//     data: columns["cumulative cases"],
-//   },
-// ];
-
-// for (const column in columns) {
-//   datasetsArray.push({
-//     label: String(column), // fix keys!
-//     backgroundColor: getRandomColor(),
-//     data: column[0],
-//   });
-// }
+/* Global configs
+Chart.defaults.global = { }
+*/
 
 const Dataset = [];
-
-// Dataset.push({
-//   label: "Foo Label",
-//   backgroundColor: "rgb(255, 99, 132)",
-//   borderColor: "rgb(255, 99, 132)",
-//   data: props.simResults["cumulative cases"],
-// });
 
 for (var key of Object.keys(props.simResults)) {
   if (key.toUpperCase() != key) {
     // in order to avoid constant values
+    const rgba = getRandomRgba()
     Dataset.push({
       label: key,
-      backgroundColor: getRandomColor(),
-      borderColor: self.backgroundColor,
+      backgroundColor: rgba[1],
+      borderColor: rgba[0],
       data: props.simResults[key],
     });
   }
@@ -59,25 +36,31 @@ const data = {
   datasets: Dataset,
 };
 
-onMounted(() => {
-  const ctx = document.getElementById("myChart").getContext("2d");
-
-  const myChart = new Chart(ctx, {
-    type: "line",
-    data: data,
-    options: {
-      plugins: {
-        title: {
-          display: true,
-          text: "Simulation Results",
-        },
-        legend: {
-          position: "bottom",
-        },
+const config = {
+  type: "line",
+  data: data,
+  options: {
+    pointRadius: 0,
+    pointHoverRadious: 7,
+    plugins: {
+      title: {
+        display: true,
+        text: "Simulation Results",
+      },
+      legend: {
+        position: "bottom",
       },
     },
-  });
+  },
+};
+
+onMounted(() => {
+  const myChart = new Chart(document.getElementById("myChart"), config);
+
 });
+
+// Chart.defaults.elements.line.borderColor = "rgba(0.3, 0.5, 0.4, 0.1)"; // Change settings globaly
+// Chart.defaults.elements.line.backgroundColor = "rgba(0.2, 0.2, 0.6, 0.1)"; // Change settings globaly
 
 function getRandomColor() {
   var letters = "0123456789ABCDEF".split("");
@@ -86,5 +69,13 @@ function getRandomColor() {
     color += letters[Math.floor(Math.random() * 16)];
   }
   return color;
+}
+
+function getRandomRgba() {
+  const r = parseInt(Math.random() * 255)
+  const g = parseInt(Math.random() * 255)
+  const b = parseInt(Math.random() * 255)
+  const a = 0.4
+  return([`rgb(${r},${g},${b})`,`rgba(${r},${g},${b},${a})`])
 }
 </script>

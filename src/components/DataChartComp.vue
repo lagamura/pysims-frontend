@@ -1,9 +1,16 @@
 <template>
-  <div class="row mb-3 justify-content-center">
+  <div class="row mb-3 justify-content-center ">
     <div class="col">
-      <button @click="getJsonData">Fetch Data</button>
-
-      <h3>Simulation Variables</h3>
+      <div class="row">
+        <div class="col">
+          <h3>Simulation Variables</h3>
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-dark" @click="getJsonData">
+            Fetch Data
+          </button>
+        </div>
+      </div>
       <li v-for="vars in simulVars">
         {{ vars }}
       </li>
