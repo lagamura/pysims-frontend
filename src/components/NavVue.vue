@@ -1,7 +1,10 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">PySims</a>
+      <a class="navbar-brand">
+        <!-- THIS should inherit style from above -->
+        <router-link class="nav-link" to="/">PySims</router-link>
+        </a>
       <button
         class="navbar-toggler"
         type="button"

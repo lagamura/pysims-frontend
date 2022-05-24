@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap"
 import router from "./router/router";
+import { createPinia } from 'pinia'
 import { createApp } from "vue";
 import App from "./App.vue";
 
@@ -18,6 +19,7 @@ app.component(
 
 
 app.use(router)
+app.use(createPinia())
 app.mount("#app")
 document.title = "PySims"
 
