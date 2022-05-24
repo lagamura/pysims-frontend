@@ -20,7 +20,7 @@
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
       <template v-if="models">
         <li v-for="model in models" :key="model.id">
-          <a class="dropdown-item" href="#" @click="setModelName(model)">
+          <a class="dropdown-item" href="#" @click="setModelName(model); $emit('renderVariables', model)">
             {{ model }}
           </a>
         </li>
@@ -31,6 +31,12 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import {useStore} from '../store/SimStore';
+
+const emit = defineEmits('renderVariables')
+
+const store = useStore()
+console.log(store.simulation)
 
 const url = "http://127.0.0.1:8000/get_available_models";
 
@@ -57,6 +63,7 @@ onMounted(() => {
 
 function setModelName(model) {
   state.value = model;
+  store.simulation.model_name = model // this is for pinia state management
   console.log(state.value);
 }
 </script>
