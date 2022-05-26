@@ -2,24 +2,47 @@
   <div class="container pt-5">
     <div class="row mb-3">
       <div class="col-md-4 themed-grid-col">
-        <ListAvailableModels />
+        <ListAvailableModels @render-variables="pushNewSimulView()" />
       </div>
       <div class="col-md-4 themed-grid-col">
         <h3>Simulations history</h3>
         <TableVue />
       </div>
     </div>
+    <div class="row mb-3">
+      <div class="col-md-4"></div>
+    </div>
   </div>
 </template>
 
-<script>
-import TableVue from "@/components/TableVue.vue";
-import axios from "axios";
+<script setup>
 import ListAvailableModels from "../components/ListAvailableModels.vue";
+import TableVue from "../components/TableVue.vue";
+import { useRouter, useRoute } from "vue-router";
 
+const router = useRouter();
+const route = useRoute();
+
+function pushNewSimulView() {
+  const redirectPath = route.query.redirect || '/new-simulation'
+  router.push(redirectPath)
+}
+
+// function pushNewSimulView(query) {
+//   router.push({
+//     name: "new-simulation",
+//     query: {
+//       ...route.query,
+//     },
+//   });
+// }
+</script>
+
+<!--
 export default {
   data() {
     return {
+      
       models: [],
     };
   },
@@ -39,4 +62,4 @@ export default {
     ListAvailableModels,
   },
 };
-</script>
+-->

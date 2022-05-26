@@ -20,7 +20,7 @@
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
       <template v-if="models">
         <li v-for="model in models" :key="model.id">
-          <a class="dropdown-item" href="#" @click="setModelName(model); $emit('renderVariables', model)">
+          <a class="dropdown-item"  @click="setModelName(model); $emit('renderVariables', model)">
             {{ model }}
           </a>
         </li>
@@ -33,7 +33,7 @@
 import { ref, onMounted } from "vue";
 import {useStore} from '../store/SimStore';
 
-const emit = defineEmits('renderVariables')
+const emit = defineEmits(['renderVariables'])
 
 const store = useStore()
 console.log(store.simulation)
@@ -43,7 +43,7 @@ const url = "http://127.0.0.1:8000/get_available_models";
 const models = ref([]); // with axios
 const state = ref("");
 
-async function getJsonData() {
+async function getModels() {
   // this needs to run asychronous
 
   //console.log("button event triggered");
@@ -58,12 +58,12 @@ async function getJsonData() {
 }
 
 onMounted(() => {
-  getJsonData();
+  getModels();
 });
 
 function setModelName(model) {
   state.value = model;
   store.simulation.model_name = model // this is for pinia state management
-  console.log(state.value);
+  //console.log(state.value);
 }
 </script>

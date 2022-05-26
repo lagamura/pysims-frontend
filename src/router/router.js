@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import NewSimulation from '@/views/NewSimulation.vue'
 import HistoryView from '@/views/HistoryView.vue'
-import GetSimulation from '@/views/GetSimulation.vue'
 
 const routes = [
     {
@@ -14,11 +13,6 @@ const routes = [
         path: '/new-simulation',
         name: 'NewSimulation',
         component: NewSimulation
-    },
-    {
-        path: '/get-simulation',
-        name: 'GetSimulation',
-        component: GetSimulation
     },
     {
         path: '/history',

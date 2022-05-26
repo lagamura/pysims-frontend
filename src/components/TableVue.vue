@@ -10,7 +10,7 @@
       </tr>
     </thead>
     <tbody>
-      <!-- Loop through the list get the each student data -->
+      <!-- Loop through the list get the each model data -->
       <tr v-for="item in models_history" :key="item">
         <td v-for="field in fields" :key="field">{{ item[field] }}</td>
       </tr>

@@ -4,7 +4,7 @@
       <a class="navbar-brand">
         <!-- THIS should inherit style from above -->
         <router-link class="nav-link" to="/">PySims</router-link>
-        </a>
+      </a>
       <button
         class="navbar-toggler"
         type="button"
@@ -21,16 +21,13 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/">Home</router-link>
           </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/get-simulation"
-              >Get Simulation</router-link
-            >
-          </li>
+
           <li class="nav-item">
             <router-link class="nav-link" to="/history"
               >Simulations History</router-link
             >
           </li>
+
           <li class="nav-item">
             <router-link class="nav-link" to="new-simulation"
               >New Simulation</router-link

@@ -1,5 +1,5 @@
 <template>
-  <canvas id="myChart" width="300" height="300"></canvas>
+  <canvas id="myChart" width="600" height="600"></canvas>
 </template>
 <script setup>
 import {onMounted} from "vue";

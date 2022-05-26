@@ -23,4 +23,3 @@ app.use(createPinia())
 app.mount("#app")
 document.title = "PySims"
 
-//import "bootstrap/dist/js/bootstrap.js";

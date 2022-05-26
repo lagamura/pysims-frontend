@@ -1,23 +1,33 @@
 <template>
-  <div class="row mb-3 justify-content-center ">
+  <div class="row mb-3 justify-content-center">
     <div class="col">
       <div class="row">
         <div class="col">
-          <h3>Simulation Variables</h3>
+          <h3>
+            Simulation Variables of Model:
+            <i>{{ store.simulation.model_name }}</i>
+          </h3>
+          <li v-for="vars in simulVars">
+            {{ vars }}
+          </li>
         </div>
         <div class="col">
           <button type="button" class="btn btn-dark" @click="getJsonData">
-            Fetch Data
+            Run Simulation
           </button>
         </div>
+        <div class="col">
+          <div class="col">
+            <!-- Conditional Rendering of the component -->
+            <ChartExample v-if="flag" :sim-results="JsonObj" />
+          </div>
+        </div>
       </div>
-      <li v-for="vars in simulVars">
-        {{ vars }}
-      </li>
     </div>
+  </div>
+  <div class="row mb-3">
     <div class="col">
-      <!-- Conditional Rendering of the component -->
-      <ChartExample v-if="flag" :sim-results="JsonObj" />
+      <BootstrapTable></BootstrapTable>
     </div>
   </div>
 </template>
@@ -25,17 +35,51 @@
 <script setup>
 import { onMounted, computed, watch, ref } from "vue";
 import ChartExample from "./ChartExample.vue";
+import { useStore } from "../store/SimStore";
+import BootstrapTable from "./BootstrapTable.vue";
 
-// const state = reactive({
-//   flag: false,
-//   sim_results: [],
-// });
+const store = useStore();
 
 let flag = ref(false);
 let data = ref("");
 const JsonObj = ref(null);
 
+const data_namespace = ref("");
+const namespace = ref(null);
+
 const url = "http://127.0.0.1:8000/get_simul_res_json/1";
+const url_namespace =
+  "http://127.0.0.1:8000/get_model_namespace/" + store.simulation.model_name;
+console.log(url_namespace);
+
+async function postSim() {
+  fetch("https://example.com/profile", {
+    method: "POST", // or 'PUT'
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+
+async function getSimVars(event) {
+  // this needs to run asychronous
+  try {
+    const response = await fetch(url_namespace);
+    namespace.value = await response.json();
+
+    console.log("namespace are:", namespace.value);
+  } catch (error) {
+    console.log("Error! Could not reach the API. " + error);
+  }
+}
 
 async function getJsonData(event) {
   // this needs to run asychronous
@@ -55,25 +99,21 @@ async function getJsonData(event) {
   }
 }
 
+async function runSimulation() {}
+
 // instead, use a getter:
 watch(data, (newData) => {
   console.log(`newData are ${newData}`);
 });
 
 onMounted(() => {
+  getSimVars();
   getJsonData();
 });
 
 const simulVars = computed(() => {
-  if (JsonObj.value) {
-    return Object.keys(JsonObj.value);
+  if (namespace.value) {
+    return Object.keys(namespace.value);
   }
 });
 </script>
-
-<!-- jsonify and object
-    .then((response) => response.json())
-    .then((data) => {
-      state.sim_results = JSON.parse(data);
-      console.log(state.sim_results);
--->
