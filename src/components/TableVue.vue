@@ -1,21 +1,11 @@
 <template>
-  <table class="table table-striped table-dark">
-    <thead>
-      <tr>
-        <th scope="col">id</th>
-        <th scope="col">Model name</th>
-        <th scope="col">Simulation Name</th>
-        <th scope="col">csv_path</th>
-        <th scope="col">Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Loop through the list get the each model data -->
-      <tr v-for="item in models_history" :key="item">
-        <td v-for="field in fields" :key="field">{{ item[field] }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <el-table :data="models_history" flexible = true style="width: 100%">
+    <el-table-column prop="id" label="id" width="180" />
+    <el-table-column prop="model_name" label="Model Name" width="180" />
+    <el-table-column prop="simulation_name" label="Simulation Name" width="180" />
+    <el-table-column prop="csv_path" label="Csv Path" width="180" />
+    <el-table-column prop="date" label="Date" />
+  </el-table>
 </template>
 
 <script setup>
@@ -29,6 +19,7 @@ onMounted(async () => {
     .get("http://127.0.0.1:8000/get_simuls")
     .then((response) => {
       models_history.value = response.data;
+      console.log(models_history)
     })
     .catch((error) => {
       alert(error);

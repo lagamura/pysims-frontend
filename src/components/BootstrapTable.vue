@@ -38,7 +38,7 @@ onMounted(async () => {
     .get(url)
     .then((response) => {
       model_doc.value = response.data;
-      console.log(`Bootstrap table response:${model_doc.value}`)
+      //console.log(`Bootstrap table response:${model_doc.value}`)
     })
     .catch((error) => {
       alert(error);

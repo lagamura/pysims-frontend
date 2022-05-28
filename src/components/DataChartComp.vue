@@ -1,34 +1,27 @@
 <template>
-  <div class="row mb-3 justify-content-center">
-    <div class="col">
-      <div class="row">
-        <div class="col">
-          <h3>
-            Simulation Variables of Model:
-            <i>{{ store.simulation.model_name }}</i>
-          </h3>
-          <li v-for="vars in simulVars">
-            {{ vars }}
-          </li>
-        </div>
-        <div class="col">
-          <button type="button" class="btn btn-dark" @click="getJsonData">
-            Run Simulation
-          </button>
-        </div>
-        <div class="col">
-          <div class="col">
-            <!-- Conditional Rendering of the component -->
-            <ChartExample v-if="flag" :sim-results="JsonObj" />
-          </div>
-        </div>
+  <div>
+    <h3>
+      Simulation Variables of Model:
+      <i>{{ store.simulation.model_name }}</i>
+    </h3>
+    <div v-for="vars in simulVars">
+      <div class="slider-demo-block">
+        <span class="demonstration">{{ vars }}</span>
+        <el-slider show-input />
       </div>
     </div>
   </div>
-  <div class="row mb-3">
-    <div class="col">
-      <BootstrapTable></BootstrapTable>
-    </div>
+  <div>
+    <button type="button" class="btn btn-dark" @click="getJsonData">
+      Run Simulation
+    </button>
+  </div>
+  <div>
+    <!-- Conditional Rendering of the component -->
+    <ChartExample v-if="flag" :sim-results="JsonObj" />
+  </div>
+  <div>
+    <BootstrapTable></BootstrapTable>
   </div>
 </template>
 
@@ -42,6 +35,7 @@ const store = useStore();
 
 let flag = ref(false);
 let data = ref("");
+const params = ref([]);
 const JsonObj = ref(null);
 
 const data_namespace = ref("");
@@ -70,14 +64,15 @@ async function postSim() {
 }
 
 async function getSimVars(event) {
-  // this needs to run asychronous
-  try {
-    const response = await fetch(url_namespace);
-    namespace.value = await response.json();
+  if (store.simulation.model_name) {
+    try {
+      const response = await fetch(url_namespace);
+      namespace.value = await response.json();
 
-    console.log("namespace are:", namespace.value);
-  } catch (error) {
-    console.log("Error! Could not reach the API. " + error);
+      console.log("namespace are:", namespace.value);
+    } catch (error) {
+      console.log("Error! Could not reach the API. " + error);
+    }
   }
 }
 
@@ -117,3 +112,28 @@ const simulVars = computed(() => {
   }
 });
 </script>
+
+
+<style scoped>
+.slider-demo-block {
+  display: flex;
+  align-items: center;
+}
+.slider-demo-block .el-slider {
+  margin-top: 0;
+  margin-left: 12px;
+}
+.slider-demo-block .demonstration {
+  font-size: 14px;
+  color: var(--el-text-color-secondary);
+  line-height: 44px;
+  flex: 1;
+  overflow: clip;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 0;
+}
+.slider-demo-block .demonstration + .el-slider {
+  flex: 0 0 70%;
+}
+</style>
