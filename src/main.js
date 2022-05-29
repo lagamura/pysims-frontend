@@ -1,5 +1,3 @@
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap"
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import router from "./router/router";

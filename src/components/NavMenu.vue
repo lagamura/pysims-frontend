@@ -24,7 +24,6 @@
     <el-menu-item index="/new-simulation">new-simulation</el-menu-item>
     <el-menu-item index="4">Orders</el-menu-item>
   </el-menu>
-  <router-view />
 </template>
 
 <script lang="ts" setup>

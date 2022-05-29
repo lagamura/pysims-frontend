@@ -1,7 +1,7 @@
 <template>
-  <div class="container pt-5 h-100 d-flex flex-column">
-    <div class="row mb-3 justify-content-center">
-      <div class="col-md-auto">
+  <div>
+    <div>
+      <div>
         <TableVue></TableVue>
       </div>
     </div>
