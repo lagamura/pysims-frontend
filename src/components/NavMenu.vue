@@ -4,7 +4,7 @@
     class="el-menu-demo"
     mode="horizontal"
     @select="handleSelect"
-    router= "true"
+    router="true"
   >
     <el-menu-item index="/" route="/">Home </el-menu-item>
     <el-sub-menu index="/new-simulation">
@@ -27,11 +27,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref } from 'vue'
 
-const activeIndex = ref("1");
-const activeIndex2 = ref("1");
+const activeIndex = ref('1')
+const activeIndex2 = ref('1')
 const handleSelect = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath);
-};
+  console.log(key, keyPath)
+}
 </script>
