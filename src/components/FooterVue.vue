@@ -1,6 +1,5 @@
-
+<!-- 
 <template>
-  <footer class="footer">
     <div class="footer-main">
       <h4>Links</h4>
       <a
@@ -46,5 +45,10 @@
         >SegmentFault</a
       >
     </div>
-  </footer>
+</template> -->
+
+<template>
+<h3>
+  This is a footer
+</h3>
 </template>

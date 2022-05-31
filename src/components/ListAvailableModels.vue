@@ -1,4 +1,3 @@
-
 <template>
   <el-dropdown>
     <span class="el-dropdown-link">
@@ -9,8 +8,8 @@
     </span>
     <template #dropdown v-if="models">
       <el-dropdown-menu>
-      <el-dropdown-item v-for="model in models" :key="model.id">
-          <a class="dropdown-item"  @click="setModelName(model); $emit('renderVariables', model)">
+        <el-dropdown-item v-for="model in models" :key="model.id">
+          <a class="dropdown-item" @click="setModelName(model); $emit('renderVariables', model)">
             {{ model }}
           </a>
         </el-dropdown-item>
@@ -20,40 +19,42 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useStore } from "../store/SimStore";
+import { ref, onMounted } from 'vue'
+import { useStore } from '../store/SimStore'
+import { useFetch } from '@vueuse/core'
 
-const emit = defineEmits(["renderVariables"]);
+const url = 'http://127.0.0.1:8000/get_available_models'
 
-const store = useStore();
-console.log(store.simulation);
+const { isFetching, error, models, execute } = await useFetch(url,{ immediate: false })
 
-const url = "http://127.0.0.1:8000/get_available_models";
+const emit = defineEmits(['renderVariables'])
 
-const models = ref([]); // with axios
-const state = ref("");
+const store = useStore()
+console.log(store.simulation)
 
-async function getModels() {
-  // this needs to run asychronous
+const state = ref('')
 
-  //console.log("button event triggered");
+// async function getModels() {
+//   // this needs to run asychronous
 
-  try {
-    const response = await fetch(url);
-    models.value = await response.json();
-    //console.log(data.value);
-  } catch (error) {
-    console.log("Error! Could not reach the API. " + error);
-  }
-}
+//   //console.log("button event triggered");
+
+//   try {
+//     const response = await fetch(url)
+//     models.value = await response.json()
+//     //console.log(data.value);
+//   } catch (error) {
+//     console.log('Error! Could not reach the API. ' + error)
+//   }
+// }
 
 onMounted(() => {
-  getModels();
-});
+  execute()
+})
 
 function setModelName(model) {
-  state.value = model;
-  store.simulation.model_name = model; // this is for pinia state management
+  state.value = model
+  store.simulation.model_name = model // this is for pinia state management
   //console.log(state.value);
 }
 </script>
