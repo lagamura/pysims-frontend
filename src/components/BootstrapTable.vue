@@ -1,5 +1,5 @@
 <template>
-      <h4 class="text-center">Model Documentation</h4>
+  <button class="text-center">Model Documentation</button>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -11,7 +11,6 @@
         <th scope="col">Type</th>
         <th scope="col">Subtype</th>
         <th scope="col">Comment</th>
-
       </tr>
     </thead>
     <tbody>
@@ -23,32 +22,33 @@
   </table>
 </template>
 
+
 <script setup>
-import axios from "axios";
-import { onMounted, computed,ref} from "vue";
-import { useStore } from "../store/SimStore";
+import axios from 'axios'
+import { onMounted, computed, ref } from 'vue'
+import { useStore } from '../store/SimStore'
 
-const store = useStore();
+const store = useStore()
 
-let model_doc = ref([]);
-const url = "http://127.0.0.1:8000/get_model_docs/"+ store.simulation.model_name
+let model_doc = ref([])
+const url =
+  'http://127.0.0.1:8000/get_model_docs/' + store.simulation.model_name
 
 onMounted(async () => {
   await axios
     .get(url)
     .then((response) => {
-      model_doc.value = response.data;
+      model_doc.value = response.data
       //console.log(`Bootstrap table response:${model_doc.value}`)
     })
     .catch((error) => {
-      alert(error);
-    });
-});
+      alert(error)
+    })
+})
 
 const fields = computed(() => {
   if (model_doc.value) {
-    return Object.keys(model_doc.value[0]);
+    return Object.keys(model_doc.value[0])
   }
-});
-
+})
 </script>

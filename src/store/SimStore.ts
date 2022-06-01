@@ -8,17 +8,17 @@ type JSONValue =
     | Array<JSONValue>;// maybe error
 
     interface Simulation {
-        id: number,
-        name: string,
-        model_name: string,
-        json_data:  JSONValue 
+        id: number | undefined,
+        name: string | undefined,
+        model_name: string | undefined,
+        json_data:  JSONValue | undefined
 }
 
 const simulation: Simulation = {
-    id : 0,
-    name : "no_name_yet",
-    model_name : "no_model_name_yet",
-    json_data : "no_json_data_yet"
+  id: undefined,
+  name: undefined,
+  model_name: undefined,
+  json_data: undefined
 }
     
 // export type SimulationType = {
