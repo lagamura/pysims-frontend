@@ -12,7 +12,7 @@
     </div>
   </div>
   <div>
-    <button type="button" class="btn btn-dark" @click="getJsonData">
+    <button type="button" class="btn" @click="getJsonData">
       Run Simulation
     </button>
   </div>
@@ -20,16 +20,13 @@
     <!-- Conditional Rendering of the component -->
     <ChartExample v-if="flag" :sim-results="JsonObj" />
   </div>
-  <div>
-    <BootstrapTable></BootstrapTable>
-  </div>
+
 </template>
 
 <script setup>
 import { onMounted, computed, watch, ref } from "vue";
 import ChartExample from "./ChartExample.vue";
 import { useStore } from "../store/SimStore";
-import BootstrapTable from "./BootstrapTable.vue";
 
 const store = useStore();
 

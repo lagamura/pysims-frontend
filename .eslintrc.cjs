@@ -6,7 +6,10 @@ module.exports = {
   extends: [
     "eslint:recommended",
     "plugin:vue/vue3-essential",
-
+    '@typescript-eslint'
+  ],
+  plugins: [
+    '@typescript-eslint',
   ],
   env: {
     "vue/setup-compiler-macros": true,

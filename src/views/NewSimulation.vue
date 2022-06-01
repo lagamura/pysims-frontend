@@ -19,6 +19,11 @@
       <div>
         <DataChartComp />
       </div>
+      <el-divider />
+      <suspense>
+        <DocTable/>
+        <template #fallback> ...Loading </template>
+      </suspense>
     </div>
   </template>
 </template>
@@ -26,6 +31,8 @@
 <script setup>
 import ListAvailableModels from '../components/ListAvailableModels.vue'
 import DataChartComp from '../components/DataChartComp.vue'
+import DocTable from "../components/DocTable.vue";
+
 import { useStore } from '../store/SimStore'
 import { useFetch } from '@vueuse/core'
 

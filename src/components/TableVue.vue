@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="models_history" :flexible="true" style="width: 100%">
+  <el-table :data="models_history" :flexible="true" max-height="300" :default-expand-all="true" style="width: 100%">
     <el-table-column prop="id" label="id" width="180" />
     <el-table-column prop="model_name" label="Model Name" width="180" />
     <el-table-column
@@ -23,28 +23,24 @@
 </template>
 
 <script setup>
-import axios from 'axios'
 import { onMounted, ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
-
-let models_history = ref([])
+import { useFetch } from '@vueuse/core'
 
 const router = useRouter()
 const route = useRoute()
 
+const url = 'http://127.0.0.1:8000/get_simuls'
 
-onMounted(async () => {
-  await axios
-    .get('http://127.0.0.1:8000/get_simuls')
-    .then((response) => {
-      models_history.value = response.data
-      console.log(models_history)
-    })
-    .catch((error) => {
-      alert(error)
-    })
-})
+const { isFetching, error, data } = await useFetch(url).get().json()
+console.log(typeof(data))
+console.log(`data is: ${data}`)
+console.log(`data value is: ${data.value}`)
+
+
+const models_history = ref(data)
+//console(`models_history = ${models_history}`)
 
 function pushNewSimulView() {
   const redirectPath = route.query.redirect || '/new-simulation'

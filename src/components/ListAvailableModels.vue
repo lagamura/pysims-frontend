@@ -35,8 +35,6 @@ console.log(store.simulation)
 
 const state = ref('')
 
-onMounted(() => {})
-
 function setModelName(model) {
   state.value = model
   store.simulation.model_name = model // this is for pinia state management

@@ -6,7 +6,7 @@
     @select="handleSelect"
     :router="true"
   >
-    <el-menu-item index="/" h="full" @click="toggleDark()">
+    <el-menu-item index="/" h="full">
       <button
         class="border-none w-full bg-transparent cursor-pointer"
         style="height: var(--el-menu-item-height)"
@@ -29,11 +29,20 @@
       </el-sub-menu>
     </el-sub-menu>
     <el-menu-item index="/new-simulation">new-simulation</el-menu-item>
+    <el-menu-item h="full" @click="toggleDark()">
+      <button
+        class="border-none w-full bg-transparent cursor-pointer"
+        style="height: var(--el-menu-item-height)"
+      >
+        <i inline-flex i="dark:el-moon el-sunny" />
+      </button>
+    </el-menu-item>
   </el-menu>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { toggleDark } from '../composables/dark'
 
 const activeIndex = ref('1')
 const activeIndex2 = ref('1')
