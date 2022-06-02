@@ -34,7 +34,9 @@
         class="border-none w-full bg-transparent cursor-pointer"
         style="height: var(--el-menu-item-height)"
       >
-        <i inline-flex i="dark:el-moon el-sunny" />
+        <i inline-flex>
+          <el-icon><Moon/></el-icon>
+        </i>
       </button>
     </el-menu-item>
   </el-menu>

@@ -1,11 +1,13 @@
 <template>
-  <div class="common-layout" style="display:grid; grid-template-rows: auto 1fr auto;">
+  <div class="common-layout">
     <el-container>
-      <NavMenu />
-      <el-main style="display: flex">
+      <el-header>
+        <NavMenu />
+      </el-header>
+      <el-main>
         <router-view></router-view>
       </el-main>
-      <el-footer class="flex"><FooterVue /></el-footer>
+      <el-footer><FooterVue /></el-footer>
     </el-container>
   </div>
 </template>
