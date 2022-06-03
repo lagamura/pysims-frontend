@@ -1,8 +1,6 @@
 <template>
   <div>
     <el-button class="btn" @click="getJsonData"> Run Simulation </el-button>
-  </div>
-  <div>
     <!-- Conditional Rendering of the component -->
     <ChartExample v-if="flag" :sim-results="JsonObj" />
   </div>
@@ -18,8 +16,6 @@ const store = useStore()
 let flag = ref(false)
 let data = ref('')
 const JsonObj = ref(null)
-
-
 
 const url = 'http://127.0.0.1:8000/get_simul_res_json/1'
 //console.log(url_namespace);
@@ -40,8 +36,6 @@ async function postSim() {
       console.error('Error:', error)
     })
 }
-
-
 
 async function getJsonData(event) {
   // this needs to run asychronous
@@ -65,14 +59,10 @@ async function runSimulation() {}
 
 // instead, use a getter:
 watch(data, (newData) => {
-  console.log(`newData are ${newData}`)
+  console.log(`newData are ${JSON.parse(newData)}`)
 })
 
 onMounted(() => {
   getJsonData()
 })
-
-
 </script>
-
-

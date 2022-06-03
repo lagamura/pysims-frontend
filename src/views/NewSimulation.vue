@@ -1,6 +1,6 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :span="12">
+  <el-row :gutter="40">
+    <el-col :span="8">
       <template v-if="!store.simulation.model_name">
         <h3>Step 1 Choose an Available Model</h3>
         <suspense>
@@ -14,7 +14,7 @@
     </el-col>
 
     <template v-if="store.simulation.model_name">
-      <el-col :span="12">
+      <el-col :span="16">
         <suspense>
           <DocTable />
           <template #fallback> ...Loading </template>
@@ -23,21 +23,24 @@
     </template>
   </el-row>
   <el-row>
-    <template v-if="store.simulation.model_name">
-      <div class="sim_execute">
-        <div class="model_name">
-          <h3>
-            Choosen model is:
-            <i style="color: chartreuse">{{ store.simulation.model_name }}</i>
-          </h3>
-          <el-button @click = "resetState">Choose Again</el-button>
+    <el-col>
+      <template v-if="store.simulation.model_name">
+        <div class="sim_execute">
+          <div class="model_name">
+            <h3>
+              Choosen model is:
+              <i style="color: chartreuse">{{ store.simulation.model_name }}</i>
+            </h3>
+            <el-button @click="resetState">Choose Again</el-button>
+          </div>
         </div>
-        <div>
-          <DataChartComp />
-        </div>
-        <el-divider />
-      </div>
-    </template>
+      </template>
+    </el-col>
+  </el-row>
+  <el-divider />
+
+  <el-row justify="center">
+    <DataChartComp />
   </el-row>
 </template>
 
@@ -55,5 +58,4 @@ const store = useStore()
 function resetState() {
   store.$reset()
 }
-
 </script>
