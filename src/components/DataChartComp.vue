@@ -2,13 +2,13 @@
   <div>
     <el-button class="btn" @click="getJsonData"> Run Simulation </el-button>
     <!-- Conditional Rendering of the component -->
-    <ChartExample v-if="flag" :sim-results="JsonObj" />
+    <ChartSimul v-if="flag" :sim-results="JsonObj" />
   </div>
 </template>
 
 <script setup>
 import { onMounted, computed, watch, ref } from 'vue'
-import ChartExample from './ChartExample.vue'
+import ChartSimul from './ChartSimul.vue'
 import { useStore } from '../store/SimStore'
 
 const store = useStore()
@@ -18,24 +18,7 @@ let data = ref('')
 const JsonObj = ref(null)
 
 const url = 'http://127.0.0.1:8000/get_simul_res_json/1'
-//console.log(url_namespace);
 
-async function postSim() {
-  fetch('https://example.com/profile', {
-    method: 'POST', // or 'PUT'
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log('Success:', data)
-    })
-    .catch((error) => {
-      console.error('Error:', error)
-    })
-}
 
 async function getJsonData(event) {
   // this needs to run asychronous

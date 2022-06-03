@@ -1,5 +1,14 @@
 <template>
-  <el-table :data="models_history" :flexible="true" max-height="300" :default-expand-all="true" style="width: 100%">
+  <el-table
+    :data="models_history"
+    :flexible="true"
+    max-height="300"
+    :default-expand-all="true"
+    style="width: 100%"
+    highlight-current-row
+    ref="singleTableRef"
+    @current-change="handleCurrentChange"
+  >
     <el-table-column prop="id" label="id" width="180" />
     <el-table-column prop="model_name" label="Model Name" width="180" />
     <el-table-column prop="simulation_name" label="Simulation Name" width="180" />
@@ -14,11 +23,56 @@
   <el-button class="mt-4" style="width: 100%" @click="pushNewSimulView()">Add Simulation</el-button>
 </template>
 
-<script setup>
-import { onMounted, ref, computed } from 'vue'
+<script lang="ts" setup>
+import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-
+import type { ElTable } from 'element-plus'
 import { useFetch } from '@vueuse/core'
+import { useStore } from '../store/SimStore'
+import { useGetJsonData } from '../composables/getjson'
+
+const store = useStore()
+
+interface SimRow {
+  id: number
+  model_name: string
+  simulation_name: string
+  csv_path: string
+  date: string
+}
+
+const currentRow = ref()
+const singleTableRef = ref<InstanceType<typeof ElTable>>()
+
+const setCurrent = (row?: SimRow) => {
+  singleTableRef.value!.setCurrentRow(row)
+}
+
+const handleCurrentChange = (val: SimRow | undefined) => {
+  currentRow.value = val
+  console.log(currentRow.value)
+  console.log(`id is: ${currentRow.value.id}`)
+  // State change//
+  store.$patch((state) => {
+    state.simulation.id = currentRow.value.id
+    state.simulation.name = currentRow.value.simulation_name
+    state.simulation.model_name = currentRow.value.model_name
+  })
+
+  useGetJsonData(<number>store.simulation.id).then((value) => {
+    const json_data: string = value
+    //console.log(`json_data is: ${json_data}`)
+    store.$patch((state) => {
+      state.simulation.json_data = json_data
+    })
+  })
+
+  //pushNewSimulView()
+}
+
+const deleteRow = (index: number, row: SimRow) => {
+  console.log(index, row)
+}
 
 const router = useRouter()
 const route = useRoute()
