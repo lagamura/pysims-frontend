@@ -29,9 +29,9 @@ const simulation: Simulation = {
 // the first argument is a unique id of the store across your application
 export const useStore = defineStore('Store', {
   // other options...
-  state: () => ({
-    simulation
-  }),
+  state: () => {
+    return { simulation }
+  },
   actions: {
       reset(){
         simulation.id= undefined,

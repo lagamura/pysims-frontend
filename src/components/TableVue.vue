@@ -61,7 +61,7 @@ const handleCurrentChange = (val: SimRow | undefined) => {
 
   useGetJsonData(<number>store.simulation.id).then((value) => {
     const json_data: string = value
-    //console.log(`json_data is: ${json_data}`)
+    console.log(`json_data is: ${json_data}`)
     store.$patch((state) => {
       state.simulation.json_data = json_data
     })

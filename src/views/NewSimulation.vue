@@ -44,7 +44,7 @@
   </el-row>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import ListAvailableModels from '../components/ListAvailableModels.vue'
 import DataChartComp from '../components/DataChartComp.vue'
 import DocTable from '../components/DocTable.vue'

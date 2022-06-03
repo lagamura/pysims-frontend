@@ -1,5 +1,5 @@
 <template>
-  <canvas id="myChart" width="600" height="600"></canvas>
+  <canvas id="myChart" width="400" height="400"></canvas>
 </template>
 <script setup>
 import {onMounted} from "vue";
@@ -40,7 +40,7 @@ const config = {
   type: "line",
   data: data,
   options: {
-    pointRadius: 0,
+    pointRadius: 2,
     pointHoverRadious: 7,
     plugins: {
       title: {
