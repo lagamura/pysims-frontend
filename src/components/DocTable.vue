@@ -27,7 +27,7 @@ const showFlag = ref(true)
 const model_doc = ref()
 
 const url = computed(() => {
-  return 'http://127.0.0.1:8000/get_model_docs/' + store.simulation.model_name
+  return 'http://127.0.0.1:8000/get_model_docs/' + store.cur_simul //WATCH OUT THIS MAYBE IS NOT REACTIVE
 })
 
 async function getModelDoc() {
@@ -56,14 +56,13 @@ store.$subscribe((mutation, state) => {
   localStorage.setItem('simStore', JSON.stringify(state))
   console.log(localStorage)
 
-  //---//
-  //const url = 'http://127.0.0.1:8000/get_model_docs/' + store.simulation.model_name
-  //console.log(`Url is: ${url.value}`)
 })
 
 onMounted(() => {
   console.log('On Mounted Triggered')
   console.log(url)
-  getModelDoc() // Fetch doc data
+  if (store.cur_simul) {
+    getModelDoc() // Fetch doc data
+  }
 })
 </script>

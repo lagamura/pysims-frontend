@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="40">
     <el-col :span="8">
-      <template v-if="!store.simulation.model_name">
+      <template v-if="simulations">
         <h3>Step 1 Choose an Available Model</h3>
         <suspense>
           <ListAvailableModels />
@@ -13,7 +13,7 @@
       </template>
     </el-col>
 
-    <template v-if="store.simulation.model_name">
+    <template v-if="simulations">
       <el-col :span="16">
         <suspense>
           <DocTable />
@@ -24,14 +24,14 @@
   </el-row>
   <el-row>
     <el-col>
-      <template v-if="store.simulation.model_name">
+      <template v-if="cur_simul">
         <div class="sim_execute">
           <div class="model_name">
             <h3>
               Choosen model is:
-              <i style="color: chartreuse">{{ store.simulation.model_name }}</i>
+              <i style="color: chartreuse">{{ simulations[cur_simul-1].json_data }}</i>
             </h3>
-            <el-button @click="resetState">Choose Again</el-button>
+            <el-button >Choose Again</el-button>
           </div>
         </div>
       </template>
@@ -52,10 +52,10 @@ import SimVars from '../components/SimVars.vue'
 
 import { useStore } from '../store/SimStore'
 import { useFetch } from '@vueuse/core'
+import { storeToRefs } from 'pinia'
 
 const store = useStore()
+const {simulations, cur_simul} = storeToRefs(store)
 
-function resetState() {
-  store.$reset()
-}
+
 </script>

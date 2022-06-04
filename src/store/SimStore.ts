@@ -1,3 +1,4 @@
+import { useInitState } from '@/composables/getjson'
 import { defineStore } from 'pinia'
 
 // type JSONValue =
@@ -7,18 +8,11 @@ import { defineStore } from 'pinia'
 //     | { [x: string]: JSONValue }
 //     | Array<JSONValue>;// maybe error
 
-interface Simulation {
-  id: number | undefined
-  name: string | undefined
-  model_name: string | undefined
-  json_data: string | undefined // type JSONValue disabled because of infinite loop
-}
-
-const simulation: Simulation = {
-  id: undefined,
-  name: undefined,
-  model_name: undefined,
-  json_data: undefined
+export type Simulation = {
+  id: number
+  name: string
+  model_name: string
+  json_data: string // type JSONValue disabled because of infinite loop
 }
 
 // export type SimulationType = {
@@ -27,17 +21,29 @@ const simulation: Simulation = {
 
 // useStore could be anything like useUser, useCart
 // the first argument is a unique id of the store across your application
-export const useStore = defineStore('Store', {
-  // other options...
-  state: () => {
-    return { simulation }
-  },
+export const useStore = defineStore({
+  id: 'Store',
+  state: () => ({
+    simulations: [] as Simulation[],
+    cur_simul: null
+  }),
+
   actions: {
-      reset(){
-        simulation.id= undefined,
-        simulation.name= undefined,
-        simulation.model_name= undefined,
-        simulation.json_data=undefined
-      }
+    addItem(simulation: Simulation) {
+      this.simulations.push(simulation)
+      console.log(`simulation ${simulation} added`)
+    },
+    removeItem(index: number) {
+      const i = this.simulations.findIndex((s) => s.id === index)
+      if (i > -1) this.simulations.splice(i, 1)
+    },
+    init() {
+      useInitState().then((data) => {
+        this.simulations = data.value
+      })
+    },
+    printSimulations() {
+      this.simulations
+    }
   }
 })

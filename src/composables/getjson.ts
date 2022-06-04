@@ -1,3 +1,5 @@
+import { useFetch } from "@vueuse/core"
+
 export async function useGetJsonData(id: number): Promise<string> {
   const url = 'http://127.0.0.1:8000/get_simul_res_json/' + id
 
@@ -19,6 +21,25 @@ export async function useGetJsonData(id: number): Promise<string> {
       )
     )
   }
+}
+
+export async function useInitState() {
+  const url = 'http://127.0.0.1:8000/get_simuls'
+  const { isFetching, error, data, onFetchResponse, onFetchError } = await useFetch(url)
+    .get()
+    .json()
+  console.log(data.value)
+  // model_doc.value = Object.values(data.value)
+  // for (var obj of Object.values(data.value)){
+  //   model_doc.push(obj)
+  // }
+
+  onFetchResponse((response) => {
+    console.log(`data Fetched! ${response.status}`)
+    //console.log(`data on Fetch Response ${model_doc.value}`)
+  })
+
+  return(data)
 }
 
 // async function postSim() {

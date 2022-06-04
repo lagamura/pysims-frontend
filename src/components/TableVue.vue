@@ -53,25 +53,12 @@ const handleCurrentChange = (val: SimRow | undefined) => {
   console.log(currentRow.value)
   console.log(`id is: ${currentRow.value.id}`)
   // State change//
-  store.$patch((state) => {
-    state.simulation.id = currentRow.value.id
-    state.simulation.name = currentRow.value.simulation_name
-    state.simulation.model_name = currentRow.value.model_name
-  })
-
-  useGetJsonData(<number>store.simulation.id).then((value) => {
-    const json_data: string = value
-    console.log(`json_data is: ${json_data}`)
-    store.$patch((state) => {
-      state.simulation.json_data = json_data
-    })
-  })
-
-  //pushNewSimulView()
+  store.cur_simul = currentRow.value.id
 }
 
-const deleteRow = (index: number, row: SimRow) => {
-  console.log(index, row)
+const deleteRow = (index: number) => {
+  console.log(index)
+  store.removeItem(index)
 }
 
 const router = useRouter()
@@ -79,16 +66,12 @@ const route = useRoute()
 
 const url = 'http://127.0.0.1:8000/get_simuls'
 
-const { isFetching, error, data } = await useFetch(url).get().json()
-//console.log(typeof(data))
-//console.log(`data is: ${data}`)
-//console.log(`data value is: ${data.value}`)
+const { isFetching, error, data} = await useFetch(url).get().json()
 
 const models_history = ref(data)
-//console(`models_history = ${models_history}`)
 
 function pushNewSimulView() {
-  const redirectPath = route.query.redirect || '/new-simulation'
+  const redirectPath = '/new-simulation' // route.query.redirect || 'new-simulation' throws ts problem
   router.push(redirectPath)
 }
 

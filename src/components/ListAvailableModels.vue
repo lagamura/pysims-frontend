@@ -31,15 +31,11 @@ const { isFetching, error, data } = await useFetch(url).get().json()
 const emit = defineEmits(['renderVariables'])
 
 const store = useStore()
-//console.log(store.simulation)
 
-const state = ref('')
 
 function setModelName(model) {
   state.value = model
-  store.simulation.model_name = model // this is for pinia state management
+  store.model_name = model // this is for pinia state management
   emit('renderVariables', model)
-  //console.log(state.value)
-  //console.log(store.simulation)
 }
 </script>

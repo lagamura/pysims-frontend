@@ -14,7 +14,7 @@ import { useStore } from '../store/SimStore'
 
 const store = useStore()
 
-const url_namespace = 'http://127.0.0.1:8000/get_model_namespace/' + store.simulation.model_name
+const url_namespace = 'http://127.0.0.1:8000/get_model_namespace/' +
 
 const params = ref([])
 
@@ -22,7 +22,7 @@ const data_namespace = ref('')
 const namespace = ref(null)
 
 async function getSimVars(event) {
-  if (store.simulation.model_name) {
+  if (store.simulations) {
     try {
       const response = await fetch(url_namespace)
       namespace.value = await response.json()

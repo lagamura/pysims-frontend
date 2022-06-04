@@ -2,7 +2,7 @@
   <canvas id="myChart" width="400" height="400"></canvas>
 </template>
 <script setup>
-import {onMounted} from "vue";
+import {onMounted, watch} from "vue";
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
 
@@ -10,8 +10,9 @@ const props = defineProps({
   simResults: Object | String,
 });
 
-//console.log(props.simResults);
-
+watch(props.simResults, (newValue) => {
+  console.log(`Sim Results has changed - new dataset is: ${newValue}`)
+})
 /* Global configs
 Chart.defaults.global = { }
 */
