@@ -1,11 +1,12 @@
 <template>
   <h3>Simulation Variables of Model:</h3>
-  <div v-for="vars in simulVars">
+  <div v-for="(vars, index) in simulVars">
     <div class="slider-demo-block">
       <span class="demonstration">{{ vars }}</span>
-      <el-slider show-input />
+      <el-slider v-model="params[index]" show-input />
     </div>
   </div>
+  <div>{{params}}</div>
 </template>
 
 <script setup>
@@ -16,8 +17,8 @@ const props = defineProps({
 })
 
 const url_namespace = ref('')
-
 const namespace = ref(null)
+const params = ref([])
 
 async function getSimVars() {
   console.log('Fetching getSimVars...')
@@ -37,6 +38,13 @@ const simulVars = computed(() => {
     return Object.keys(namespace.value)
   }
 })
+
+const py_namespace = computed(() => {
+  if (namespace.value) {
+    return Object.values(namespace.value)
+  }
+})
+
 // watch props https://stackoverflow.com/questions/59125857/how-to-watch-props-change-with-vue-composition-api-vue-3
 watch(
   () => props.modelName,

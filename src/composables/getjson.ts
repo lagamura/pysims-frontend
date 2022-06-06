@@ -42,19 +42,19 @@ export async function useInitState() {
   return(data)
 }
 
-// async function postSim() {
-//   fetch('https://example.com/profile', {
-//     method: 'POST', // or 'PUT'
-//     headers: {
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify(data)
-//   })
-//     .then((response) => response.json())
-//     .then((data) => {
-//       console.log('Success:', data)
-//     })
-//     .catch((error) => {
-//       console.error('Error:', error)
-//     })
-// }
+async function postSim(model_name: string, data:object) {
+  fetch('http://127.0.0.1:8000/add_new_simulation/' + model_name, {
+    method: 'POST', // or 'PUT'
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('Success:', data)
+    })
+    .catch((error) => {
+      console.error('Error:', error)
+    })
+}
