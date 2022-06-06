@@ -8,7 +8,11 @@
   </el-row>
   <el-row justify="center">
     <el-col :span="10">
-      <ChartSimul v-if="cur_simul" :sim-results="simulations[cur_simul - 1].json_data" />
+      <ChartSimul
+        v-if="cur_simul"
+        :sim-results="simulations[cur_simul - 1].json_data"
+        :cur-simul-counter="cur_simul"
+      />
     </el-col>
   </el-row>
 </template>
@@ -22,13 +26,13 @@ import { storeToRefs } from 'pinia'
 import { watch } from 'vue'
 
 const store = useStore()
-store.init()
 
 const { simulations, cur_simul } = storeToRefs(store)
 console.log(`State Simulations:${simulations}`)
+{{simulations}}
 
 watch(cur_simul, (newvalue) => {
   console.log(`cur_simul has changed ${newvalue}`)
-  //console.log(store.cur_simul)
+  console.log(simulations.value[cur_simul.value - 1].json_data)
 })
 </script>

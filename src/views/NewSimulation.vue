@@ -1,22 +1,23 @@
 <template>
   <el-row :gutter="40">
     <el-col :span="8">
-      <template v-if="simulations">
+      <template v-if="true">
         <h3>Step 1 Choose an Available Model</h3>
         <suspense>
-          <ListAvailableModels />
+          <ListAvailableModels @model-name="(model: string) => modelName = model "/>
           <template #fallback> ...Loading </template>
         </suspense>
-      </template>
-      <template v-else>
-        <SimVars />
+        <suspense>
+          <SimVars :model-name="modelName" />
+          <template #fallback> ...Loading SimVars </template>
+        </suspense>
       </template>
     </el-col>
 
     <template v-if="simulations">
       <el-col :span="16">
         <suspense>
-          <DocTable />
+          <DocTable :model-name = "modelName"/>
           <template #fallback> ...Loading </template>
         </suspense>
       </el-col>
@@ -29,9 +30,9 @@
           <div class="model_name">
             <h3>
               Choosen model is:
-              <i style="color: chartreuse">{{ simulations[cur_simul-1].json_data }}</i>
+              <i style="color: chartreuse">{{ simulations[cur_simul - 1].model_name }}</i>
             </h3>
-            <el-button >Choose Again</el-button>
+            <el-button>Choose Again</el-button>
           </div>
         </div>
       </template>
@@ -51,11 +52,16 @@ import DocTable from '../components/DocTable.vue'
 import SimVars from '../components/SimVars.vue'
 
 import { useStore } from '../store/SimStore'
-import { useFetch } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
+import { watch, ref} from 'vue'
 
 const store = useStore()
-const {simulations, cur_simul} = storeToRefs(store)
+const { simulations, cur_simul } = storeToRefs(store)
 
+const modelName = ref('')
+
+watch(modelName, (newvalue) => {
+  console.log(`modelName in NewSimulation component has changed: ${newvalue}`)
+  })
 
 </script>

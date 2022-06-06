@@ -9,28 +9,26 @@
 </template>
 
 <script setup>
-import { onMounted, computed, watch, ref } from 'vue'
-import { useStore } from '../store/SimStore'
+import {computed, watch, ref} from 'vue'
 
-const store = useStore()
+const props = defineProps({
+  modelName: String
+})
 
-const url_namespace = 'http://127.0.0.1:8000/get_model_namespace/' +
+const url_namespace = ref('')
 
-const params = ref([])
-
-const data_namespace = ref('')
 const namespace = ref(null)
 
-async function getSimVars(event) {
-  if (store.simulations) {
-    try {
-      const response = await fetch(url_namespace)
-      namespace.value = await response.json()
+async function getSimVars() {
+  console.log('Fetching getSimVars...')
+  console.log(url_namespace.value)
+  try {
+    const response = await fetch(url_namespace.value)
+    namespace.value = await response.json()
 
-      //console.log("namespace are:", namespace.value);
-    } catch (error) {
-      console.log('Error! Could not reach the API. ' + error)
-    }
+    //console.log("namespace are:", namespace.value);
+  } catch (error) {
+    console.log('Error! Could not reach the API. ' + error)
   }
 }
 
@@ -39,11 +37,22 @@ const simulVars = computed(() => {
     return Object.keys(namespace.value)
   }
 })
+// watch props https://stackoverflow.com/questions/59125857/how-to-watch-props-change-with-vue-composition-api-vue-3
+watch(
+  () => props.modelName,
+  (before, after) => {
+    console.log('url_namespace has changed')
+    url_namespace.value = 'http://127.0.0.1:8000/get_model_namespace/' + props.modelName
+    getSimVars()
+  }
+)
 
-onMounted(() => {
-  getSimVars()
-})
+
 </script>
+
+
+
+
 <style scoped>
 .slider-demo-block {
   display: flex;

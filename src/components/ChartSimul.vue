@@ -1,17 +1,28 @@
 <template>
-  <canvas id="myChart" width="400" height="400"></canvas>
+  <canvas id="myChart" width="500" height="500"></canvas>
 </template>
 <script setup>
-import {onMounted, watch} from "vue";
+import {ref, onMounted, watch, toRef} from "vue";
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
 
 const props = defineProps({
   simResults: Object | String,
+  curSimulCounter: Number
 });
 
-watch(props.simResults, (newValue) => {
+const curSimulRef = toRef(props, 'curSimulCounter')
+const SimResultsRef = toRef(props, 'SimResults')
+
+console.log(`Chart Rendering...`)
+
+watch(SimResultsRef, (newValue) => {
   console.log(`Sim Results has changed - new dataset is: ${newValue}`)
+})
+
+watch(curSimulRef, (newvalue) => {
+  console.log(`curSimulCounter prop has changed ${newvalue}`)
+  //console.log(store.cur_simul)
 })
 /* Global configs
 Chart.defaults.global = { }

@@ -25,7 +25,8 @@ export const useStore = defineStore({
   id: 'Store',
   state: () => ({
     simulations: [] as Simulation[],
-    cur_simul: null
+    cur_simul: 0, // this should be fixed
+    simul: {} as Simulation
   }),
 
   actions: {

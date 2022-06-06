@@ -15,4 +15,9 @@
 <script setup>
 import NavMenu from './components/NavMenu.vue'
 import FooterVue from './components/FooterVue.vue'
+import { useStore } from './store/SimStore'
+
+const store = useStore()
+store.init() //init of the state
+
 </script>
