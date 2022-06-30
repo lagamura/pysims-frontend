@@ -2,7 +2,7 @@
   <el-row :gutter="40">
     <el-col :span="8">
       <template v-if="true">
-        <h3>Step 1 Choose an Available Model</h3>
+        <h3>Step 1 - Choose an Available Model</h3>
         <suspense>
           <ListAvailableModels @model-name="(model: string) => modelName = model "/>
           <template #fallback> ...Loading </template>
@@ -11,6 +11,8 @@
           <SimVars :model-name="modelName" />
           <template #fallback> ...Loading SimVars </template>
         </suspense>
+        <h3>Step 3 - Choose a simulation name</h3>
+        <el-input v-model="simulation_name" placeholder="Your Simulation Name" />
       </template>
     </el-col>
 
@@ -59,6 +61,7 @@ const store = useStore()
 const { simulations, cur_simul } = storeToRefs(store)
 
 const modelName = ref('')
+const simulation_name = ref('')
 
 watch(modelName, (newvalue) => {
   console.log(`modelName in NewSimulation component has changed: ${newvalue}`)

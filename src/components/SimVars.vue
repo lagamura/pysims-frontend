@@ -1,16 +1,15 @@
 <template>
-  <h3>Simulation Variables of Model:</h3>
+  <h3>Step 2 - Choose Simulation Variables of Model:</h3>
   <div v-for="(vars, index) in simulVars">
     <div class="slider-demo-block">
       <span class="demonstration">{{ vars }}</span>
       <el-slider v-model="params[index]" show-input />
     </div>
   </div>
-  <div>{{params}}</div>
 </template>
 
 <script setup>
-import {computed, watch, ref} from 'vue'
+import { computed, watch, ref } from 'vue'
 
 const props = defineProps({
   modelName: String
@@ -19,6 +18,12 @@ const props = defineProps({
 const url_namespace = ref('')
 const namespace = ref(null)
 const params = ref([])
+
+/* input */
+/* Computed Properties
+// py_namespace
+// simVars
+*/
 
 async function getSimVars() {
   console.log('Fetching getSimVars...')
@@ -54,12 +59,7 @@ watch(
     getSimVars()
   }
 )
-
-
 </script>
-
-
-
 
 <style scoped>
 .slider-demo-block {

@@ -11,7 +11,7 @@
     max-height="600"
   >
     <el-table-column prop="Real Name" label="Real Name" width="180" />
-    <!-- <el-table-column prop="Py Name" label="Py Name" width="180" /> -->
+    <el-table-column prop="Py Name" label="Py Name" width="180" />
     <!-- <el-table-column prop="Subscripts" label="Subscripts" /> -->
     <el-table-column prop="Units" label="Units" width="180" />
     <el-table-column prop="Limits" label="Limits" />
