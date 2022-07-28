@@ -16,9 +16,7 @@
     </el-menu-item>
     <el-sub-menu index="/new-simulation">
       <template #title>Workspace</template>
-      <el-menu-item index="2-1" route="new-simulation"
-        >New Simulation</el-menu-item
-      >
+      <el-menu-item index="2-1" route="new-simulation">New Simulation</el-menu-item>
       <el-menu-item index="2-2" route="home">item two</el-menu-item>
       <el-menu-item index="2-3" route="HomeView">item three</el-menu-item>
       <el-sub-menu index="2-4">
@@ -28,14 +26,14 @@
         <el-menu-item index="2-4-3">item three</el-menu-item>
       </el-sub-menu>
     </el-sub-menu>
-    <el-menu-item index="/new-simulation">new-simulation</el-menu-item>
+    <el-menu-item index="/new-simulation">Add Simulation</el-menu-item>
     <el-menu-item h="full" @click="toggleDark()">
       <button
         class="border-none w-full bg-transparent cursor-pointer"
         style="height: var(--el-menu-item-height)"
       >
         <i inline-flex>
-          <el-icon><Moon/></el-icon>
+          <el-icon><Moon /></el-icon>
         </i>
       </button>
     </el-menu-item>

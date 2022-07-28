@@ -42,8 +42,8 @@ export async function useInitState() {
   return(data)
 }
 
-async function postSim(model_name: string, data:object) {
-  fetch('http://127.0.0.1:8000/add_new_simulation/' + model_name, {
+export async function postSim(data:object) {
+  fetch('http://127.0.0.1:8000/add_new_simulation/', {
     method: 'POST', // or 'PUT'
     headers: {
       'Content-Type': 'application/json'

@@ -1,30 +1,29 @@
 <template>
   <el-row :gutter="40">
     <el-col :span="8">
-      <template v-if="true">
-        <h3>Step 1 - Choose an Available Model</h3>
-        <suspense>
-          <ListAvailableModels @model-name="(model: string) => modelName = model "/>
-          <template #fallback> ...Loading </template>
-        </suspense>
-        <suspense>
-          <SimVars :model-name="modelName" />
-          <template #fallback> ...Loading SimVars </template>
-        </suspense>
-        <h3>Step 3 - Choose a simulation name</h3>
-        <el-input v-model="simulation_name" placeholder="Your Simulation Name" />
-      </template>
+      <h3>Step 1 - Choose an Available Model</h3>
+      <suspense>
+        <ListAvailableModels />
+        <template #fallback> ...Loading </template>
+      </suspense>
+      <suspense>
+        <SimVars />
+        <template #fallback> ...Loading SimVars </template>
+      </suspense>
+      <h3>Step 3 - Choose a simulation name</h3>
+      <el-input v-model="simul.name" placeholder="Your Simulation Name" />
     </el-col>
 
     <template v-if="simulations">
       <el-col :span="16">
         <suspense>
-          <DocTable :model-name = "modelName"/>
+          <DocTable :model-name="simul.model_name" />
           <template #fallback> ...Loading </template>
         </suspense>
       </el-col>
     </template>
   </el-row>
+
   <el-row>
     <el-col>
       <template v-if="cur_simul">
@@ -43,28 +42,39 @@
   <el-divider />
 
   <el-row justify="center">
+    <el-button class="btn" @click="PostSimulation"> Run Simulation </el-button>
+  </el-row>
+
+  <el-row justify="center">
     <DataChartComp />
   </el-row>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import ListAvailableModels from '../components/ListAvailableModels.vue'
 import DataChartComp from '../components/DataChartComp.vue'
 import DocTable from '../components/DocTable.vue'
 import SimVars from '../components/SimVars.vue'
+import { postSim } from '../composables/getjson'
 
 import { useStore } from '../store/SimStore'
 import { storeToRefs } from 'pinia'
-import { watch, ref} from 'vue'
 
 const store = useStore()
-const { simulations, cur_simul } = storeToRefs(store)
+const { simulations, cur_simul, simul } = storeToRefs(store)
 
-const modelName = ref('')
-const simulation_name = ref('')
+async function PostSimulation(event) {
+  if (event) {
+    //console.log("button event triggered");
 
-watch(modelName, (newvalue) => {
-  console.log(`modelName in NewSimulation component has changed: ${newvalue}`)
-  })
+    try {
+      const response = await postSim(simul.value)
+      data.value = await response.json()
+      JsonObj.value = JSON.parse(data.value)
 
+    } catch (error) {
+      console.log('Error! Could not reach the API. ' + error)
+    }
+  }
+}
 </script>

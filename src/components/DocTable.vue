@@ -41,12 +41,12 @@ async function getModelDoc() {
   })
     .get()
     .json()
-  console.log(data.value)
+  //console.log(data.value)
   model_doc.value = Object.values(data.value)
   // for (var obj of Object.values(data.value)){
   //   model_doc.push(obj)
   // }
-  console.log(model_doc)
+  //console.log(model_doc)
 
   onFetchResponse((response) => {
     console.log(`data Fetched! ${response.status}`)
@@ -68,7 +68,8 @@ watch(
   () => props.modelName,
   (before, after) => {
     url.value = 'http://127.0.0.1:8000/get_model_docs/' + props.modelName
+    //url.value = '/api/get_model_docs/' + props.modelName
     getModelDoc()
   }
-)
+) 
 </script>

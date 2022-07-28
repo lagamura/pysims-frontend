@@ -1,23 +1,13 @@
 import { useInitState } from '@/composables/getjson'
 import { defineStore } from 'pinia'
 
-// type JSONValue =
-//     | string
-//     | number
-//     | boolean
-//     | { [x: string]: JSONValue }
-//     | Array<JSONValue>;// maybe error
-
 export type Simulation = {
   id: number
   name: string
   model_name: string
   json_data: string // type JSONValue disabled because of infinite loop
+  namespace: string[]
 }
-
-// export type SimulationType = {
-//     simulation: Simulation
-// }
 
 // useStore could be anything like useUser, useCart
 // the first argument is a unique id of the store across your application
@@ -25,8 +15,11 @@ export const useStore = defineStore({
   id: 'Store',
   state: () => ({
     simulations: [] as Simulation[],
-    cur_simul: 0, // this should be fixed
-    simul: {} as Simulation
+    simul: {} as Simulation,
+    cur_simul: 0,
+    params: {} // this is js object
+
+    // is this correct??
   }),
 
   actions: {
