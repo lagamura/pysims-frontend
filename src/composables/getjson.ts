@@ -1,4 +1,4 @@
-import { useFetch } from "@vueuse/core"
+import { useFetch } from '@vueuse/core'
 
 export async function useGetJsonData(id: number): Promise<string> {
   const url = 'http://127.0.0.1:8000/get_simul_res_json/' + id
@@ -39,10 +39,10 @@ export async function useInitState() {
     //console.log(`data on Fetch Response ${model_doc.value}`)
   })
 
-  return(data)
+  return data
 }
 
-export async function postSim(data:object) {
+export async function postSim(data: object) {
   fetch('http://127.0.0.1:8000/add_new_simulation/', {
     method: 'POST', // or 'PUT'
     headers: {
@@ -57,4 +57,21 @@ export async function postSim(data:object) {
     .catch((error) => {
       console.error('Error:', error)
     })
+}
+
+export async function fetch_del(url: string, id: number): Promise<string> {
+  const response = await fetch(url + id)
+  console.log(response)
+
+  if (response.ok) {
+    const data: string = await response.json()
+    // const data_string = JSON.stringify(data)
+    const data_obj = JSON.parse(data)
+    // console.log(`data in data_string is: ${data_string}`)
+    console.log(`data in data_obj is: ${data_obj}`)
+
+    return data_obj
+  } else {
+    return Promise.reject(new Error(`Something went wrong with fetch_post json data}`))
+  }
 }

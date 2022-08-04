@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { onMounted, computed, watch, ref } from 'vue'
+import { watch, ref } from 'vue'
 import ChartSimul from './ChartSimul.vue'
 import { useStore } from '../store/SimStore'
 import { postSim } from '../composables/getjson'

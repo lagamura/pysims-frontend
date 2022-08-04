@@ -1,47 +1,53 @@
 <template>
   <h3>Step 2 - Choose Simulation Variables of Model:</h3>
-  <div v-for="(vars, index) in simulVars">
+  <div v-for="(param, index) in params_obj" :key="index">
     <div class="slider-demo-block">
-      <span class="demonstration">{{ vars }}</span>
-      <el-slider v-model="params[index]" show-input />
+      <span class="demonstration">{{ param.param_name }}</span>
+      <el-slider v-model="param.param_value" show-input />
     </div>
   </div>
+  <el-button @click="defaultparams()"> Default Parameters </el-button>
 </template>
 
 <script setup>
-import { computed, watch, ref } from 'vue'
+import { computed, watch, ref, onMounted } from 'vue'
+import { useStore } from '../store/SimStore'
+import { storeToRefs } from 'pinia'
 
-const props = defineProps({
-  modelName: String
-})
+const store = useStore()
+const { simulation, params_obj, dropdown_trigger } = storeToRefs(store) //access params from store as ref
 
-const url_namespace = ref('')
-const namespace = ref(null)
-const params = ref([])
-
-/* input */
-/* Computed Properties
-// py_namespace
-// simVars
+// https://stackoverflow.com/questions/1117916/merge-keys-array-and-values-array-into-an-object-in-javascript
+/*
+const keys = ['height', 'width'];
+const values = ['12px', '24px'];
+const merged = keys.reduce((obj, key, index) => ({ ...obj, [key]: values[index] }), {});
 */
 
-async function getSimVars() {
-  console.log('Fetching getSimVars...')
-  console.log(url_namespace.value)
-  try {
-    const response = await fetch(url_namespace.value)
-    namespace.value = await response.json()
+const namespace = ref(null)
 
-    //console.log("namespace are:", namespace.value);
-  } catch (error) {
-    console.log('Error! Could not reach the API. ' + error)
-  }
+function getSimVars() {
+  console.log(`Fetching getSimVars for model ${simulation.value.model_name}...`)
+
+  fetch('http://127.0.0.1:8000/get_model_namespace/' + simulation.value.model_name)
+    .then((response) => response.json())
+    .then((data) => {
+      simulation.value.params = data
+      Object.keys(simulation.value.params).forEach((key) => {
+        simulation.value.params[key] = 0
+        params_obj.value.push({ param_name: key, param_value: 0 })
+      })
+
+      console.log(`successfully fetched model_namespace ${JSON.stringify(data)}`)
+    })
+    .catch((error) => {
+      console.log('Error! Could not reach the API. ' + error)
+    })
 }
 
-const simulVars = computed(() => {
-  if (namespace.value) {
-    return Object.keys(namespace.value)
-  }
+watch(dropdown_trigger, (newvalue) => {
+  console.log(`state simulation has changed ${newvalue.model_name}`)
+  getSimVars()
 })
 
 const py_namespace = computed(() => {
@@ -50,7 +56,13 @@ const py_namespace = computed(() => {
   }
 })
 
-// watch props https://stackoverflow.com/questions/59125857/how-to-watch-props-change-with-vue-composition-api-vue-3
+function defaultparams() {
+  simulation.value.params = {}
+  params_obj.value = {} // Be Carefull Potential bug - workaround
+  console.log(`SET DEFAULT PARAMS TO: ${JSON.stringify(simulation.value.params)}`)
+}
+
+/* watch props https://stackoverflow.com/questions/59125857/how-to-watch-props-change-with-vue-composition-api-vue-3
 watch(
   () => props.modelName,
   (before, after) => {
@@ -59,6 +71,7 @@ watch(
     getSimVars()
   }
 )
+*/
 </script>
 
 <style scoped>

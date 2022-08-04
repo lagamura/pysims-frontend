@@ -30,9 +30,9 @@ const { data } = await useFetch(url).get().json()
 const store = useStore()
 
 
-
 function setModelName(model: string) {
-  store.simul.model_name = model
+  store.simulation.model_name = model
+  store.dropdown_trigger = true;
   console.log("Button on dropdown-list triggered")
 }
 </script>

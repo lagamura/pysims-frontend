@@ -1,6 +1,6 @@
 <template>
   <el-table
-    :data="models_history"
+    :data="store.user_simulations"
     :flexible="true"
     max-height="300"
     :default-expand-all="true"
@@ -10,13 +10,27 @@
     @current-change="handleCurrentChange"
   >
     <el-table-column prop="id" label="id" width="180" />
-    <el-table-column prop="model_name" label="Model Name" :sortable='true' width="180" />
+    <el-table-column prop="model_name" label="Model Name" :sortable="true" width="180" />
     <el-table-column prop="simulation_name" label="Simulation Name" width="180" />
     <el-table-column prop="csv_path" label="Csv Path" width="180" />
-    <el-table-column prop="date" :sortable='true' label="Date" />
+    <el-table-column prop="date" :sortable="true" label="Date" />
     <el-table-column fixed="right" label="Operations" width="120">
       <template #default="scope">
-        <el-button text size="small" @click.prevent="deleteRow(scope.$index)"> Remove </el-button>
+        <el-popconfirm
+          confirm-button-text="Yes"
+          cancel-button-text="No"
+          :icon="InfoFilled"
+          icon-color="#626AEF"
+          title="Are you sure to delete this?"
+          trigger="hover"
+          effect="light"
+          width="auto"
+          @confirm="deleteRow(scope.$index)"
+        >
+          <template #reference>
+            <el-button text size="small"> Delete </el-button>
+          </template>
+        </el-popconfirm>
       </template>
     </el-table-column>
   </el-table>
@@ -29,7 +43,7 @@ import { useRouter, useRoute } from 'vue-router'
 import type { ElTable } from 'element-plus'
 import { useFetch } from '@vueuse/core'
 import { useStore } from '../store/SimStore'
-import { useGetJsonData } from '../composables/getjson'
+import { InfoFilled } from '@element-plus/icons-vue'
 
 const store = useStore()
 
@@ -58,17 +72,23 @@ const handleCurrentChange = (val: SimRow | undefined) => {
 
 const deleteRow = (index: number) => {
   console.log(index)
-  store.removeItem(index)
+  store.cur_simul = -1
+  const { error } = useFetch('http://127.0.0.1:8000/delete_simul_by_id/' + (index + 1)).delete()
+  // Request will be sent with POST method and data will be parsed as text
+  if (error.value) {
+    console.log(`error on useFetch for deletion occured: ${error.value}`)
+  }
+  store.removeItem(index + 1)
 }
 
 const router = useRouter()
-const route = useRoute()
 
 const url = 'http://127.0.0.1:8000/get_simuls'
 
-const { isFetching, error, data} = await useFetch(url).get().json()
+const { data } = await useFetch(url).get().json()
 
-const models_history = ref(data)
+store.user_simulations = data.value
+//set state of user_simulations
 
 function pushNewSimulView() {
   const redirectPath = '/new-simulation' // route.query.redirect || 'new-simulation' throws ts problem
@@ -77,8 +97,8 @@ function pushNewSimulView() {
 
 //const fields = ["id", "model_name", "simulation_name", "csv_path", "date"];
 const fields = computed(() => {
-  if (models_history.value) {
-    return Object.keys(models_history.value[0]).slice(0, -1)
+  if (store.user_simulations) {
+    return Object.keys(store.user_simulations[0]).slice(0, -1) // here i use slice to exclude json data
   }
 })
 </script>

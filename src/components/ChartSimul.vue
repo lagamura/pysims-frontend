@@ -2,14 +2,15 @@
   <canvas id="myChart" width="500" height="500"></canvas>
 </template>
 <script setup>
-import {ref, onMounted, watch, toRef} from "vue";
-import { Chart, registerables } from "chart.js";
-Chart.register(...registerables);
+import { ref, onMounted, watch, toRef } from 'vue'
+import { Chart, registerables } from 'chart.js'
+Chart.register(...registerables)
 
 const props = defineProps({
   simResults: Object | String,
-  curSimulCounter: Number
-});
+  curSimulCounter: Number,
+  testProp: Number
+})
 
 const curSimulRef = toRef(props, 'curSimulCounter')
 const SimResultsRef = toRef(props, 'SimResults')
@@ -22,13 +23,13 @@ watch(SimResultsRef, (newValue) => {
 
 watch(curSimulRef, (newvalue) => {
   console.log(`curSimulCounter prop has changed ${newvalue}`)
-  //console.log(store.cur_simul)
+  
 })
 /* Global configs
 Chart.defaults.global = { }
 */
 
-const Dataset = [];
+const Dataset = []
 
 for (var key of Object.keys(props.simResults)) {
   if (key.toUpperCase() != key) {
@@ -38,18 +39,18 @@ for (var key of Object.keys(props.simResults)) {
       label: key,
       backgroundColor: rgba[1],
       borderColor: rgba[0],
-      data: props.simResults[key],
-    });
+      data: props.simResults[key]
+    })
   }
 }
 
 const data = {
   //labels: props.labels,
-  datasets: Dataset,
-};
+  datasets: Dataset
+}
 
 const config = {
-  type: "line",
+  type: 'line',
   data: data,
   options: {
     pointRadius: 2,
@@ -57,29 +58,27 @@ const config = {
     plugins: {
       title: {
         display: true,
-        text: "Simulation Results",
+        text: 'Simulation Results'
       },
       legend: {
-        position: "bottom",
-      },
-    },
-  },
-};
+        position: 'bottom'
+      }
+    }
+  }
+}
 
 onMounted(() => {
-  const myChart = new Chart(document.getElementById("myChart"), config);
-
-});
+  const myChart = new Chart(document.getElementById('myChart'), config)
+})
 
 // Chart.defaults.elements.line.borderColor = "rgba(0.3, 0.5, 0.4, 0.1)"; // Change settings globaly
 // Chart.defaults.elements.line.backgroundColor = "rgba(0.2, 0.2, 0.6, 0.1)"; // Change settings globaly
-
 
 function getRandomRgba() {
   const r = Math.random() * 255
   const g = Math.random() * 255
   const b = Math.random() * 255
   const a = 0.4
-  return([`rgb(${r},${g},${b})`,`rgba(${r},${g},${b},${a})`])
+  return [`rgb(${r},${g},${b})`, `rgba(${r},${g},${b},${a})`]
 }
 </script>

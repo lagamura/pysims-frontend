@@ -43,10 +43,6 @@ async function getModelDoc() {
     .json()
   //console.log(data.value)
   model_doc.value = Object.values(data.value)
-  // for (var obj of Object.values(data.value)){
-  //   model_doc.push(obj)
-  // }
-  //console.log(model_doc)
 
   onFetchResponse((response) => {
     console.log(`data Fetched! ${response.status}`)
