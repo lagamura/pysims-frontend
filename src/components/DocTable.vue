@@ -25,7 +25,8 @@
 import { watch, ref } from 'vue'
 import { useStore } from '../store/SimStore'
 import { useFetch } from '@vueuse/core'
-import { MutationType } from 'pinia'
+
+const store = useStore()
 
 const showFlag = ref(true)
 const model_doc = ref()
@@ -36,13 +37,19 @@ const props = defineProps({
 })
 
 async function getModelDoc() {
-  const { isFetching, error, data, onFetchResponse, onFetchError } = await useFetch(url.value, {
+  const { data, onFetchResponse, onFetchError } = await useFetch(url.value, {
     refetch: true
   })
     .get()
     .json()
   //console.log(data.value)
   model_doc.value = Object.values(data.value)
+  store.simulation.components = Object.values(data.value)
+  console.log(JSON.stringify(store.simulation.components))
+  store.simulation.components.forEach(component => {
+    component.student_control = false
+    component._value = null  
+  })
 
   onFetchResponse((response) => {
     console.log(`data Fetched! ${response.status}`)

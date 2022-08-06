@@ -1,28 +1,25 @@
 <template>
+  <TutorSelection />
   <h3>Step 2 - Choose Simulation Variables of Model:</h3>
-  <div v-for="(param, index) in params_obj" :key="index">
-    <div class="slider-demo-block">
-      <span class="demonstration">{{ param.param_name }}</span>
-      <el-slider v-model="param.param_value" show-input />
+  <div v-for="(component, index) in simulation.components" :key="index">
+    <div v-if="component.student_control" class="slider-demo-block">
+      <span class="demonstration">{{ component['Real Name'] }}</span>
+      <el-slider v-model="component._value" show-input />
+      <span>
+        {{ 'units:' + component.Units }}
+      </span>
     </div>
   </div>
-  <el-button @click="defaultparams()"> Default Parameters </el-button>
 </template>
 
 <script setup>
 import { computed, watch, ref, onMounted } from 'vue'
 import { useStore } from '../store/SimStore'
 import { storeToRefs } from 'pinia'
+import TutorSelection from './TutorSelection.vue'
 
 const store = useStore()
 const { simulation, params_obj, dropdown_trigger } = storeToRefs(store) //access params from store as ref
-
-// https://stackoverflow.com/questions/1117916/merge-keys-array-and-values-array-into-an-object-in-javascript
-/*
-const keys = ['height', 'width'];
-const values = ['12px', '24px'];
-const merged = keys.reduce((obj, key, index) => ({ ...obj, [key]: values[index] }), {});
-*/
 
 const namespace = ref(null)
 
@@ -56,12 +53,6 @@ const py_namespace = computed(() => {
   }
 })
 
-function defaultparams() {
-  simulation.value.params = {}
-  params_obj.value = {} // Be Carefull Potential bug - workaround
-  console.log(`SET DEFAULT PARAMS TO: ${JSON.stringify(simulation.value.params)}`)
-}
-
 /* watch props https://stackoverflow.com/questions/59125857/how-to-watch-props-change-with-vue-composition-api-vue-3
 watch(
   () => props.modelName,
@@ -71,6 +62,13 @@ watch(
     getSimVars()
   }
 )
+*/
+
+// https://stackoverflow.com/questions/1117916/merge-keys-array-and-values-array-into-an-object-in-javascript
+/*
+const keys = ['height', 'width'];
+const values = ['12px', '24px'];
+const merged = keys.reduce((obj, key, index) => ({ ...obj, [key]: values[index] }), {});
 */
 </script>
 

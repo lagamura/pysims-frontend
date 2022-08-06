@@ -15,4 +15,5 @@ export interface Simulation {
   model_name: string
   params: {
   }
+  components: []
 }

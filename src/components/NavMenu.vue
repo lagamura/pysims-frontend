@@ -14,18 +14,9 @@
         <el-icon><HomeFilled /></el-icon>
       </button>
     </el-menu-item>
-    <el-sub-menu index="/new-simulation">
-      <template #title>Workspace</template>
-      <el-menu-item index="2-1" route="new-simulation">New Simulation</el-menu-item>
-      <el-menu-item index="2-2" route="home">item two</el-menu-item>
-      <el-menu-item index="2-3" route="HomeView">item three</el-menu-item>
-      <el-sub-menu index="2-4">
-        <template #title>item four</template>
-        <el-menu-item index="2-4-1">item one</el-menu-item>
-        <el-menu-item index="2-4-2">item two</el-menu-item>
-        <el-menu-item index="2-4-3">item three</el-menu-item>
-      </el-sub-menu>
-    </el-sub-menu>
+    <el-menu-item index="/about"> About </el-menu-item>
+    <el-menu-item index="/dashboard"> Dashboard </el-menu-item>
+
     <el-menu-item index="/new-simulation">Add Simulation</el-menu-item>
     <el-menu-item h="full" @click="toggleDark()">
       <button
