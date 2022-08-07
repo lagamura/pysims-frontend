@@ -4,7 +4,7 @@
     <div class="slider-demo-block">
       <li>
         <span class="demonstration">{{ component['Real Name'] }}</span>
-        <Toggle :onLabel="enable" :offLabel="disable" v-model="component.student_control" />
+        <Toggle v-model="component.student_control" />
       </li>
     </div>
   </div>

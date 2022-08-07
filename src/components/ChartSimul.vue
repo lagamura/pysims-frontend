@@ -1,15 +1,21 @@
 <template>
-  <canvas id="myChart" width="500" height="500"></canvas>
+  <canvas :id="props.chartid"></canvas>
 </template>
 <script setup>
 import { ref, onMounted, watch, toRef } from 'vue'
 import { Chart, registerables } from 'chart.js'
+import { storeToRefs } from 'pinia'
+import { useStore } from '../store/SimStore'
+
 Chart.register(...registerables)
+
+const store = useStore()
+const { simulation } = storeToRefs(store)
 
 const props = defineProps({
   simResults: Object | String,
   curSimulCounter: Number,
-  testProp: Number
+  chartid: String
 })
 
 const curSimulRef = toRef(props, 'curSimulCounter')
@@ -23,7 +29,6 @@ watch(SimResultsRef, (newValue) => {
 
 watch(curSimulRef, (newvalue) => {
   console.log(`curSimulCounter prop has changed ${newvalue}`)
-  
 })
 /* Global configs
 Chart.defaults.global = { }
@@ -32,7 +37,7 @@ Chart.defaults.global = { }
 const Dataset = []
 
 for (var key of Object.keys(props.simResults)) {
-  if (key.toUpperCase() != key) {
+  if (key.toUpperCase() != key && key == props.chartid) {
     // in order to avoid constant values
     const rgba = getRandomRgba()
     Dataset.push({
@@ -53,12 +58,30 @@ const config = {
   type: 'line',
   data: data,
   options: {
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text:
+            'time: ' +
+            simulation.value.components.find((element) => element['Real Name'] == 'FINAL TIME')
+              .Units
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: simulation.value.components.find((element) => element['Real Name'] == props.chartid)
+            .Units,
+          color: '#FFFFFF'
+        }
+      }
+    },
     pointRadius: 2,
     pointHoverRadious: 7,
     plugins: {
       title: {
         display: true,
-        text: 'Simulation Results'
       },
       legend: {
         position: 'bottom'
@@ -68,7 +91,8 @@ const config = {
 }
 
 onMounted(() => {
-  const myChart = new Chart(document.getElementById('myChart'), config)
+  //document.getElementById('mychart').setAttribute('id', props.chartid)
+  const myChart = new Chart(document.getElementById(props.chartid), config)
 })
 
 // Chart.defaults.elements.line.borderColor = "rgba(0.3, 0.5, 0.4, 0.1)"; // Change settings globaly

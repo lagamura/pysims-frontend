@@ -75,3 +75,5 @@ export async function fetch_del(url: string, id: number): Promise<string> {
     return Promise.reject(new Error(`Something went wrong with fetch_post json data}`))
   }
 }
+
+

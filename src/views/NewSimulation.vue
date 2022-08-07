@@ -2,15 +2,13 @@
   <el-row :gutter="40">
     <el-col :span="8">
       <h2>Model: {{ simulation.model_name }}</h2>
-      <h3>Step 1 - Choose an Available Model</h3>
+      <h3>Choose an Available Model</h3>
       <suspense>
         <ListAvailableModels />
         <template #fallback> ...Loading </template>
       </suspense>
-      <suspense>
-        <SimVars />
-        <template #fallback> ...Loading SimVars </template>
-      </suspense>
+      <h2>Choose Control Variables</h2>
+      <TutorSelection />
       <h3>Step 3 - Choose a simulation name</h3>
       <el-input v-model="simulation.simulation_name" placeholder="Your Simulation Name" />
     </el-col>
@@ -62,10 +60,10 @@
 <script setup>
 import ListAvailableModels from '../components/ListAvailableModels.vue'
 import DocTable from '../components/DocTable.vue'
-import SimVars from '../components/SimVars.vue'
 import { postSim } from '../composables/getjson'
 import { useStore } from '../store/SimStore'
 import { storeToRefs } from 'pinia'
+import TutorSelection from '../components/TutorSelection.vue'
 
 const store = useStore()
 const { user_simulations, simulation, cur_simul } = storeToRefs(store)

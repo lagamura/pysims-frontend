@@ -2,56 +2,40 @@
   <el-row :gutter="20">
     <el-col :span="16">
       <h2>Model: {{ store.simulation.model_name }}</h2>
-      <h3>Step 1 - Choose an Available Model</h3>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eget nunc faucibus,
-        iaculis urna ut, feugiat nibh. Aliquam cursus tincidunt nunc, sit amet faucibus ligula
-        convallis id. Morbi placerat nunc eu enim aliquet consectetur. In hac habitasse platea
-        dictumst. Nulla ut nunc ac dolor vehicula pharetra. Sed eget volutpat magna. Cras id felis
-        tincidunt, pulvinar metus in, commodo quam. Curabitur lobortis mi diam, nec congue purus
-        scelerisque vel. Phasellus eu tellus ut neque scelerisque viverra. Class aptent taciti
-        sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce eget risus
-        sapien. Sed pretium nisl non tortor rhoncus imperdiet. Morbi at vestibulum erat, a venenatis
-        diam. Phasellus fringilla fermentum porttitor. Vestibulum laoreet sagittis augue id
-        molestie. Duis neque est, porta non sodales vitae, molestie sed neque. Vivamus rhoncus
-        sodales nulla, a efficitur odio congue tempor. Praesent non mauris malesuada, pharetra odio
-        eget, accumsan lacus. Maecenas in eleifend metus. Integer in elit metus. In nec sapien
-        purus. Fusce nisl metus, pellentesque eu tortor at, ultricies volutpat ipsum. Aenean
-        ultrices augue et venenatis molestie. Praesent at facilisis purus, at fermentum tortor. Nunc
-        tincidunt dui placerat nisl gravida consequat. Proin vel malesuada sem. Donec sit amet
-        viverra quam. Maecenas malesuada venenatis dui, non tincidunt massa. Duis vulputate non urna
-        at fringilla. Curabitur enim urna, placerat quis faucibus vitae, malesuada vestibulum dolor.
-        Ut varius cursus efficitur. Donec nec felis at purus dictum posuere quis tincidunt lacus.
-        Aliquam faucibus nisi et lectus viverra consectetur. Phasellus dictum lectus a turpis
-        ullamcorper ultrices. Nam in erat orci. Integer malesuada non ex a euismod. Sed diam dolor,
-        condimentum ut tempus sit amet, molestie ut nunc. Aenean turpis massa, finibus a aliquam
-        sed, laoreet ut odio. Mauris nec purus volutpat, convallis est egestas, facilisis dolor.
-        Maecenas pellentesque porta sem, et vehicula purus commodo sed. Ut aliquet nulla in elit
-        lobortis varius. Sed elementum posuere ante in scelerisque. Vivamus nec odio interdum,
-        mollis lacus ut, aliquet nulla. Morbi et gravida ex. Phasellus sed nisl dui. Phasellus sed
-        consectetur ipsum. Vivamus vel ornare dolor, eget tempor nisi. Cras ut interdum eros.
-        Phasellus mi enim, pulvinar eu erat eget, feugiat pretium tellus. Praesent in sollicitudin
-        diam. Morbi luctus odio at dolor ornare, vel dapibus lacus interdum. Nunc aliquam ut felis
-        ornare tempor. Morbi hendrerit risus orci, a tincidunt leo aliquam nec. Quisque maximus
-        semper ipsum. In commodo, urna sed auctor elementum, quam lectus imperdiet tellus, ut
-        imperdiet sem nisi a metus. Nunc vulputate sapien ac sapien placerat volutpat. Nulla eu dui
-        ac nunc pellentesque dapibus. Donec vel felis eget nunc laoreet pretium. Class aptent taciti
-        sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-      </p>
+      <el-divider />
+      <h3>Output</h3>
+      <div style="flex-basis: 33.3%; flex-wrap: wrap">
+        <!-- v-for should be checked for correct key -->
+        <div v-for="(Obj, index) in JsonObj" key:index>
+          <div
+            v-if="!CONST_VARS.includes(index)"
+            class="chart-container"
+            style="position: relative"
+          >
+            <ChartSimul v-if="JsonObj" :chartid="index" :sim-results="JsonObj" />
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-container" style="position: relative">
+        <ChartSimul v-if="JsonObj" chartid="mychart" :sim-results="JsonObj" />
+      </div>
     </el-col>
     <el-col :span="8" id="border_class">
-      <div class="m-4 ">
+      <div class="m-4">
         <el-button title="Run next Step">
           <el-icon>
             <VideoPlay />
           </el-icon>
         </el-button>
-        <el-button title="Run Simulation">
+        <el-button title="Run Simulation" @click="PostSimulation">
           <el-icon><ArrowRightBold /></el-icon>
         </el-button>
+        <el-divider direction="vertical" />
+        <span>Step:0</span>
       </div>
-      <div class="demo-progress ">
-        <span>Progress Bar</span>
+      <div class="demo-progress">
+        <span class="pa-30">Progress Bar</span>
         <el-progress :text-inside="true" :stroke-width="26" :percentage="50" />
       </div>
       <div class="inline-block justify-space-between mb-4 flex-wrap gap-4">
@@ -61,24 +45,106 @@
         <el-divider direction="vertical" />
         <span>duration:</span>
       </div>
-      <p>
-        lobortis varius. Sed elementum posuere ante in scelerisque. Vivamus nec odio interdum,
-        mollis lacus ut, aliquet nulla. Morbi et gravida ex. Phasellus sed nisl dui. Phasellus sed
-      </p>
+      <el-divider />
+      <h3>Inputs</h3>
+      <div
+        class="inline-block justify-space-between gap-4"
+        v-for="(component, index) in store.simulation.components"
+        :key="index"
+      >
+        <span class="control-vars m-2" v-if="component.student_control">
+          <el-tooltip class="box-item" effect="dark" placement="top-start">
+            <template #content> {{ component.Units }}</template>
+            {{ component['Real Name'] }}
+          </el-tooltip>
+        </span>
+      </div>
     </el-col>
   </el-row>
 </template>
 
 <script setup>
+import ChartSimul from '@/components/ChartSimul.vue'
+
+import { storeToRefs } from 'pinia'
+import { useFetch } from '@vueuse/core'
+import { onMounted, ref } from 'vue'
 import { useStore } from '../store/SimStore'
 
 const store = useStore()
+const { simulation } = storeToRefs(store)
+
+const JsonObj = ref()
+
+const url = 'http://127.0.0.1:8000/add_new_simulation/'
+
+const CONST_VARS = ['FINAL TIME', 'INITIAL TIME', 'TIME STEP', 'SAVEPER']
 
 const buttons = [
   { type: 'info', text: 'info' },
   { type: 'primary', text: 'reset' }
 ]
+
+async function PostSimulation(event) {
+  if (event) {
+    console.log('Posting Simulation...')
+    const date = new Date()
+    simulation.value.timestamp = formatDate(date)
+    simulation.value.user = 'to-be-implemented'
+    simulation.value.simulation_name = 'hardcoded for test'
+    simulation.value.model_name = 'Teacup'
+    for (const component in store.components) {
+      if (component._value) {
+        store.params_obj.push({ param_name: component['Py Name'], param_value: component._value })
+      }
+    }
+
+    Object.entries(store.params_obj).forEach(([key, value]) => {
+      simulation.value.params[value.param_name] = value.param_value
+    })
+
+    const { components, ...payload } = simulation.value
+
+    const { data, onFetchResponse, onFetchError } = await useFetch(url, {
+      onFetchError(ctx) {
+        console.log('Something went wrong on Posting-Run Simulation') + ctx.error
+      }
+    })
+      .post(payload)
+      .json()
+
+    onFetchResponse((response) => {
+      console.log(`data Fetched! ${response.status}`)
+      //console.log(`data on Fetch Response ${model_doc.value}`)
+    })
+
+    onFetchError((ctx) => {
+      console.log('Something went wrong on Posting-Run Simulation') + ctx.error
+    })
+
+    JsonObj.value = data.value.json_data
+  }
+}
+
+function padTo2Digits(num) {
+  return num.toString().padStart(2, '0')
+}
+
+function formatDate(date) {
+  return (
+    [date.getFullYear(), padTo2Digits(date.getMonth() + 1), padTo2Digits(date.getDate())].join(
+      '-'
+    ) +
+    ' ' +
+    [
+      padTo2Digits(date.getHours()),
+      padTo2Digits(date.getMinutes()),
+      padTo2Digits(date.getSeconds())
+    ].join(':')
+  )
+}
 </script>
+
 <style scoped>
 #border_class {
   border-left: 0.13rem solid white; /*this should be changed globally with theme's variable*/
@@ -87,5 +153,32 @@ const buttons = [
   margin-bottom: 15px;
   margin-top: 15px;
   width: 350px;
+}
+
+.control-vars {
+  display: inline-flex;
+  border: 0 solid var(--el-color-primary-light-9);
+  background-color: var(--el-color-primary-light-9);
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+  height: 32px;
+  white-space: nowrap;
+  cursor: pointer;
+  color: var(--el-button-text-color);
+  text-align: center;
+  box-sizing: border-box;
+  outline: 0;
+  transition: 0.1s;
+  font-weight: var(--el-button-font-weight);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  vertical-align: middle;
+  -webkit-appearance: none;
+  padding: 8px 15px;
+  font-size: var(--el-font-size-base);
+  border-radius: var(--el-border-radius-base);
 }
 </style>
