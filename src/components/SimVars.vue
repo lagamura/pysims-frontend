@@ -1,13 +1,9 @@
 <template>
-  <TutorSelection />
   <h3>Step 2 - Choose Simulation Variables of Model:</h3>
   <div v-for="(component, index) in simulation.components" :key="index">
     <div v-if="component.student_control" class="slider-demo-block">
       <span class="demonstration">{{ component['Real Name'] }}</span>
       <el-slider v-model="component._value" show-input />
-      <span>
-        {{ 'units:' + component.Units }}
-      </span>
     </div>
   </div>
 </template>
@@ -16,7 +12,6 @@
 import { computed, watch, ref, onMounted } from 'vue'
 import { useStore } from '../store/SimStore'
 import { storeToRefs } from 'pinia'
-import TutorSelection from './TutorSelection.vue'
 
 const store = useStore()
 const { simulation, params_obj, dropdown_trigger } = storeToRefs(store) //access params from store as ref

@@ -45,7 +45,7 @@ async function getModelDoc() {
   //console.log(data.value)
   model_doc.value = Object.values(data.value)
   store.simulation.components = Object.values(data.value)
-  console.log(JSON.stringify(store.simulation.components))
+  //console.log(JSON.stringify(store.simulation.components))
   store.simulation.components.forEach(component => {
     component.student_control = false
     component._value = null  
@@ -53,7 +53,6 @@ async function getModelDoc() {
 
   onFetchResponse((response) => {
     console.log(`data Fetched! ${response.status}`)
-    //console.log(`data on Fetch Response ${model_doc.value}`)
   })
 
   onFetchError((error) => {
