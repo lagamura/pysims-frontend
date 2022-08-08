@@ -1,7 +1,5 @@
 <template>
-  <canvas :id="props.chartid" width=450 height=300></canvas>
-
-  <img :id="img_id" alt="thumbnail-chart" width="150" height="150" />
+  <canvas :id="props.chartid" :width="props._width" :height="props._height"></canvas>
 </template>
 <script setup>
 import { ref, computed, onMounted, watch, toRef } from 'vue'
@@ -18,7 +16,9 @@ const url = ref()
 const props = defineProps({
   simResults: Object | String,
   curSimulCounter: Number,
-  chartid: String
+  chartid: String,
+  _width: { type: String, default: '450' },
+  _height: { type: String, default: '300' }
 })
 
 const curSimulRef = toRef(props, 'curSimulCounter')
@@ -76,7 +76,7 @@ const config = {
           display: true,
           text: simulation.value.components.find((element) => element['Real Name'] == props.chartid)
             .Units,
-          color: '#FFFFFF'
+          color: '#808080'
         }
       }
     },
@@ -93,11 +93,18 @@ const config = {
   },
   plugins: [
     {
+      beforeDraw: (chart) => {
+        const { ctx } = chart
+        ctx.save()
+        ctx.globalCompositeOperation = 'destination-over'
+        ctx.fillStyle = 'White'
+        ctx.fillRect(0, 0, chart.width, chart.height)
+        ctx.restore()
+      },
       afterRender: function (chart) {
         //url.value = chart.toBase64Image()
         const src = chart.toBase64Image('image/png', 1)
-        console.log(img_id.value)
-        document.getElementById(img_id.value).src = src
+        store.img_thumbnails.push({ img_id: img_id.value, bs64: src })
       }
     }
   ]
@@ -122,3 +129,5 @@ function getRandomRgba() {
   return [`rgb(${r},${g},${b})`, `rgba(${r},${g},${b},${a})`]
 }
 </script>
+
+<style scoped></style>

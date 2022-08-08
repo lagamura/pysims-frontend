@@ -3,24 +3,48 @@
     <el-col :span="16">
       <h2>Model: {{ store.simulation.model_name }}</h2>
       <el-divider />
-      <h3>Output</h3>
-      <div>
-        <!-- v-for should be checked for correct key -->
-        <div v-for="(Obj, index) in JsonObj" key:index>
-            <div
-              v-if="!CONST_VARS.includes(index)"
-              class="chart-container"
-              style="position: relative"
-            >
-              <ChartSimul v-if="JsonObj" :chartid="index" :sim-results="JsonObj" />
-            </div>
-        </div>
-      </div>
 
-      <div class="chart-container" style="position: relative">
-        <ChartSimul v-if="JsonObj" chartid="mychart" :sim-results="JsonObj" />
-      </div>
+      <h3 class="mb-4">Output</h3>
+      <!--Populate Chart-->
+      <el-row v-if="choosenChart" class="chartCard justify-center">
+        <div class="chartBox" style="width: 500px">
+          <ChartSimul
+            v-if="JsonObj"
+            :chartid="choosenChart"
+            :sim-results="JsonObj"
+            :key="choosenChart"
+          />
+        </div>
+      </el-row>
+      <el-divider />
+
+      <el-row>
+        <!-- <div v-for="(obj, index) in store.img_thumbnails" key:index>
+          <el-col>
+            <img :id="obj.img_id" alt="thumbnail-chart" width="150" height="150" :src="obj.bs64" />
+          </el-col>
+        </div> -->
+        <div v-for="(Obj, index) in JsonObj" key:index>
+          <div v-if="!CONST_VARS.includes(index)" class="chart-container">
+            <el-col>
+              <div class="chartCard">
+                <div class="chartBox">
+                  <ChartSimul
+                    v-if="JsonObj"
+                    :chartid="index"
+                    :sim-results="JsonObj"
+                    _width="500"
+                    _height="350"
+                    @click="Populate(index.toString())"
+                  />
+                </div>
+              </div>
+            </el-col>
+          </div>
+        </div>
+      </el-row>
     </el-col>
+    <!-- This is the right side-section -->
     <el-col :span="8" id="border_class">
       <div class="m-4">
         <el-button title="Run next Step">
@@ -70,11 +94,13 @@ import { storeToRefs } from 'pinia'
 import { useFetch } from '@vueuse/core'
 import { onMounted, ref } from 'vue'
 import { useStore } from '../store/SimStore'
+import ChartSimul1 from '../components/ChartSimul.vue'
 
 const store = useStore()
 const { simulation } = storeToRefs(store)
 
 const JsonObj = ref()
+const choosenChart = ref('')
 
 const url = 'http://127.0.0.1:8000/add_new_simulation/'
 
@@ -84,6 +110,10 @@ const buttons = [
   { type: 'info', text: 'info' },
   { type: 'primary', text: 'reset' }
 ]
+
+function Populate(index) {
+  choosenChart.value = index
+}
 
 async function PostSimulation(event) {
   if (event) {
@@ -180,5 +210,28 @@ function formatDate(date) {
   padding: 8px 15px;
   font-size: var(--el-font-size-base);
   border-radius: var(--el-border-radius-base);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.chartCard {
+  /* width: 20vw; */
+  /* display: flex; */
+}
+.chartBox {
+  width: 250px;
+  padding: 20px;
+  border-radius: 20px;
+  border: solid 3px rgba(255, 26, 104, 1);
+  background: white;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.chartMain {
 }
 </style>
