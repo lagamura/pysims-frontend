@@ -9,9 +9,9 @@
     <template #dropdown v-if="data">
       <el-dropdown-menu>
         <el-dropdown-item v-for="model in data" :key="model.id">
-          <a class="dropdown-item" @click="setModelName(model)">
+          <span class="dropdown-item" @click="setModelName(model)">
             {{ model }}
-          </a>
+          </span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </template>
@@ -21,18 +21,26 @@
 <script lang="ts" setup>
 import { useStore } from '../store/SimStore'
 import { useFetch } from '@vueuse/core'
+import { ArrowDown } from '@element-plus/icons-vue'
 
 const url = 'http://127.0.0.1:8000/get_available_models'
 
 const { data } = await useFetch(url).get().json()
 
-
 const store = useStore()
-
 
 function setModelName(model: string) {
   store.simulation.model_name = model
-  store.dropdown_trigger = true;
-  console.log("Button on dropdown-list triggered")
+  store.dropdown_trigger = true
+  console.log('Button on dropdown-list triggered')
 }
 </script>
+
+<style scoped>
+.example-showcase .el-dropdown-link {
+  cursor: pointer;
+  color: var(--el-color-primary);
+  display: flex;
+  align-items: center;
+}
+</style>
