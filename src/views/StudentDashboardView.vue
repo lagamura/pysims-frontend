@@ -4,16 +4,16 @@
       <h2>Model: {{ store.simulation.model_name }}</h2>
       <el-divider />
       <h3>Output</h3>
-      <div style="flex-basis: 33.3%; flex-wrap: wrap">
+      <div>
         <!-- v-for should be checked for correct key -->
         <div v-for="(Obj, index) in JsonObj" key:index>
-          <div
-            v-if="!CONST_VARS.includes(index)"
-            class="chart-container"
-            style="position: relative"
-          >
-            <ChartSimul v-if="JsonObj" :chartid="index" :sim-results="JsonObj" />
-          </div>
+            <div
+              v-if="!CONST_VARS.includes(index)"
+              class="chart-container"
+              style="position: relative"
+            >
+              <ChartSimul v-if="JsonObj" :chartid="index" :sim-results="JsonObj" />
+            </div>
         </div>
       </div>
 

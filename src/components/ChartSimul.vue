@@ -1,8 +1,10 @@
 <template>
-  <canvas :id="props.chartid"></canvas>
+  <canvas :id="props.chartid" width=450 height=300></canvas>
+
+  <img :id="img_id" alt="thumbnail-chart" width="150" height="150" />
 </template>
 <script setup>
-import { ref, onMounted, watch, toRef } from 'vue'
+import { ref, computed, onMounted, watch, toRef } from 'vue'
 import { Chart, registerables } from 'chart.js'
 import { storeToRefs } from 'pinia'
 import { useStore } from '../store/SimStore'
@@ -11,6 +13,7 @@ Chart.register(...registerables)
 
 const store = useStore()
 const { simulation } = storeToRefs(store)
+const url = ref()
 
 const props = defineProps({
   simResults: Object | String,
@@ -81,18 +84,31 @@ const config = {
     pointHoverRadious: 7,
     plugins: {
       title: {
-        display: true,
+        display: true
       },
       legend: {
         position: 'bottom'
       }
     }
-  }
+  },
+  plugins: [
+    {
+      afterRender: function (chart) {
+        //url.value = chart.toBase64Image()
+        const src = chart.toBase64Image('image/png', 1)
+        console.log(img_id.value)
+        document.getElementById(img_id.value).src = src
+      }
+    }
+  ]
 }
 
 onMounted(() => {
-  //document.getElementById('mychart').setAttribute('id', props.chartid)
   const myChart = new Chart(document.getElementById(props.chartid), config)
+})
+
+const img_id = computed(() => {
+  return 'thumbnail-chart-' + props.chartid
 })
 
 // Chart.defaults.elements.line.borderColor = "rgba(0.3, 0.5, 0.4, 0.1)"; // Change settings globaly
