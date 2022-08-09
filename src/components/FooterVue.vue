@@ -1,5 +1,5 @@
 <template>
-  <el-row>
+  <el-row >
     <el-col :span="12">
       <div id="image">
         <img src="../assets/ece_logo_el.png" alt="e-ce uth logo" />

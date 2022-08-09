@@ -83,6 +83,13 @@
           </el-tooltip>
         </span>
       </div>
+      <div class="mt-4" v-for="(component, index) in store.simulation.components" :key="index">
+        <div class="slider-demo-block" v-if="component.student_control">
+          <span> {{ component['Real Name'] }}</span>
+
+          <el-slider v-model="component._value" show-input />
+        </div>
+      </div>
     </el-col>
   </el-row>
 </template>
@@ -123,15 +130,20 @@ async function PostSimulation(event) {
     simulation.value.user = 'to-be-implemented'
     simulation.value.simulation_name = 'hardcoded for test'
     simulation.value.model_name = 'Teacup'
-    for (const component in store.components) {
+    simulation.value.components.forEach((component) => {
       if (component._value) {
-        store.params_obj.push({ param_name: component['Py Name'], param_value: component._value })
-      }
-    }
+        console.log('Hellooooo')
+        console.log(component['Real Name'])
+        console.log(component._value)
 
-    Object.entries(store.params_obj).forEach(([key, value]) => {
-      simulation.value.params[value.param_name] = value.param_value
+        //store.params_obj.push({ param_name: component['Py Name'], param_value: component._value })
+        store.simulation.params[component['Real Name']] = component._value // here we access directly the object from store because we add properties in params - see more for references
+      }
     })
+
+    // Object.entries(store.params_obj).forEach(([key, value]) => {
+    //   simulation.value.params[value.param_name] = value.param_value
+    // })
 
     const { components, ...payload } = simulation.value
 
@@ -218,10 +230,6 @@ function formatDate(date) {
   font-family: sans-serif;
 }
 
-.chartCard {
-  /* width: 20vw; */
-  /* display: flex; */
-}
 .chartBox {
   width: 250px;
   padding: 20px;
@@ -232,6 +240,11 @@ function formatDate(date) {
   cursor: pointer;
 }
 
-.chartMain {
+.slider-demo-block {
+  align-items: center;
+}
+.slider-demo-block .el-slider {
+  margin-top: 0;
+  margin-left: 12px;
 }
 </style>
