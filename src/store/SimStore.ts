@@ -18,7 +18,7 @@ export const useStore = defineStore({
   state: () =>
     ({
       user_simulations: [],
-      simulation: {} as Simulation,
+      simulation: <Simulation>{} ,
       cur_simul: -1,
       params_obj: [],
       dropdown_trigger: false,
