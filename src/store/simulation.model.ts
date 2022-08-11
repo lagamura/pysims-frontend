@@ -12,7 +12,7 @@ export interface Simulation {
   timestamp: Date
   simulation_name: string
   model_name: string
-  params: { }
+  params: {}
   components: {
     Real_Name: string
     Py_Name: string
@@ -25,4 +25,6 @@ export interface Simulation {
     student_control: boolean
     _value: number
   }[]
+  start_time: number
+  end_time: number | undefined
 }

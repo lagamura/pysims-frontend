@@ -5,7 +5,11 @@
       <h3>Choose an Available Model</h3>
       <suspense>
         <ListAvailableModels />
-        <template #fallback> ...Loading </template>
+        <template #fallback>
+          <el-icon class="is-loading">
+            <Loading />
+          </el-icon>
+        </template>
       </suspense>
       <h2>Choose Control Variables</h2>
       <TutorSelection />
@@ -17,7 +21,11 @@
       <el-col :span="16">
         <suspense>
           <DocTable :model-name="simulation.model_name" />
-          <template #fallback> ...Loading </template>
+          <template #fallback>
+            <el-icon class="is-loading">
+              <Loading />
+            </el-icon>
+          </template>
         </suspense>
       </el-col>
     </template>
@@ -75,9 +83,6 @@ async function PostSimulation(event) {
     simulation.value.timestamp = formatDate(date)
     simulation.value.user = 'to-be-implemented'
 
-    Object.entries(store.params_obj).forEach(([key, value]) => {
-      simulation.value.params[value.param_name] = value.param_value
-    })
     //console.log(`simulation.value.params: ${simulation.value.params}`)
 
     try {

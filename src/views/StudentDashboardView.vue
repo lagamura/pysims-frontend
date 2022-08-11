@@ -33,6 +33,7 @@
                     v-if="JsonObj"
                     :chartid="index"
                     :sim-results="JsonObj"
+                    :key="JsonObj"
                     _width="500"
                     _height="350"
                     @click="Populate(index.toString())"
@@ -47,12 +48,12 @@
     <!-- This is the right side-section -->
     <el-col :span="8" id="border_class">
       <div class="m-4">
-        <el-button title="Run next Step">
+        <el-button title="Run next Step" :disabled=button_flag @click="PostSimulation($event, true)">
           <el-icon>
             <VideoPlay />
           </el-icon>
         </el-button>
-        <el-button title="Run Simulation" @click="PostSimulation">
+        <el-button title="Run Simulation" @click="PostSimulation($event, false)">
           <el-icon><ArrowRightBold /></el-icon>
         </el-button>
         <el-divider direction="vertical" />
@@ -60,12 +61,15 @@
       </div>
       <div class="demo-progress">
         <span class="pa-30">Progress Bar</span>
-        <el-progress :text-inside="true" :stroke-width="26" :percentage="50" />
+        <el-progress :text-inside="true" :stroke-width="26" :percentage="bar_percentage" />
       </div>
       <div class="inline-block justify-space-between mb-4 flex-wrap gap-4">
-        <el-button v-for="button in buttons" :key="button.text" :type="button.type" text bg>{{
-          button.text
-        }}</el-button>
+        <el-button type="info" text bg> info </el-button>
+        <el-popconfirm title="Are you sure to reset the simulation?" @confirm="reset_time()">
+          <template #reference>
+            <el-button type="primary" text bg> reset</el-button>
+          </template>
+        </el-popconfirm>
         <el-divider direction="vertical" />
         <span>duration:</span>
       </div>
@@ -101,72 +105,82 @@ import { storeToRefs } from 'pinia'
 import { useFetch } from '@vueuse/core'
 import { onMounted, ref } from 'vue'
 import { useStore } from '../store/SimStore'
-import ChartSimul1 from '../components/ChartSimul.vue'
 
 const store = useStore()
 const { simulation } = storeToRefs(store)
 
 const JsonObj = ref()
 const choosenChart = ref('')
+const button_flag = ref(false)
+const cur_step = ref(0)
 
-const url = 'http://127.0.0.1:8000/add_new_simulation/'
+let url = 'http://127.0.0.1:8000/add_new_simulation/?step_run=false'
 
 const CONST_VARS = ['FINAL TIME', 'INITIAL TIME', 'TIME STEP', 'SAVEPER']
-
-const buttons = [
-  { type: 'info', text: 'info' },
-  { type: 'primary', text: 'reset' }
-]
 
 function Populate(index) {
   choosenChart.value = index
 }
 
-async function PostSimulation(event) {
+function reset_time() {
+  simulation.value.start_time = 0
+  simulation.value.end_time = 0.125 // hardcoded
+  cur_step.value = 0
+}
+
+async function PostSimulation(event, step_run) {
   if (event) {
     console.log('Posting Simulation...')
+    button_flag.value=true
     const date = new Date()
     simulation.value.timestamp = formatDate(date)
     simulation.value.user = 'to-be-implemented'
     simulation.value.simulation_name = 'hardcoded for test'
-    simulation.value.model_name = 'Teacup'
+    simulation.value.model_name = 'Teacup' // hardcoded
+
     simulation.value.components.forEach((component) => {
       if (component._value) {
-        console.log('Hellooooo')
-        console.log(component['Real Name'])
-        console.log(component._value)
-
-        //store.params_obj.push({ param_name: component['Py Name'], param_value: component._value })
         store.simulation.params[component['Real Name']] = component._value // here we access directly the object from store because we add properties in params - see more for references
       }
     })
 
-    // Object.entries(store.params_obj).forEach(([key, value]) => {
-    //   simulation.value.params[value.param_name] = value.param_value
-    // })
-
     const { components, ...payload } = simulation.value
 
+    console.log(step_run)
+    if (step_run) {
+      url = 'http://127.0.0.1:8000/add_new_simulation/?step_run=true'
+    }
     const { data, onFetchResponse, onFetchError } = await useFetch(url, {
-      onFetchError(ctx) {
-        console.log('Something went wrong on Posting-Run Simulation') + ctx.error
+      afterFetch() {
+        simulation.value.start_time += 0.125
+        simulation.value.end_time += 0.125 // hardcoded
+        cur_step.value += 1
+        console.log(`Updating start_time value ${simulation.value.start_time}`)
+        button_flag.value = false
       }
     })
       .post(payload)
       .json()
 
-    onFetchResponse((response) => {
-      console.log(`data Fetched! ${response.status}`)
-      //console.log(`data on Fetch Response ${model_doc.value}`)
-    })
-
     onFetchError((ctx) => {
       console.log('Something went wrong on Posting-Run Simulation') + ctx.error
     })
 
+    onFetchResponse((response) => {
+      // THIS DOES NOT FIRE FOR SOME REASON
+      console.log(`data Fetched! ${response.status}`)
+      //console.log(`data on Fetch Response ${model_doc.value}`)
+      //simulation.value.start_time += 0.125
+    })
+
     JsonObj.value = data.value.json_data
+    //console.log(JsonObj.value)
   }
 }
+
+const bar_percentage = computed(() => {
+  return((30/0.125)*cur_step.value/100)
+})
 
 function padTo2Digits(num) {
   return num.toString().padStart(2, '0')
@@ -185,6 +199,7 @@ function formatDate(date) {
     ].join(':')
   )
 }
+import { computed } from '@vue/reactivity'
 </script>
 
 <style scoped>

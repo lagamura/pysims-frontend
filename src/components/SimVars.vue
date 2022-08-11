@@ -14,7 +14,7 @@ import { useStore } from '../store/SimStore'
 import { storeToRefs } from 'pinia'
 
 const store = useStore()
-const { simulation, params_obj, dropdown_trigger } = storeToRefs(store) //access params from store as ref
+const { simulation, dropdown_trigger } = storeToRefs(store) //access params from store as ref
 
 const namespace = ref(null)
 
@@ -27,7 +27,6 @@ function getSimVars() {
       simulation.value.params = data
       Object.keys(simulation.value.params).forEach((key) => {
         simulation.value.params[key] = 0
-        params_obj.value.push({ param_name: key, param_value: 0 })
       })
 
       console.log(`successfully fetched model_namespace ${JSON.stringify(data)}`)

@@ -13,6 +13,8 @@ const store = useStore()
 const { simulation } = storeToRefs(store)
 const url = ref()
 
+//store.simulation.components[1]._value = 200 // Warning - Is Final Time always in the 1st cell?
+
 const props = defineProps({
   simResults: Object | String,
   curSimulCounter: Number,
@@ -65,11 +67,14 @@ const config = {
       x: {
         title: {
           display: true,
+          type: 'time',
           text:
             'time: ' +
             simulation.value.components.find((element) => element['Real Name'] == 'FINAL TIME')
               .Units
-        }
+        },
+        suggestedMin: 0,
+        suggestedMax: simulation.value.components[1]._value
       },
       y: {
         title: {
@@ -77,7 +82,9 @@ const config = {
           text: simulation.value.components.find((element) => element['Real Name'] == props.chartid)
             .Units,
           color: '#808080'
-        }
+        },
+        suggestedMin: 0,
+        suggestedMax: 200
       }
     },
     pointRadius: 2,
@@ -100,12 +107,15 @@ const config = {
         ctx.fillStyle = 'White'
         ctx.fillRect(0, 0, chart.width, chart.height)
         ctx.restore()
-      },
+      }
+      /* Rendering Images */
+      /*
       afterRender: function (chart) {
         //url.value = chart.toBase64Image()
         const src = chart.toBase64Image('image/png', 1)
         store.img_thumbnails.push({ img_id: img_id.value, bs64: src })
       }
+      */
     }
   ]
 }

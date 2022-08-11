@@ -8,9 +8,8 @@ export type RootState = {
   user_simulations: UserSimulation[]
   simulation: Simulation
   cur_simul: number
-  params_obj: []
   dropdown_trigger: boolean
-  img_thumbnails: {img_id:string, bs64:string}[]
+  img_thumbnails: { img_id: string; bs64: string }[]
 }
 
 export const useStore = defineStore({
@@ -18,11 +17,15 @@ export const useStore = defineStore({
   state: () =>
     ({
       user_simulations: [],
-      simulation: {components:{}, params:{}} as Simulation,
+      simulation: {
+        components: {},
+        params: {},
+        start_time: 0,
+        end_time: 0.125
+      } as Simulation, //hardcoded
       cur_simul: -1,
-      params_obj: [],
       dropdown_trigger: false,
-      img_thumbnails: [] //maybe problem with the first argument
+      img_thumbnails: []
     } as RootState), // Warning - this should be changed, there is a discussion on use "as RootState" here: https://dev.to/carlomigueldy/getting-started-with-vue-3-pinia-store-typescript-by-building-a-grocery-list-app-19km
 
   actions: {
