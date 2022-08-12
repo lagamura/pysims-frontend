@@ -3,7 +3,10 @@
     <h3>user_simulations history</h3>
     <suspense>
       <TableVue />
-      <template #fallback> ...Loading </template>
+      <template #fallback>
+        <el-icon class="is-loading">
+          <Loading /> </el-icon
+      ></template>
     </suspense>
   </el-row>
   <el-row justify="center">

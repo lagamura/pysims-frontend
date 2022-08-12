@@ -48,7 +48,11 @@
     <!-- This is the right side-section -->
     <el-col :span="8" id="border_class">
       <div class="m-4">
-        <el-button title="Run next Step" :disabled=button_flag @click="PostSimulation($event, true)">
+        <el-button
+          title="Run next Step"
+          :disabled="button_flag"
+          @click="PostSimulation($event, true)"
+        >
           <el-icon>
             <VideoPlay />
           </el-icon>
@@ -92,7 +96,23 @@
           <span> {{ component['Real Name'] }}</span>
 
           <el-slider v-model="component._value" show-input />
+          <span style="font-size: smaller"> {{ component['Units'] }}</span>
         </div>
+      </div>
+      <el-divider />
+      <h3>Constants</h3>
+      <div
+        class="inline-block justify-space-between gap-4"
+        v-for="(component, index) in store.simulation.components"
+        :key="index"
+      >
+        <span class="control-vars m-2" v-if="component.Type=='Constant'">
+          <el-tooltip class="box-item" effect="dark" placement="top-start">
+            <template #content> {{ component.Units }}</template>
+            {{component['Real Name']}} =
+             {{component._value}}
+          </el-tooltip>
+        </span>
       </div>
     </el-col>
   </el-row>
@@ -131,7 +151,7 @@ function reset_time() {
 async function PostSimulation(event, step_run) {
   if (event) {
     console.log('Posting Simulation...')
-    button_flag.value=true
+    button_flag.value = true
     const date = new Date()
     simulation.value.timestamp = formatDate(date)
     simulation.value.user = 'to-be-implemented'
@@ -179,7 +199,7 @@ async function PostSimulation(event, step_run) {
 }
 
 const bar_percentage = computed(() => {
-  return((30/0.125)*cur_step.value/100)
+  return ((30 / 0.125) * cur_step.value) / 100
 })
 
 function padTo2Digits(num) {

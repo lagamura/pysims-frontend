@@ -25,9 +25,6 @@ function getSimVars() {
     .then((response) => response.json())
     .then((data) => {
       simulation.value.params = data
-      Object.keys(simulation.value.params).forEach((key) => {
-        simulation.value.params[key] = 0
-      })
 
       console.log(`successfully fetched model_namespace ${JSON.stringify(data)}`)
     })
