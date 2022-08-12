@@ -91,7 +91,7 @@ store.user_simulations = data.value
 //set state of user_simulations
 
 function pushNewSimulView() {
-  const redirectPath = '/new-simulation' // route.query.redirect || 'new-simulation' throws ts problem
+  const redirectPath = '/tutor-dashboard' // route.query.redirect || 'tutor-dashboard' throws ts problem
   router.push(redirectPath)
 }
 

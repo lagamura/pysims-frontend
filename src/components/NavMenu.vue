@@ -15,9 +15,9 @@
       </button>
     </el-menu-item>
     <el-menu-item index="/about"> About </el-menu-item>
-    <el-menu-item index="/dashboard"> Dashboard </el-menu-item>
+    <el-menu-item index="/dashboard"> Student Dashboard </el-menu-item>
 
-    <el-menu-item index="/new-simulation">Add Simulation</el-menu-item>
+    <el-menu-item index="/tutor-dashboard">Tutor Dashboard</el-menu-item>
     <el-menu-item h="full" @click="toggleDark()">
       <button
         class="border-none w-full bg-transparent cursor-pointer"

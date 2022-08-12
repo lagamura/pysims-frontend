@@ -24,7 +24,7 @@ function getSimVars() {
   fetch('http://127.0.0.1:8000/get_model_namespace/' + simulation.value.model_name)
     .then((response) => response.json())
     .then((data) => {
-      simulation.value.params = data
+      //simulation.value.params = data
 
       console.log(`successfully fetched model_namespace ${JSON.stringify(data)}`)
     })
