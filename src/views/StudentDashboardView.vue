@@ -44,6 +44,12 @@
           </div>
         </div>
       </el-row>
+      <el-divider />
+
+      <el-button v-if="bar_percentage > 99" color="00A568" @click="getCsvResults()"
+        >Export csv</el-button
+      >
+      <!-- <el-button @click="swipeDb()">Swipe Database</el-button> -->
     </el-col>
     <!-- This is the right side-section -->
     <el-col :span="8" id="border_class">
@@ -61,7 +67,7 @@
           <el-icon><ArrowRightBold /></el-icon>
         </el-button>
         <el-divider direction="vertical" />
-        <span>Step:0</span>
+        <span>Step:{{cur_step}}</span>
       </div>
       <div class="demo-progress">
         <span class="pa-30">Progress Bar</span>
@@ -106,11 +112,11 @@
         v-for="(component, index) in store.simulation.components"
         :key="index"
       >
-        <span class="control-vars m-2" v-if="component.Type=='Constant'">
+        <span class="control-vars m-2" v-if="component.Type == 'Constant'">
           <el-tooltip class="box-item" effect="dark" placement="top-start">
             <template #content> {{ component.Units }}</template>
-            {{component['Real Name']}} =
-             {{component._value}}
+            {{ component['Real Name'] }} =
+            {{ component._value }}
           </el-tooltip>
         </span>
       </div>
@@ -125,6 +131,7 @@ import { storeToRefs } from 'pinia'
 import { useFetch } from '@vueuse/core'
 import { onMounted, ref } from 'vue'
 import { useStore } from '../store/SimStore'
+import { computed } from '@vue/reactivity'
 
 const store = useStore()
 const { simulation } = storeToRefs(store)
@@ -167,9 +174,13 @@ async function PostSimulation(event, step_run) {
     const { components, ...payload } = simulation.value
 
     console.log(step_run)
+
     if (step_run) {
       url = 'http://127.0.0.1:8000/add_new_simulation/?step_run=true'
+    } else {
+      url = 'http://127.0.0.1:8000/add_new_simulation/?step_run=false'
     }
+
     const { data, onFetchResponse, onFetchError } = await useFetch(url, {
       afterFetch() {
         simulation.value.start_time += 0.125
@@ -177,6 +188,9 @@ async function PostSimulation(event, step_run) {
         cur_step.value += 1
         console.log(`Updating start_time value ${simulation.value.start_time}`)
         button_flag.value = false
+        if (!step_run) {
+          cur_step.value = 240 // FINAL TIME / time step
+        }
       }
     })
       .post(payload)
@@ -199,8 +213,28 @@ async function PostSimulation(event, step_run) {
 }
 
 const bar_percentage = computed(() => {
-  return ((30 / 0.125) * cur_step.value) / 100
+  return ((100 / (30 / 0.125)) * cur_step.value).toFixed(2) //hardcoded
 })
+
+function getCsvResults() {
+  //const { data, onFetchResponse, onFetchError } = await useFetch(url).blob()
+  fetch('http://127.0.0.1:8000/get_csv_results')
+    .then((res) => {
+      return res.blob()
+    })
+    .then((data) => {
+      var a = document.createElement('a')
+      a.href = window.URL.createObjectURL(data)
+      a.download = `${simulation.value.model_name}_${simulation.value.timestamp}`
+      a.click()
+    })
+}
+
+async function swipeDb() {
+  for (var i = 0; i <= 500; i++) {
+    await useFetch(`http://127.0.0.1:8000/delete_simul_by_id/${i}`).delete()
+  }
+}
 
 function padTo2Digits(num) {
   return num.toString().padStart(2, '0')
@@ -219,7 +253,6 @@ function formatDate(date) {
     ].join(':')
   )
 }
-import { computed } from '@vue/reactivity'
 </script>
 
 <style scoped>
