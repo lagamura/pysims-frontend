@@ -45,10 +45,14 @@
         </div>
       </el-row>
       <el-divider />
-
-      <el-button v-if="bar_percentage > 99" color="00A568" @click="getCsvResults()"
+      <div v-if="bar_percentage > 99">
+      <el-button  color="00A568" @click="getCsvResults()"
         >Export csv</el-button
       >
+      <el-input v-model="simulation.simulation_name">
+
+      </el-input>
+      </div>
       <!-- <el-button @click="swipeDb()">Swipe Database</el-button> -->
     </el-col>
     <!-- This is the right side-section -->
