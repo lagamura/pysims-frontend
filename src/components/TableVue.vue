@@ -44,7 +44,7 @@ import type { ElTable } from 'element-plus'
 import { useFetch } from '@vueuse/core'
 import { useStore } from '../store/SimStore'
 import { InfoFilled } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus/lib/components'
+import { ElMessage } from 'element-plus'
 
 const store = useStore()
 
@@ -74,7 +74,9 @@ const handleCurrentChange = (val: SimRow | undefined) => {
 const deleteRow = (index: number) => {
   console.log(index)
   store.cur_simul = -1
-  const { error,onFetchError } = useFetch('http://127.0.0.1:8000/delete_simul_by_id/' + (index + 1)).delete()
+  const { error, onFetchError } = useFetch(
+    'http://127.0.0.1:8000/delete_simul_by_id/' + (index + 1)
+  ).delete()
   // Request will be sent with POST method and data will be parsed as text
   onFetchError((error) => {
     console.log(error.message)
@@ -85,15 +87,13 @@ const deleteRow = (index: number) => {
     })
   })
   store.removeItem(index + 1)
-  
-
 }
 
 const router = useRouter()
 
 const url = 'http://127.0.0.1:8000/get_simuls'
 
-const { data } = useFetch(url).get().json()
+const { data } = await useFetch(url).get().json()
 
 store.user_simulations = data.value
 //set state of user_simulations

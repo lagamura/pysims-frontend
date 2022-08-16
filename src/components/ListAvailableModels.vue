@@ -25,7 +25,7 @@ import { ArrowDown } from '@element-plus/icons-vue'
 
 const url = 'http://127.0.0.1:8000/get_available_models'
 
-const { data } = useFetch(url).get().json()
+const { data } = await useFetch(url).get().json()
 
 const store = useStore()
 

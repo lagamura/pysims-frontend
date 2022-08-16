@@ -38,7 +38,7 @@ const props = defineProps({
 })
 
 async function getModelDoc() {
-  const { data, onFetchResponse, onFetchError } = useFetch(url.value, {
+  const { data, onFetchResponse, onFetchError } = await useFetch(url.value, {
     refetch: true
   })
     .get()
@@ -68,7 +68,7 @@ async function getModelDoc() {
 
 async function get_components_values() {
   const url = 'http://127.0.0.1:8000/get_components_values/' + props.modelName
-  const { data, onFetchResponse, onFetchError } = useFetch(url, {}).get().json()
+  const { data, onFetchResponse, onFetchError } = await useFetch(url, {}).get().json()
   console.log('data are', data)
   store.simulation.components.forEach((component) => {
     component._value = data.value[component['Real Name']] // be carefull there is a glitch in .Real_name property, we cannot access it by simulation.Real_Name

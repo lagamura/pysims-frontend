@@ -82,7 +82,12 @@
         <el-progress :text-inside="true" :stroke-width="26" :percentage="bar_percentage" />
       </div>
       <div class="inline-block justify-space-between mb-4 flex-wrap gap-4">
-        <el-button type="info" text bg> info </el-button>
+        <el-popover placement="right" :width="400" trigger="click">
+          <template #reference>
+            <el-button type="info" text bg> info </el-button>
+          </template>
+          <PopOver />
+        </el-popover>
         <el-popconfirm title="Are you sure to reset the simulation?" @confirm="reset_time()">
           <template #reference>
             <el-button type="primary" text bg> reset</el-button>
@@ -134,6 +139,7 @@
 
 <script setup>
 import ChartSimul from '@/components/ChartSimul.vue'
+import PopOver from '@/components/PopOver.vue'
 
 import { storeToRefs } from 'pinia'
 import { useFetch } from '@vueuse/core'
@@ -198,7 +204,7 @@ async function PostSimulation(event, step_run) {
 
     const { components, ...payload } = simulation.value
 
-    const { data, onFetchResponse, onFetchError } = useFetch(url, {
+    const { data, onFetchResponse, onFetchError } = await useFetch(url, {
       afterFetch() {
         //const time_step = 0.125
 
@@ -243,7 +249,7 @@ async function PostSimulation(event, step_run) {
 const bar_percentage = computed(() => Math.round((100 / (FINAL_TIME / TIME_STEP)) * cur_step.value))
 
 function getCsvResults() {
-  //const { data, onFetchResponse, onFetchError } = useFetch(url).blob()
+  //const { data, onFetchResponse, onFetchError } = await useFetch(url).blob()
   fetch('http://127.0.0.1:8000/get_csv_results')
     .then((res) => {
       return res.blob()
@@ -258,7 +264,7 @@ function getCsvResults() {
 
 async function saveResults() {
   url = 'http://localhost:8000/save_results'
-  const { data, onFetchResponse, onFetchError } = useFetch(url, {
+  const { data, onFetchResponse, onFetchError } = await useFetch(url, {
     /* This maybe not work correctly, if fetch fails what happens?*/
     afterFetch() {
       ElMessage.success({
@@ -282,7 +288,7 @@ async function saveResults() {
 
 async function swipeDb() {
   for (var i = 0; i <= 500; i++) {
-    useFetch(`http://127.0.0.1:8000/delete_simul_by_id/${i}`).delete()
+    await useFetch(`http://127.0.0.1:8000/delete_simul_by_id/${i}`).delete()
   }
 }
 
