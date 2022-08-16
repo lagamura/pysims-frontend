@@ -1,11 +1,9 @@
 <template>
-  <el-row>
-    <el-col :span="12">
-      <img src="src\assets\Teacup.png" />
-    </el-col>
+  <div>
+    <img src="src\assets\Teacup.png" width="300" height="200" />
 
-    <el-col :span="12">
-      <h3>{{ store.simulation.simulation_name }}</h3>
+    <h3>{{ store.simulation.model_name }}</h3>
+    <el-scrollbar height="300px">
       <p>
         System dynamics was created during the mid-1950s[3] by Professor Jay Forrester of the
         Massachusetts Institute of Technology. In 1956, Forrester accepted a professorship in the
@@ -23,11 +21,12 @@
         internal structure of the firm and not to an external force such as the business cycle.
         These hand simulations were the start of the field of system dynamics
       </p>
-    </el-col>
-  </el-row>
+    </el-scrollbar>
+  </div>
 </template>
 
 <script setup>
 import { useStore } from '@/store/SimStore'
 const store = useStore()
+
 </script>

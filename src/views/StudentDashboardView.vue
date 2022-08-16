@@ -82,7 +82,7 @@
         <el-progress :text-inside="true" :stroke-width="26" :percentage="bar_percentage" />
       </div>
       <div class="inline-block justify-space-between mb-4 flex-wrap gap-4">
-        <el-popover placement="right" :width="400" trigger="click">
+        <el-popover placement="left" :width="400" trigger="click">
           <template #reference>
             <el-button type="info" text bg> info </el-button>
           </template>
@@ -147,6 +147,7 @@ import { ref } from 'vue'
 import { useStore } from '../store/SimStore'
 import { computed } from '@vue/reactivity'
 import { ElMessage } from 'element-plus'
+import PopOver1 from '../components/PopOver.vue'
 
 const store = useStore()
 const { simulation } = storeToRefs(store)
