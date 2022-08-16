@@ -44,6 +44,7 @@ import type { ElTable } from 'element-plus'
 import { useFetch } from '@vueuse/core'
 import { useStore } from '../store/SimStore'
 import { InfoFilled } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus/lib/components'
 
 const store = useStore()
 
@@ -73,12 +74,19 @@ const handleCurrentChange = (val: SimRow | undefined) => {
 const deleteRow = (index: number) => {
   console.log(index)
   store.cur_simul = -1
-  const { error } = useFetch('http://127.0.0.1:8000/delete_simul_by_id/' + (index + 1)).delete()
+  const { error,onFetchError } = useFetch('http://127.0.0.1:8000/delete_simul_by_id/' + (index + 1)).delete()
   // Request will be sent with POST method and data will be parsed as text
-  if (error.value) {
-    console.log(`error on useFetch for deletion occured: ${error.value}`)
-  }
+  onFetchError((error) => {
+    console.log(error.message)
+    console.error(error.message)
+    ElMessage.error({
+      message: 'Problem connecting to API',
+      type: 'error'
+    })
+  })
   store.removeItem(index + 1)
+  
+
 }
 
 const router = useRouter()

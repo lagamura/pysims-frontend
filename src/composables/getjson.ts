@@ -1,4 +1,5 @@
 import { useFetch } from '@vueuse/core'
+import { ElMessage } from 'element-plus'
 
 export async function useGetJsonData(id: number): Promise<string> {
   const url = 'http://127.0.0.1:8000/get_simul_res_json/' + id
@@ -25,7 +26,7 @@ export async function useGetJsonData(id: number): Promise<string> {
 
 export async function useInitState() {
   const url = 'http://127.0.0.1:8000/get_simuls'
-  const { isFetching, error, data, onFetchResponse, onFetchError } = useFetch(url).get().json()
+  const { data, onFetchResponse, onFetchError } = useFetch(url).get().json()
   console.log(data.value)
   // model_doc.value = Object.values(data.value)
   // for (var obj of Object.values(data.value)){
@@ -35,6 +36,15 @@ export async function useInitState() {
   onFetchResponse((response) => {
     console.log(`data Fetched! ${response.status}`)
     //console.log(`data on Fetch Response ${model_doc.value}`)
+  })
+
+  onFetchError((error) => {
+    console.log(error.message)
+    console.error(error.message)
+    ElMessage.error({
+      message: 'Problem connecting to API',
+      type: 'error'
+    })
   })
 
   return data

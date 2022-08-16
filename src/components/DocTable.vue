@@ -25,7 +25,7 @@
 import { watch, ref } from 'vue'
 import { useStore } from '../store/SimStore'
 import { useFetch } from '@vueuse/core'
-import { storeToRefs } from 'pinia'
+import { ElMessage } from 'element-plus'
 
 const store = useStore()
 
@@ -57,7 +57,12 @@ async function getModelDoc() {
   })
 
   onFetchError((error) => {
-    console.log(`Error Occured in Fetching Doc ${error}`)
+    console.log(error.message)
+    console.error(error.message)
+    ElMessage.error({
+      message: 'Problem connecting to API',
+      type: 'error'
+    })
   })
 }
 
@@ -72,6 +77,15 @@ async function get_components_values() {
   store.simulation.end_time = store.simulation.components.filter(
     (component) => component['Real Name'] == 'TIME STEP'
   )[0]._value
+
+  onFetchError((error) => {
+    console.log(error.message)
+    console.error(error.message)
+    ElMessage.error({
+      message: 'Problem connecting to API',
+      type: 'error'
+    })
+  })
 }
 
 watch(
