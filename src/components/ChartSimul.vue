@@ -47,8 +47,8 @@ for (var key of Object.keys(props.simResults)) {
     const rgba = getRandomRgba()
     Dataset.push({
       label: key,
-      backgroundColor: rgba[1],
-      borderColor: rgba[0],
+      backgroundColor: stringToColour(props.chartid),
+      borderColor: stringToColour(props.chartid),
       data: props.simResults[key]
     })
   }
@@ -137,6 +137,19 @@ function getRandomRgba() {
   const b = Math.random() * 255
   const a = 0.4
   return [`rgb(${r},${g},${b})`, `rgba(${r},${g},${b},${a})`]
+}
+
+function stringToColour(str) {
+  var hash = 0
+  for (var i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  var colour = '#'
+  for (var i = 0; i < 3; i++) {
+    var value = (hash >> (i * 8)) & 0xff
+    colour += ('00' + value.toString(16)).substr(-2)
+  }
+  return colour
 }
 </script>
 

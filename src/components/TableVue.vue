@@ -85,7 +85,7 @@ const router = useRouter()
 
 const url = 'http://127.0.0.1:8000/get_simuls'
 
-const { data } = await useFetch(url).get().json()
+const { data } = useFetch(url).get().json()
 
 store.user_simulations = data.value
 //set state of user_simulations
