@@ -25,6 +25,7 @@
 import { watch, ref } from 'vue'
 import { useStore } from '../store/SimStore'
 import { useFetch } from '@vueuse/core'
+import { ElMessage } from 'element-plus'
 
 const store = useStore()
 
@@ -46,9 +47,9 @@ async function getModelDoc() {
   model_doc.value = Object.values(data.value)
   store.simulation.components = Object.values(data.value)
   //console.log(JSON.stringify(store.simulation.components))
-  store.simulation.components.forEach(component => {
+  store.simulation.components.forEach((component) => {
     component.student_control = false
-    component._value = null  
+    component._value = null
   })
 
   onFetchResponse((response) => {
@@ -56,22 +57,42 @@ async function getModelDoc() {
   })
 
   onFetchError((error) => {
-    console.log(`Error Occured in Fetching Doc ${error}`)
+    console.log(error.message)
+    console.error(error.message)
+    ElMessage.error({
+      message: 'Problem connecting to API',
+      type: 'error'
+    })
   })
 }
 
-// const fields = computed(() => {
-//   if (model_doc.value) {
-//     return Object.keys(model_doc.value[0])
-//   }
-// })
+async function get_components_values() {
+  const url = 'http://127.0.0.1:8000/get_components_values/' + props.modelName
+  const { data, onFetchResponse, onFetchError } = await useFetch(url, {}).get().json()
+  console.log('data are', data)
+  store.simulation.components.forEach((component) => {
+    component._value = data.value[component['Real Name']] // be carefull there is a glitch in .Real_name property, we cannot access it by simulation.Real_Name
+  })
+  store.simulation.start_time = 0
+  store.simulation.end_time = store.simulation.components.filter(
+    (component) => component['Real Name'] == 'TIME STEP'
+  )[0]._value
+
+  onFetchError((error) => {
+    console.log(error.message)
+    console.error(error.message)
+    ElMessage.error({
+      message: 'Problem connecting to API',
+      type: 'error'
+    })
+  })
+}
 
 watch(
   () => props.modelName,
   (before, after) => {
     url.value = 'http://127.0.0.1:8000/get_model_docs/' + props.modelName
-    //url.value = '/api/get_model_docs/' + props.modelName
-    getModelDoc()
+    getModelDoc().then(() => get_components_values())
   }
-) 
+)
 </script>

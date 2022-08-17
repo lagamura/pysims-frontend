@@ -44,6 +44,20 @@
           </div>
         </div>
       </el-row>
+      <el-divider />
+      <div v-if="bar_percentage > 99" class="inline-flex justify-center gap-4">
+        <el-button color="00A568" @click="getCsvResults()">Export csv</el-button>
+        <div class="inline-flex justify-center gap-4 pl-20 border-l">
+          <el-input
+            v-model="simulation.simulation_name"
+            placeholder=" Simulation Name"
+            maxlength="20"
+          >
+          </el-input>
+          <el-button @click="saveResults()"> Save Simulation </el-button>
+        </div>
+      </div>
+      <!-- <el-button @click="swipeDb()">Swipe Database</el-button> -->
     </el-col>
     <!-- This is the right side-section -->
     <el-col :span="8" id="border_class">
@@ -61,14 +75,19 @@
           <el-icon><ArrowRightBold /></el-icon>
         </el-button>
         <el-divider direction="vertical" />
-        <span>Step:0</span>
+        <span>Step:{{ cur_step }}</span>
       </div>
       <div class="demo-progress">
         <span class="pa-30">Progress Bar</span>
         <el-progress :text-inside="true" :stroke-width="26" :percentage="bar_percentage" />
       </div>
       <div class="inline-block justify-space-between mb-4 flex-wrap gap-4">
-        <el-button type="info" text bg> info </el-button>
+        <el-popover placement="left" :width="400" trigger="click">
+          <template #reference>
+            <el-button type="info" text bg> info </el-button>
+          </template>
+          <PopOver />
+        </el-popover>
         <el-popconfirm title="Are you sure to reset the simulation?" @confirm="reset_time()">
           <template #reference>
             <el-button type="primary" text bg> reset</el-button>
@@ -106,11 +125,11 @@
         v-for="(component, index) in store.simulation.components"
         :key="index"
       >
-        <span class="control-vars m-2" v-if="component.Type=='Constant'">
+        <span class="control-vars m-2" v-if="component.Type == 'Constant'">
           <el-tooltip class="box-item" effect="dark" placement="top-start">
             <template #content> {{ component.Units }}</template>
-            {{component['Real Name']}} =
-             {{component._value}}
+            {{ component['Real Name'] }} =
+            {{ component._value }}
           </el-tooltip>
         </span>
       </div>
@@ -120,11 +139,15 @@
 
 <script setup>
 import ChartSimul from '@/components/ChartSimul.vue'
+import PopOver from '@/components/PopOver.vue'
 
 import { storeToRefs } from 'pinia'
 import { useFetch } from '@vueuse/core'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { useStore } from '../store/SimStore'
+import { computed } from '@vue/reactivity'
+import { ElMessage } from 'element-plus'
+import PopOver1 from '../components/PopOver.vue'
 
 const store = useStore()
 const { simulation } = storeToRefs(store)
@@ -133,6 +156,13 @@ const JsonObj = ref()
 const choosenChart = ref('')
 const button_flag = ref(false)
 const cur_step = ref(0)
+
+const FINAL_TIME = simulation.value.components.filter(
+  (component) => component['Real Name'] == 'FINAL TIME'
+)[0]._value
+const TIME_STEP = simulation.value.components.filter(
+  (component) => component['Real Name'] == 'TIME STEP'
+)[0]._value
 
 let url = 'http://127.0.0.1:8000/add_new_simulation/?step_run=false'
 
@@ -144,7 +174,9 @@ function Populate(index) {
 
 function reset_time() {
   simulation.value.start_time = 0
-  simulation.value.end_time = 0.125 // hardcoded
+  simulation.value.end_time = simulation.value.components.filter(
+    (component) => component['Real Name'] == 'TIME STEP'
+  )[0]._value
   cur_step.value = 0
 }
 
@@ -155,35 +187,52 @@ async function PostSimulation(event, step_run) {
     const date = new Date()
     simulation.value.timestamp = formatDate(date)
     simulation.value.user = 'to-be-implemented'
-    simulation.value.simulation_name = 'hardcoded for test'
-    simulation.value.model_name = 'Teacup' // hardcoded
 
     simulation.value.components.forEach((component) => {
-      if (component._value) {
+      if (component._value && component.student_control) {
         store.simulation.params[component['Real Name']] = component._value // here we access directly the object from store because we add properties in params - see more for references
       }
     })
 
-    const { components, ...payload } = simulation.value
-
-    console.log(step_run)
     if (step_run) {
       url = 'http://127.0.0.1:8000/add_new_simulation/?step_run=true'
+    } else {
+      url = 'http://127.0.0.1:8000/add_new_simulation/?step_run=false'
+      simulation.value.end_time = simulation.value.components.filter(
+        (component) => component['Real Name'] == 'FINAL TIME'
+      )[0]._value
     }
+
+    const { components, ...payload } = simulation.value
+
     const { data, onFetchResponse, onFetchError } = await useFetch(url, {
       afterFetch() {
-        simulation.value.start_time += 0.125
-        simulation.value.end_time += 0.125 // hardcoded
+        //const time_step = 0.125
+
+        const time_step = simulation.value.components.filter(
+          (component) => component['Real Name'] == 'TIME STEP'
+        )[0]._value
+        simulation.value.start_time += time_step
+        simulation.value.end_time += time_step
         cur_step.value += 1
         console.log(`Updating start_time value ${simulation.value.start_time}`)
         button_flag.value = false
+        if (!step_run) {
+          cur_step.value = FINAL_TIME / TIME_STEP
+          console.log(cur_step.value)
+        }
       }
     })
       .post(payload)
       .json()
 
-    onFetchError((ctx) => {
-      console.log('Something went wrong on Posting-Run Simulation') + ctx.error
+    onFetchError((error) => {
+      console.log(error.message)
+      console.error(error.message)
+      ElMessage.error({
+        message: 'Problem connecting to API',
+        type: 'error'
+      })
     })
 
     onFetchResponse((response) => {
@@ -198,9 +247,51 @@ async function PostSimulation(event, step_run) {
   }
 }
 
-const bar_percentage = computed(() => {
-  return ((30 / 0.125) * cur_step.value) / 100
-})
+const bar_percentage = computed(() => Math.round((100 / (FINAL_TIME / TIME_STEP)) * cur_step.value))
+
+function getCsvResults() {
+  //const { data, onFetchResponse, onFetchError } = await useFetch(url).blob()
+  fetch('http://127.0.0.1:8000/get_csv_results')
+    .then((res) => {
+      return res.blob()
+    })
+    .then((data) => {
+      var a = document.createElement('a')
+      a.href = window.URL.createObjectURL(data)
+      a.download = `${simulation.value.model_name}_${simulation.value.timestamp}`
+      a.click()
+    })
+}
+
+async function saveResults() {
+  url = 'http://localhost:8000/save_results'
+  const { data, onFetchResponse, onFetchError } = await useFetch(url, {
+    /* This maybe not work correctly, if fetch fails what happens?*/
+    afterFetch() {
+      ElMessage.success({
+        message: 'Results saved succesfully',
+        type: 'success'
+      })
+    }
+  })
+    .post(simulation.value)
+    .json()
+
+  onFetchError((error) => {
+    console.log(error.message)
+    console.error(error.message)
+    ElMessage.error({
+      message: 'Problem connecting to API',
+      type: 'error'
+    })
+  })
+}
+
+async function swipeDb() {
+  for (var i = 0; i <= 500; i++) {
+    await useFetch(`http://127.0.0.1:8000/delete_simul_by_id/${i}`).delete()
+  }
+}
 
 function padTo2Digits(num) {
   return num.toString().padStart(2, '0')
@@ -219,7 +310,6 @@ function formatDate(date) {
     ].join(':')
   )
 }
-import { computed } from '@vue/reactivity'
 </script>
 
 <style scoped>

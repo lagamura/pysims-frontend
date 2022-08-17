@@ -4,10 +4,14 @@
       <el-header>
         <NavMenu />
       </el-header>
-        <el-main>
-          <router-view></router-view>
-        </el-main>
-          <el-footer ><FooterVue /></el-footer>
+      <el-main>
+        <router-view v-slot="{ Component }">
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
+        </router-view>
+      </el-main>
+      <el-footer><FooterVue /></el-footer>
     </el-container>
   </div>
 </template>
@@ -20,4 +24,3 @@ import { useStore } from './store/SimStore'
 const store = useStore()
 store.init() //init of the state
 </script>
-

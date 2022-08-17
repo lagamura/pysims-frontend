@@ -7,9 +7,11 @@
     "paths": {
       "@/*": ["./src/*"]
     },
+    "outDir": "build",
     "allowJs": true,
     "types": ["element-plus/global"]
   },
+  "exclude": ["node_modules", "build/**/*"],
 
   "references": [
     {
