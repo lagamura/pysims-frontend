@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img src="src\assets\Teacup.png" width="300" height="200" />
+    <img src="\src\assets\Teacup.png" width="300" height="200" />
 
     <h3>{{ store.simulation.model_name }}</h3>
     <el-scrollbar height="300px">
