@@ -264,7 +264,7 @@ function getCsvResults() {
 }
 
 async function saveResults() {
-  url = 'http://localhost:8000/save_results'
+  url = 'https://pysims-github.herokuapp.com/save_results'
   const { data, onFetchResponse, onFetchError } = await useFetch(url, {
     /* This maybe not work correctly, if fetch fails what happens?*/
     afterFetch() {
