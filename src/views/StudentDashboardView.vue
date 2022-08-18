@@ -164,7 +164,7 @@ const TIME_STEP = simulation.value.components.filter(
   (component) => component['Real Name'] == 'TIME STEP'
 )[0]._value
 
-let url = 'http://127.0.0.1:8000/add_new_simulation/?step_run=false'
+let url = 'https://pysims-github.herokuapp.com/add_new_simulation/?step_run=false'
 
 const CONST_VARS = ['FINAL TIME', 'INITIAL TIME', 'TIME STEP', 'SAVEPER']
 
@@ -195,9 +195,9 @@ async function PostSimulation(event, step_run) {
     })
 
     if (step_run) {
-      url = 'http://127.0.0.1:8000/add_new_simulation/?step_run=true'
+      url = 'https://pysims-github.herokuapp.com/add_new_simulation/?step_run=true'
     } else {
-      url = 'http://127.0.0.1:8000/add_new_simulation/?step_run=false'
+      url = 'https://pysims-github.herokuapp.com/add_new_simulation/?step_run=false'
       simulation.value.end_time = simulation.value.components.filter(
         (component) => component['Real Name'] == 'FINAL TIME'
       )[0]._value
@@ -251,7 +251,7 @@ const bar_percentage = computed(() => Math.round((100 / (FINAL_TIME / TIME_STEP)
 
 function getCsvResults() {
   //const { data, onFetchResponse, onFetchError } = await useFetch(url).blob()
-  fetch('http://127.0.0.1:8000/get_csv_results')
+  fetch('https://pysims-github.herokuapp.com/get_csv_results')
     .then((res) => {
       return res.blob()
     })
@@ -289,7 +289,7 @@ async function saveResults() {
 
 async function swipeDb() {
   for (var i = 0; i <= 500; i++) {
-    await useFetch(`http://127.0.0.1:8000/delete_simul_by_id/${i}`).delete()
+    await useFetch(`https://pysims-github.herokuapp.com/delete_simul_by_id/${i}`).delete()
   }
 }
 

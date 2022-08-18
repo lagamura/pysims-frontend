@@ -67,7 +67,7 @@ async function getModelDoc() {
 }
 
 async function get_components_values() {
-  const url = 'http://127.0.0.1:8000/get_components_values/' + props.modelName
+  const url = 'https://pysims-github.herokuapp.com/get_components_values/' + props.modelName
   const { data, onFetchResponse, onFetchError } = await useFetch(url, {}).get().json()
   console.log('data are', data)
   store.simulation.components.forEach((component) => {
@@ -91,7 +91,7 @@ async function get_components_values() {
 watch(
   () => props.modelName,
   (before, after) => {
-    url.value = 'http://127.0.0.1:8000/get_model_docs/' + props.modelName
+    url.value = 'https://pysims-github.herokuapp.com/get_model_docs/' + props.modelName
     getModelDoc().then(() => get_components_values())
   }
 )

@@ -75,7 +75,7 @@ const deleteRow = (index: number) => {
   console.log(index)
   store.cur_simul = -1
   const { error, onFetchError } = useFetch(
-    'http://127.0.0.1:8000/delete_simul_by_id/' + (index + 1)
+    'https://pysims-github.herokuapp.com/delete_simul_by_id/' + (index + 1)
   ).delete()
   // Request will be sent with POST method and data will be parsed as text
   onFetchError((error) => {
@@ -91,7 +91,7 @@ const deleteRow = (index: number) => {
 
 const router = useRouter()
 
-const url = 'http://127.0.0.1:8000/get_simuls'
+const url = 'https://pysims-github.herokuapp.com/get_simuls'
 
 const { data } = await useFetch(url).get().json()
 

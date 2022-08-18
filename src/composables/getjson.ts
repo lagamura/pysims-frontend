@@ -2,7 +2,7 @@ import { useFetch } from '@vueuse/core'
 import { ElMessage } from 'element-plus'
 
 export async function useGetJsonData(id: number): Promise<string> {
-  const url = 'http://127.0.0.1:8000/get_simul_res_json/' + id
+  const url = 'https://pysims-github.herokuapp.com/get_simul_res_json/' + id
 
   const response = await fetch(url)
   console.log(response)
@@ -25,7 +25,7 @@ export async function useGetJsonData(id: number): Promise<string> {
 }
 
 export async function useInitState() {
-  const url = 'http://127.0.0.1:8000/get_simuls'
+  const url = 'https://pysims-github.herokuapp.com/get_simuls'
   const { data, onFetchResponse, onFetchError } = await useFetch(url).get().json()
   console.log(data.value)
   // model_doc.value = Object.values(data.value)
@@ -51,7 +51,7 @@ export async function useInitState() {
 }
 
 export async function postSim(data: object) {
-  fetch('http://127.0.0.1:8000/add_new_simulation/', {
+  fetch('https://pysims-github.herokuapp.com/add_new_simulation/', {
     method: 'POST', // or 'PUT'
     headers: {
       'Content-Type': 'application/json'

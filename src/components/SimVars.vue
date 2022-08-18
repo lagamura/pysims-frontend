@@ -21,7 +21,7 @@ const namespace = ref(null)
 function getSimVars() {
   console.log(`Fetching getSimVars for model ${simulation.value.model_name}...`)
 
-  fetch('http://127.0.0.1:8000/get_model_namespace/' + simulation.value.model_name)
+  fetch('https://pysims-github.herokuapp.com/get_model_namespace/' + simulation.value.model_name)
     .then((response) => response.json())
     .then((data) => {
       //simulation.value.params = data
@@ -49,7 +49,7 @@ watch(
   () => props.modelName,
   (before, after) => {
     console.log('url_namespace has changed')
-    url_namespace.value = 'http://127.0.0.1:8000/get_model_namespace/' + props.modelName
+    url_namespace.value = 'https://pysims-github.herokuapp.com/get_model_namespace/' + props.modelName
     getSimVars()
   }
 )

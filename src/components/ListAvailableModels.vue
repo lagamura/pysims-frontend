@@ -23,7 +23,7 @@ import { useStore } from '../store/SimStore'
 import { useFetch } from '@vueuse/core'
 import { ArrowDown } from '@element-plus/icons-vue'
 
-const url = 'http://127.0.0.1:8000/get_available_models'
+const url = 'https://pysims-github.herokuapp.com/get_available_models'
 
 const { data } = await useFetch(url).get().json()
 
