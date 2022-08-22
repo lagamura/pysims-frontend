@@ -3,8 +3,8 @@ import { ElMessage } from 'element-plus'
 
 // used by the store init to fetch the user's simulation
 export async function useInitState() {
-  const url = 'https://pysims-github.herokuapp.com/get_simuls'
-  const { data, onFetchResponse, onFetchError } = await useMyFetch(url).get().json()
+  const url_endopoint = '/get_simuls'
+  const { data, onFetchResponse, onFetchError } = await useMyFetch(url_endopoint).get().json()
   console.log(data.value)
   // model_doc.value = Object.values(data.value)
   // for (var obj of Object.values(data.value)){
