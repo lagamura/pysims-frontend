@@ -9,41 +9,17 @@
 </template>
 
 <script setup>
-import { computed, watch, ref, onMounted } from 'vue'
+import { watch } from 'vue'
 import { useStore } from '../store/SimStore'
 import { storeToRefs } from 'pinia'
 
 const store = useStore()
 const { simulation, dropdown_trigger } = storeToRefs(store) //access params from store as ref
 
-const namespace = ref(null)
-
-function getSimVars() {
-  console.log(`Fetching getSimVars for model ${simulation.value.model_name}...`)
-
-  fetch('https://pysims-github.herokuapp.com/get_model_namespace/' + simulation.value.model_name)
-    .then((response) => response.json())
-    .then((data) => {
-      //simulation.value.params = data
-
-      console.log(`successfully fetched model_namespace ${JSON.stringify(data)}`)
-    })
-    .catch((error) => {
-      console.log('Error! Could not reach the API. ' + error)
-    })
-}
-
 watch(dropdown_trigger, (newvalue) => {
   console.log(`state simulation has changed ${newvalue.model_name}`)
   getSimVars()
 })
-
-const py_namespace = computed(() => {
-  if (namespace.value) {
-    return Object.values(namespace.value)
-  }
-})
-
 
 // https://stackoverflow.com/questions/1117916/merge-keys-array-and-values-array-into-an-object-in-javascript
 /*
