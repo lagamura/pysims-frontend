@@ -177,6 +177,10 @@ function reset_time() {
     (component) => component['Real Name'] == 'TIME STEP'
   )[0]._value
   cur_step.value = 0
+  // Rerender page?
+  // const instance = getCurrentInstance()
+  // instance?.proxy?.$forceUpdate()
+  JsonObj.value = null
 }
 
 async function PostSimulation(event, step_run) {
@@ -249,28 +253,30 @@ async function PostSimulation(event, step_run) {
 const bar_percentage = computed(() => Math.round((100 / (FINAL_TIME / TIME_STEP)) * cur_step.value))
 
 function getCsvResults() {
-  const { onFetchError } = useMyFetch(url_endpoint)
-    .get()
-    .blob()
+  //const { data, onFetchResponse, onFetchError } = await useFetch(url).blob()
+  //const { data, onFetchResponse, onFetchError } = await useMyFetch(url_endpoint).blob()
+  let url = ''
+  if (import.meta.env.DEV) {
+    url = 'http://localhost:8000'
+  } else {
+    url = 'https://pysims-github.herokuapp.com'
+  }
+
+  fetch(url + '/get_csv_results')
+    .then((res) => {
+      return res.blob()
+    })
     .then((data) => {
       var a = document.createElement('a')
       a.href = window.URL.createObjectURL(data)
       a.download = `${simulation.value.model_name}_${simulation.value.timestamp}`
       a.click()
     })
-  onFetchError((error) => {
-    console.log(error.message)
-    console.error(error.message)
-    ElMessage.error({
-      message: 'Problem connecting to API',
-      type: 'error'
-    })
-  })
 }
 
 async function saveResults() {
   url_endpoint = '/save_results'
-  const { onFetchError } = useMyFetch(url_endpoint, {
+  const { onFetchError } = await useMyFetch(url_endpoint, {
     /* This maybe not work correctly, if fetch fails what happens?*/
     afterFetch() {
       ElMessage.success({
@@ -280,10 +286,8 @@ async function saveResults() {
     }
   })
     .post(simulation.value)
-    .json()
 
   onFetchError((error) => {
-    console.log(error.message)
     console.error(error.message)
     ElMessage.error({
       message: 'Problem connecting to API',
