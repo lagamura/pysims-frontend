@@ -82,8 +82,6 @@ const config = {
             .Units,
           color: '#808080'
         },
-        suggestedMin: 0,
-        suggestedMax: 200
       }
     },
     pointRadius: 2,
