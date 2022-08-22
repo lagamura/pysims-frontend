@@ -24,21 +24,21 @@
 <script setup>
 import { watch, ref } from 'vue'
 import { useStore } from '../store/SimStore'
-import { useFetch } from '@vueuse/core'
 import { ElMessage } from 'element-plus'
+import { useMyFetch } from '@/composables/getjson'
 
 const store = useStore()
 
 const showFlag = ref(true)
 const model_doc = ref()
-const url = ref('')
+const url_endpoint = ref('')
 
 const props = defineProps({
   modelName: String
 })
 
 async function getModelDoc() {
-  const { data, onFetchResponse, onFetchError } = await useFetch(url.value, {
+  const { data, onFetchResponse, onFetchError } = await useMyFetch(url_endpoint.value, {
     refetch: true
   })
     .get()
@@ -67,8 +67,8 @@ async function getModelDoc() {
 }
 
 async function get_components_values() {
-  const url = 'https://pysims-github.herokuapp.com/get_components_values/' + props.modelName
-  const { data, onFetchResponse, onFetchError } = await useFetch(url, {}).get().json()
+  const url_endpoint = '/get_components_values/' + props.modelName
+  const { data, onFetchResponse, onFetchError } = await useMyFetch(url_endpoint, {}).get().json()
   console.log('data are', data)
   store.simulation.components.forEach((component) => {
     component._value = data.value[component['Real Name']] // be carefull there is a glitch in .Real_name property, we cannot access it by simulation.Real_Name
@@ -91,7 +91,7 @@ async function get_components_values() {
 watch(
   () => props.modelName,
   (before, after) => {
-    url.value = 'https://pysims-github.herokuapp.com/get_model_docs/' + props.modelName
+    url_endpoint.value = '/get_model_docs/' + props.modelName
     getModelDoc().then(() => get_components_values())
   }
 )

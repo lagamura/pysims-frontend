@@ -39,10 +39,10 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import type { ElTable } from 'element-plus'
-import { useFetch } from '@vueuse/core'
 import { useStore } from '../store/SimStore'
+import { useMyFetch } from '@/composables/getjson'
 import { InfoFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
@@ -74,8 +74,8 @@ const handleCurrentChange = (val: SimRow | undefined) => {
 const deleteRow = (index: number) => {
   console.log(index)
   store.cur_simul = -1
-  const { error, onFetchError } = useFetch(
-    'https://pysims-github.herokuapp.com/delete_simul_by_id/' + (index + 1)
+  const { error, onFetchError } = useMyFetch(
+    '/delete_simul_by_id/' + (index + 1)
   ).delete()
   // Request will be sent with POST method and data will be parsed as text
   onFetchError((error) => {
@@ -91,9 +91,9 @@ const deleteRow = (index: number) => {
 
 const router = useRouter()
 
-const url = 'https://pysims-github.herokuapp.com/get_simuls'
+const url_endpoint = '/get_simuls'
 
-const { data } = await useFetch(url).get().json()
+const { data } = await useMyFetch(url_endpoint).get().json()
 
 store.user_simulations = data.value
 //set state of user_simulations

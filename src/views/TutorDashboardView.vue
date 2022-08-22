@@ -11,10 +11,11 @@
           </el-icon>
         </template>
       </suspense>
-      <h2>Choose Control Variables</h2>
+      <h2>Choose Control Variables (Constants)</h2>
+
       <TutorSelection />
-      <h3>Step 3 - Choose a simulation name</h3>
-      <el-input v-model="simulation.simulation_name" placeholder="Your Simulation Name" />
+      <!-- <h3>Step 3 - Choose a simulation name</h3>
+      <el-input v-model="simulation.simulation_name" placeholder="Your Simulation Name" /> -->
     </el-col>
 
     <template v-if="user_simulations">
@@ -47,7 +48,6 @@
     </el-col>
   </el-row>
   <el-divider />
-
 </template>
 
 <script setup>
@@ -59,6 +59,4 @@ import TutorSelection from '../components/TutorSelection.vue'
 
 const store = useStore()
 const { user_simulations, simulation, cur_simul } = storeToRefs(store)
-
-
 </script>

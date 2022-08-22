@@ -44,16 +44,6 @@ const py_namespace = computed(() => {
   }
 })
 
-/* watch props https://stackoverflow.com/questions/59125857/how-to-watch-props-change-with-vue-composition-api-vue-3
-watch(
-  () => props.modelName,
-  (before, after) => {
-    console.log('url_namespace has changed')
-    url_namespace.value = 'https://pysims-github.herokuapp.com/get_model_namespace/' + props.modelName
-    getSimVars()
-  }
-)
-*/
 
 // https://stackoverflow.com/questions/1117916/merge-keys-array-and-values-array-into-an-object-in-javascript
 /*

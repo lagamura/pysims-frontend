@@ -142,12 +142,11 @@ import ChartSimul from '@/components/ChartSimul.vue'
 import PopOver from '@/components/PopOver.vue'
 
 import { storeToRefs } from 'pinia'
-import { useFetch } from '@vueuse/core'
 import { ref } from 'vue'
 import { useStore } from '../store/SimStore'
 import { computed } from '@vue/reactivity'
 import { ElMessage } from 'element-plus'
-import PopOver1 from '../components/PopOver.vue'
+import { useMyFetch } from '@/composables/getjson'
 
 const store = useStore()
 const { simulation } = storeToRefs(store)
@@ -164,7 +163,7 @@ const TIME_STEP = simulation.value.components.filter(
   (component) => component['Real Name'] == 'TIME STEP'
 )[0]._value
 
-let url = 'https://pysims-github.herokuapp.com/add_new_simulation/?step_run=false'
+let url_endpoint = '/add_new_simulation/?step_run=false'
 
 const CONST_VARS = ['FINAL TIME', 'INITIAL TIME', 'TIME STEP', 'SAVEPER']
 
@@ -195,9 +194,9 @@ async function PostSimulation(event, step_run) {
     })
 
     if (step_run) {
-      url = 'https://pysims-github.herokuapp.com/add_new_simulation/?step_run=true'
+      url_endpoint = '/add_new_simulation/?step_run=true'
     } else {
-      url = 'https://pysims-github.herokuapp.com/add_new_simulation/?step_run=false'
+      url_endpoint = '/add_new_simulation/?step_run=false'
       simulation.value.end_time = simulation.value.components.filter(
         (component) => component['Real Name'] == 'FINAL TIME'
       )[0]._value
@@ -205,7 +204,7 @@ async function PostSimulation(event, step_run) {
 
     const { components, ...payload } = simulation.value
 
-    const { data, onFetchResponse, onFetchError } = await useFetch(url, {
+    const { data, onFetchResponse, onFetchError } = await useMyFetch(url_endpoint, {
       afterFetch() {
         //const time_step = 0.125
 
@@ -250,22 +249,22 @@ async function PostSimulation(event, step_run) {
 const bar_percentage = computed(() => Math.round((100 / (FINAL_TIME / TIME_STEP)) * cur_step.value))
 
 function getCsvResults() {
-  //const { data, onFetchResponse, onFetchError } = await useFetch(url).blob()
+  //const { data, onFetchResponse, onFetchError } = await useMyFetch(url_endpoint).blob()
   fetch('https://pysims-github.herokuapp.com/get_csv_results')
     .then((res) => {
       return res.blob()
     })
     .then((data) => {
       var a = document.createElement('a')
-      a.href = window.URL.createObjectURL(data)
+      a.href = window.url.createObjectURL(data)
       a.download = `${simulation.value.model_name}_${simulation.value.timestamp}`
       a.click()
     })
 }
 
 async function saveResults() {
-  url = 'https://pysims-github.herokuapp.com/save_results'
-  const { data, onFetchResponse, onFetchError } = await useFetch(url, {
+  url_endpoint = '/save_results'
+  const { onFetchError } = await useMyFetch(url_endpoint, {
     /* This maybe not work correctly, if fetch fails what happens?*/
     afterFetch() {
       ElMessage.success({
@@ -289,7 +288,7 @@ async function saveResults() {
 
 async function swipeDb() {
   for (var i = 0; i <= 500; i++) {
-    await useFetch(`https://pysims-github.herokuapp.com/delete_simul_by_id/${i}`).delete()
+    await useMyFetch(`/delete_simul_by_id/${i}`).delete()
   }
 }
 

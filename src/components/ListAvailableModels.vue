@@ -20,12 +20,12 @@
 
 <script lang="ts" setup>
 import { useStore } from '../store/SimStore'
-import { useFetch } from '@vueuse/core'
+import { useMyFetch } from '@/composables/getjson';
 import { ArrowDown } from '@element-plus/icons-vue'
 
-const url = 'https://pysims-github.herokuapp.com/get_available_models'
+const url_endpoint = '/get_available_models'
 
-const { data } = await useFetch(url).get().json()
+const { data } = await useMyFetch(url_endpoint).get().json()
 
 const store = useStore()
 

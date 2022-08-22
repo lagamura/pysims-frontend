@@ -11,7 +11,6 @@ Chart.register(...registerables)
 
 const store = useStore()
 const { simulation } = storeToRefs(store)
-const url = ref()
 
 //store.simulation.components[1]._value = 200 // Warning - Is Final Time always in the 1st cell?
 

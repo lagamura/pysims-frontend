@@ -1,32 +1,10 @@
-import { useFetch } from '@vueuse/core'
+import { createFetch } from '@vueuse/core'
 import { ElMessage } from 'element-plus'
 
-export async function useGetJsonData(id: number): Promise<string> {
-  const url = 'https://pysims-github.herokuapp.com/get_simul_res_json/' + id
-
-  const response = await fetch(url)
-  console.log(response)
-
-  if (response.ok) {
-    const data: string = await response.json()
-    // const data_string = JSON.stringify(data)
-    const data_obj = JSON.parse(data)
-    // console.log(`data in data_string is: ${data_string}`)
-    console.log(`data in data_obj is: ${data_obj}`)
-
-    return data_obj
-  } else {
-    return Promise.reject(
-      new Error(
-        `Something went wrong with fetching json data - maybe there is no simulation with id: "${id}"}`
-      )
-    )
-  }
-}
-
+// used by the store init to fetch the user's simulation
 export async function useInitState() {
   const url = 'https://pysims-github.herokuapp.com/get_simuls'
-  const { data, onFetchResponse, onFetchError } = await useFetch(url).get().json()
+  const { data, onFetchResponse, onFetchError } = await useMyFetch(url).get().json()
   console.log(data.value)
   // model_doc.value = Object.values(data.value)
   // for (var obj of Object.values(data.value)){
@@ -50,36 +28,27 @@ export async function useInitState() {
   return data
 }
 
-export async function postSim(data: object) {
-  fetch('https://pysims-github.herokuapp.com/add_new_simulation/', {
-    method: 'POST', // or 'PUT'
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log('Success:', data)
-    })
-    .catch((error) => {
-      console.error('Error:', error)
-    })
-}
 
-export async function fetch_del(url: string, id: number): Promise<string> {
-  const response = await fetch(url + id)
-  console.log(response)
-
-  if (response.ok) {
-    const data: string = await response.json()
-    // const data_string = JSON.stringify(data)
-    const data_obj = JSON.parse(data)
-    // console.log(`data in data_string is: ${data_string}`)
-    console.log(`data in data_obj is: ${data_obj}`)
-
-    return data_obj
+function URL_() {
+  if (import.meta.env.DEV) {
+    return 'http://localhost:8000'
   } else {
-    return Promise.reject(new Error(`Something went wrong with fetch_post json data}`))
+    return 'https://pysims-github.herokuapp.com'
   }
 }
+
+const URL_BASIS: string = URL_()
+
+export const useMyFetch = createFetch({
+  baseUrl: URL_BASIS,
+  options: {
+    // async beforeFetch({ options }) {
+    //   const myToken = await getMyToken()
+    //   options.headers.Authorization = `Bearer ${myToken}`
+    //   return { options }
+    // }
+  },
+  fetchOptions: {
+    mode: 'cors'
+  }
+})
