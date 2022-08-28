@@ -43,7 +43,7 @@ const Dataset = []
 for (var key of Object.keys(props.simResults)) {
   if (key.toUpperCase() != key && key == props.chartid) {
     // in order to avoid constant values
-    const rgba = getRandomRgba()
+    //const rgba = getRandomRgba()
     Dataset.push({
       label: key,
       backgroundColor: stringToColour(props.chartid),

@@ -24,7 +24,6 @@
 <script lang="ts" setup>
 import TableVue from '../components/TableVue.vue'
 import ChartSimul from '../components/ChartSimul.vue'
-import TestComp from '../components/TestComp.vue'
 
 import { useStore } from '../store/SimStore'
 import { storeToRefs } from 'pinia'

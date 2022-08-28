@@ -1,9 +1,9 @@
 <template>
   <el-menu
     :default-active="activeIndex"
-    class="el-menu-demo"
     mode="horizontal"
     @select="handleSelect"
+    :ellipsis="false"
     :router="true"
   >
     <el-menu-item index="/" h="full">
@@ -28,6 +28,13 @@
         </i>
       </button>
     </el-menu-item>
+    <div class="flex-grow" />
+    <el-menu-item index="/sign-up"> Sign Up </el-menu-item>
+    <el-menu-item index="not-yet">
+      <i inline-flex>
+        <el-icon><User /></el-icon>
+      </i>
+    </el-menu-item>
   </el-menu>
 </template>
 
@@ -35,8 +42,9 @@
 import { ref } from 'vue'
 import { toggleDark } from '../composables/dark'
 
+import { User } from '@element-plus/icons-vue'
+
 const activeIndex = ref('1')
-const activeIndex2 = ref('1')
 const handleSelect = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }
@@ -45,5 +53,10 @@ const handleSelect = (key: string, keyPath: string[]) => {
 <style scoped>
 .el-icon {
   color: aliceblue;
+}
+
+.flex-grow {
+  flex-grow: 1;
+  justify-content: flex-end;
 }
 </style>
