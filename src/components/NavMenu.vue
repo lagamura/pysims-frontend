@@ -18,17 +18,20 @@
     <el-menu-item index="/dashboard"> Student Dashboard </el-menu-item>
 
     <el-menu-item index="/tutor-dashboard">Tutor Dashboard</el-menu-item>
-    <el-menu-item h="full" @click="toggleDark()">
-      <button
-        class="border-none w-full bg-transparent cursor-pointer"
-        style="height: var(--el-menu-item-height)"
-      >
-        <i inline-flex>
-          <el-icon><Moon /></el-icon>
-        </i>
-      </button>
-    </el-menu-item>
+
     <div class="flex-grow" />
+    <el-menu-item>
+      <div>
+        <el-switch
+          v-model="togglebind"
+          style="--el-switch-on-color: #333333"
+          inline-prompt
+          :active-icon="Moon"
+          :inactive-icon="Sunny"
+          @change="toggleDark()"
+        />
+      </div>
+    </el-menu-item>
     <el-menu-item index="/sign-up"> Sign Up </el-menu-item>
     <el-menu-item index="not-yet">
       <i inline-flex>
@@ -41,10 +44,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { toggleDark } from '../composables/dark'
-
-import { User } from '@element-plus/icons-vue'
+import { Moon, Sunny } from '@element-plus/icons-vue'
 
 const activeIndex = ref('1')
+const togglebind = ref(true)
 const handleSelect = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }
