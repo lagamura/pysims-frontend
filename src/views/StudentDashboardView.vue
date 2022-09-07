@@ -177,6 +177,7 @@ function reset_time() {
     (component) => component['Real Name'] == 'TIME STEP'
   )[0]._value
   cur_step.value = 0
+  choosenChart.value = null
   // Rerender page?
   // const instance = getCurrentInstance()
   // instance?.proxy?.$forceUpdate()
@@ -284,8 +285,7 @@ async function saveResults() {
         type: 'success'
       })
     }
-  })
-    .post(simulation.value)
+  }).post(simulation.value)
 
   onFetchError((error) => {
     console.error(error.message)
