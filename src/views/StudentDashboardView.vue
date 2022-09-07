@@ -263,7 +263,9 @@ function getCsvResults() {
     url = 'https://pysims-github.herokuapp.com'
   }
 
-  fetch(url + '/get_csv_results')
+  //'/add_new_simulation/?step_run=false'
+
+  fetch(url + '/get_csv_results/' + simulation.value.model_name)
     .then((res) => {
       return res.blob()
     })
