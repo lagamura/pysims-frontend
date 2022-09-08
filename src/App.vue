@@ -5,6 +5,8 @@
         <NavMenu />
       </el-header>
       <el-main>
+        <!-- <router-view>
+        </router-view> -->
         <router-view v-slot="{ Component }">
           <keep-alive>
             <component :is="Component" />

@@ -9,7 +9,7 @@ export type RootState = {
   simulation: Simulation
   cur_simul: number
   dropdown_trigger: boolean
-  img_thumbnails: { img_id: string; bs64: string }[]
+  JsonObj: {}
 }
 
 export const useStore = defineStore({
@@ -25,7 +25,7 @@ export const useStore = defineStore({
       } as Simulation, //hardcoded
       cur_simul: -1,
       dropdown_trigger: false,
-      img_thumbnails: []
+      JsonObj: {},
     } as RootState), // Warning - this should be changed, there is a discussion on use "as RootState" here: https://dev.to/carlomigueldy/getting-started-with-vue-3-pinia-store-typescript-by-building-a-grocery-list-app-19km
 
   actions: {

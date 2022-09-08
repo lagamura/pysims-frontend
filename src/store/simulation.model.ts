@@ -3,7 +3,6 @@ export interface UserSimulation {
   name: string
   model_name: string
   json_data: string // type JSONValue disabled because of infinite loop
-  namespace: string[]
   params: {}
 }
 
@@ -17,7 +16,7 @@ export interface Simulation {
     Real_Name: string
     Py_Name: string
     Subscripts: any
-    Units: String
+    Units: string
     Limits: [number, number]
     Type: string
     Subtype: string

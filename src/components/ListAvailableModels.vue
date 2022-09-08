@@ -20,7 +20,7 @@
 
 <script lang="ts" setup>
 import { useStore } from '../store/SimStore'
-import { useMyFetch } from '@/composables/getjson';
+import { useMyFetch } from '@/composables/getjson'
 import { ArrowDown } from '@element-plus/icons-vue'
 
 const url_endpoint = '/get_available_models'
@@ -32,6 +32,7 @@ const store = useStore()
 function setModelName(model: string) {
   store.simulation.model_name = model
   store.dropdown_trigger = true
+  store.JsonObj = {}
   console.log('Button on dropdown-list triggered')
 }
 </script>

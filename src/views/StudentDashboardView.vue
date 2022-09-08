@@ -1,4 +1,4 @@
-<template>
+<template :key="simulation">
   <el-row :gutter="20">
     <el-col :span="16">
       <h2>Model: {{ store.simulation.model_name }}</h2>
@@ -149,9 +149,8 @@ import { ElMessage } from 'element-plus'
 import { useMyFetch } from '@/composables/getjson'
 
 const store = useStore()
-const { simulation } = storeToRefs(store)
+const { simulation, JsonObj } = storeToRefs(store)
 
-const JsonObj = ref()
 const choosenChart = ref('')
 const button_flag = ref(false)
 const cur_step = ref(0)
@@ -178,10 +177,12 @@ function reset_time() {
   )[0]._value
   cur_step.value = 0
   choosenChart.value = null
+  JsonObj.value = null
+  simulation.value.params = {}
+
   // Rerender page?
   // const instance = getCurrentInstance()
   // instance?.proxy?.$forceUpdate()
-  JsonObj.value = null
 }
 
 async function PostSimulation(event, step_run) {

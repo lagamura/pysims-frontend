@@ -34,7 +34,6 @@
       </template>
     </el-table-column>
   </el-table>
-  <el-button class="mt-4" style="width: 100%" @click="pushNewSimulView()">Add Simulation</el-button>
 </template>
 
 <script lang="ts" setup>
@@ -56,27 +55,34 @@ interface SimRow {
   date: string
 }
 
-const currentRow = ref()
+const currentRow = ref<SimRow>()
 const singleTableRef = ref<InstanceType<typeof ElTable>>()
 
 const setCurrent = (row?: SimRow) => {
   singleTableRef.value!.setCurrentRow(row)
 }
 
-const handleCurrentChange = (val: SimRow | undefined) => {
+const handleCurrentChange = (val: SimRow) => {
   currentRow.value = val
   console.log(currentRow.value)
   console.log(`id is: ${currentRow.value.id}`)
   // State change//
   store.cur_simul = currentRow.value.id
+  store.JsonObj = store.user_simulations[val.id -1 ].json_data
+  store.simulation.model_name = store.user_simulations[val.id - 1].model_name
+
+  // rerouting & render components
+  getModelDoc(val.model_name).then(() => {
+    get_components_values(val.model_name)
+    const redirectPath = '/dashboard' // route.query.redirect || 'tutor-dashboard' throws ts problem
+    router.push(redirectPath)
+  })
 }
 
 const deleteRow = (index: number) => {
   console.log(index)
   store.cur_simul = -1
-  const { error, onFetchError } = useMyFetch(
-    '/delete_simul_by_id/' + (index + 1)
-  ).delete()
+  const { error, onFetchError } = useMyFetch('/delete_simul_by_id/' + (index + 1)).delete()
   // Request will be sent with POST method and data will be parsed as text
   onFetchError((error) => {
     console.log(error.message)
@@ -109,4 +115,52 @@ const fields = computed(() => {
     return Object.keys(store.user_simulations[0]).slice(0, -1) // here i use slice to exclude json data
   }
 })
+
+async function getModelDoc(model_name: string) {
+  const { data, onFetchResponse, onFetchError } = await useMyFetch('/get_model_docs/' + model_name)
+    .get()
+    .json()
+  console.log(data.value)
+  store.simulation.components = Object.values(data.value)
+  //console.log(JSON.stringify(store.simulation.components))
+  store.simulation.components.forEach((component) => {
+    component.student_control = false
+    component._value = 0
+  })
+
+  onFetchResponse((response) => {
+    console.log(`data Fetched! ${response.status}`)
+  })
+
+  onFetchError((error) => {
+    console.log(error.message)
+    console.error(error.message)
+    ElMessage.error({
+      message: 'Problem connecting to API',
+      type: 'error'
+    })
+  })
+}
+
+async function get_components_values(model_name: string) {
+  const url_endpoint = '/get_components_values/' + model_name
+  const { data, onFetchError } = await useMyFetch(url_endpoint, {}).get().json()
+  console.log('data are', data)
+  store.simulation.components.forEach((component) => {
+    component._value = data.value[component['Real Name']] // be carefull there is a glitch in .Real_name property, we cannot access it by simulation.Real_Name
+  })
+  store.simulation.start_time = 0
+  store.simulation.end_time = store.simulation.components.filter(
+    (component) => component['Real Name'] == 'TIME STEP'
+  )[0]._value
+
+  onFetchError((error) => {
+    console.log(error.message)
+    console.error(error.message)
+    ElMessage.error({
+      message: 'Problem connecting to API',
+      type: 'error'
+    })
+  })
+}
 </script>
