@@ -142,11 +142,12 @@ import ChartSimul from '@/components/ChartSimul.vue'
 import PopOver from '@/components/PopOver.vue'
 
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { watch, ref, watchEffect } from 'vue'
 import { useStore } from '../store/SimStore'
 import { computed } from '@vue/reactivity'
 import { ElMessage } from 'element-plus'
 import { useMyFetch } from '@/composables/getjson'
+import { resetdashboard } from '@/store/EventsStore'
 
 const store = useStore()
 const { simulation, JsonObj } = storeToRefs(store)
@@ -297,6 +298,21 @@ async function saveResults() {
       type: 'error'
     })
   })
+}
+
+
+watchEffect(() => {
+  if (resetdashboard) {
+    reset_time()
+    resetdashboard.value.set_reset(false)
+    console.log('reset_completed')
+  }
+})
+
+if (resetdashboard.value.reset) {
+  console.log('reset-activated from store')
+  reset_time()
+  resetdashboard.set_reset(false)
 }
 
 async function swipeDb() {

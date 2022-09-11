@@ -16,7 +16,7 @@
     </el-menu-item>
     <el-menu-item index="/about"> About </el-menu-item>
     <el-menu-item index="/dashboard"> Student Dashboard </el-menu-item>
-
+    <el-menu-item index="/admin-panel">Admin Panel</el-menu-item>
     <el-menu-item index="/tutor-dashboard">Tutor Dashboard</el-menu-item>
 
     <div class="flex-grow" />

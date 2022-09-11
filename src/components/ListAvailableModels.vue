@@ -9,7 +9,7 @@
     <template #dropdown v-if="data">
       <el-dropdown-menu>
         <el-dropdown-item v-for="model in data" :key="model.id">
-          <span class="dropdown-item" @click="setModelName(model)">
+          <span class="dropdown-item" @click="setModelName(model); resetdashboard.set_reset(true)">
             {{ model }}
           </span>
         </el-dropdown-item>
@@ -22,6 +22,7 @@
 import { useStore } from '../store/SimStore'
 import { useMyFetch } from '@/composables/getjson'
 import { ArrowDown } from '@element-plus/icons-vue'
+import { resetdashboard } from '@/store/EventsStore';
 
 const url_endpoint = '/get_available_models'
 

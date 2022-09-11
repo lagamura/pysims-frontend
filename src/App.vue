@@ -4,7 +4,7 @@
       <el-header>
         <NavMenu />
       </el-header>
-      <el-main>
+      <el-main style="flex: 1 0 auto; min-height: 70vh">
         <!-- <router-view>
         </router-view> -->
         <router-view v-slot="{ Component }">
@@ -26,3 +26,5 @@ import { useStore } from './store/SimStore'
 const store = useStore()
 store.init() //init of the state
 </script>
+
+<style scoped></style>

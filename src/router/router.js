@@ -4,6 +4,7 @@ import HistoryView from '@/views/HistoryView.vue'
 import StudentDashboardView from '@/views/StudentDashboardView.vue'
 import TutorDashboardView from '@/views/TutorDashboardView.vue'
 import SignInViewVue from '@/views/SignInView.vue'
+import AdminPanelViewVue from '@/views/AdminPanelView.vue'
 
 const routes = [
     {
@@ -38,6 +39,11 @@ const routes = [
         path: '/sign-up',
         name: 'SignInView',
         component: SignInViewVue
+    },
+        {
+        path: '/admin-panel',
+        name: 'AdminPanel',
+        component: AdminPanelViewVue
     }
 ]
 const router = createRouter({
