@@ -372,6 +372,7 @@ function formatDate(date) {
   user-select: none;
   vertical-align: middle;
   -webkit-appearance: none;
+  appearance: auto;
   padding: 8px 15px;
   font-size: var(--el-font-size-base);
   border-radius: var(--el-border-radius-base);

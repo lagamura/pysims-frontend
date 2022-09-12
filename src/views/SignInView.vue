@@ -9,9 +9,11 @@
           <el-input v-model="form.firstname" />
         </el-form-item>
         <el-form-item label="Student ID" required>
-          <el-input-number v-model="form.studentid" :controls="false" />
+          <el-input-number v-model="form.id" :controls="false" />
         </el-form-item>
-
+        <el-form-item label="E-mail" prop="email" required>
+          <el-input v-model="form.email" />
+        </el-form-item>
         <el-form-item label="Department" required>
           <el-select v-model="form.department" placeholder="your Department">
             <el-option label="Econ Department" value="Econ" />
@@ -19,7 +21,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="Class" required>
-          <el-select v-model="form.class" placeholder="ECE100">
+          <el-select v-model="form.classroom_id" placeholder="ECE100">
             <el-option label="System Dynamics 101" value="ECE101" />
             <el-option label="System Dynamics 102" value="ECE102" />
           </el-select>
@@ -44,12 +46,11 @@ const formRef = ref<FormInstance>()
 const form = reactive({
   firstname: '',
   surname: '',
-  studentid: 0,
-  class: '',
+  id: 0,
+  email: '',
+  classroom_id: '',
   department: '',
-  type: [],
-  resource: '',
-  desc: ''
+  type: []
 })
 
 const rules = reactive<FormRules>({

@@ -6,7 +6,7 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue({ reactivityTransform: true }), Unocss({ /* options */ })], // Experimental feature UNSTABLE!!!
+  plugins: [vue({ reactivityTransform: true }), Unocss({})], // Experimental feature UNSTABLE!!!
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
