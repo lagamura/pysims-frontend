@@ -1,12 +1,6 @@
-export interface UserSimulation {
-  id: number
-  name: string
-  model_name: string
-  json_data: string // type JSONValue disabled because of infinite loop
-  params: {}
-}
 
 export interface Simulation {
+  id: number
   user: string
   timestamp: Date
   simulation_name: string
@@ -26,4 +20,5 @@ export interface Simulation {
   }[]
   start_time: number
   end_time: number | undefined
+  results: {}
 }

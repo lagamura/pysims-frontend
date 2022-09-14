@@ -1,4 +1,4 @@
-<template :key="JsonObj">
+<template :key="simulation.simulation_name">
   <el-row :gutter="20">
     <el-col :span="18">
       <section flex justify-between style="width: 90%">
@@ -22,9 +22,9 @@
         <el-row class="chartCard">
           <div class="chartBox" style="width: 500px">
             <ChartSimul
-              v-if="JsonObj"
+              v-if="simulation.results"
               :chartid="choosenChart"
-              :sim-results="JsonObj"
+              :sim-results="simulation.results"
               :key="choosenChart"
             />
           </div>
@@ -33,23 +33,23 @@
       <el-divider />
 
       <el-row justify-center>
-          <div v-for="(Obj, index) in JsonObj" key:index>
-            <div v-if="!CONST_VARS.includes(index)" class="chart-container">
-              <el-col>
-                <div class="chartCard">
-                  <div class="chartBox">
-                    <ChartSimul
-                      v-if="JsonObj"
-                      :chartid="index"
-                      :sim-results="JsonObj"
-                      :key="JsonObj"
-                      @click="Populate(index.toString())"
-                    />
-                  </div>
+        <div v-for="(Obj, index) in simulation.results" key:index>
+          <div v-if="!CONST_VARS.includes(index)" class="chart-container">
+            <el-col>
+              <div class="chartCard">
+                <div class="chartBox">
+                  <ChartSimul
+                    v-if="simulation.results"
+                    :chartid="index"
+                    :sim-results="simulation.results"
+                    :key="simulation.results"
+                    @click="Populate(index.toString())"
+                  />
                 </div>
-              </el-col>
-            </div>
+              </div>
+            </el-col>
           </div>
+        </div>
       </el-row>
       <el-divider />
       <!-- <el-button @click="swipeDb()">Swipe Database</el-button> -->
@@ -150,8 +150,7 @@ import { useMyFetch } from '@/composables/getjson'
 import { resetdashboard } from '@/store/EventsStore'
 
 const store = useStore()
-const { simulation, JsonObj } = storeToRefs(store)
-
+const { simulation } = storeToRefs(store)
 const choosenChart = ref('')
 const button_flag = ref(false)
 const cur_step = ref(0)
@@ -178,7 +177,7 @@ function reset_time() {
   )[0]._value
   cur_step.value = 0
   choosenChart.value = null
-  JsonObj.value = null
+  simulation.value.results = null
   simulation.value.params = {}
 
   // Rerender page?
@@ -208,7 +207,6 @@ async function PostSimulation(event, step_run) {
         (component) => component['Real Name'] == 'FINAL TIME'
       )[0]._value
     }
-
     const { components, ...payload } = simulation.value
 
     const { data, onFetchResponse, onFetchError } = await useMyFetch(url_endpoint, {
@@ -244,12 +242,9 @@ async function PostSimulation(event, step_run) {
     onFetchResponse((response) => {
       // THIS DOES NOT FIRE FOR SOME REASON
       console.log(`data Fetched! ${response.status}`)
-      //console.log(`data on Fetch Response ${model_doc.value}`)
-      //simulation.value.start_time += 0.125
     })
 
-    JsonObj.value = data.value.json_data
-    //console.log(JsonObj.value)
+    simulation.value.results = data
   }
 }
 
@@ -389,7 +384,7 @@ function formatDate(date) {
   justify-content: center;
 }
 .chartBox {
-  width: 400px; 
+  width: 400px;
   padding: 20px;
   border-radius: 20px;
   border: solid 3px rgba(255, 26, 104, 1);

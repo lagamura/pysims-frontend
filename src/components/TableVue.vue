@@ -1,10 +1,11 @@
 <template>
   <el-table
-    :data="store.user_simulations"
+    :data="data"
     :flexible="true"
+    :border="true"
     max-height="300"
     :default-expand-all="true"
-    style="width: 100%"
+    style="width: 80%"
     highlight-current-row
     ref="singleTableRef"
     @current-change="handleCurrentChange"
@@ -13,7 +14,12 @@
     <el-table-column prop="model_name" label="Model Name" :sortable="true" width="180" />
     <el-table-column prop="simulation_name" label="Simulation Name" width="180" />
     <el-table-column prop="csv_path" label="Csv Path" width="180" />
-    <el-table-column prop="date" :sortable="true" label="Date" />
+    <el-table-column prop="timestamp" :sortable="true" label="Date" />
+    <el-table-column label="csv file">
+      <template #default="scope">
+        <el-button color="00A568" @click="getCsvResults(currentRow)">Export csv</el-button>
+      </template>
+    </el-table-column>
     <el-table-column fixed="right" label="Operations" width="120">
       <template #default="scope">
         <el-popconfirm
@@ -47,7 +53,7 @@ import { InfoFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
 const store = useStore()
-const { user_simulations, simulation, JsonObj } = storeToRefs(store)
+const { simulation } = storeToRefs(store)
 
 interface SimRow {
   id: number
@@ -70,15 +76,14 @@ const handleCurrentChange = (val: SimRow) => {
   console.log(`id is: ${currentRow.value.id}`)
   // State change//
   store.cur_simul = currentRow.value.id
-  console.log(user_simulations.value[val.id - 1].json_data)
-  JsonObj.value = user_simulations.value[val.id - 1].json_data
-  simulation.value.model_name = user_simulations.value[val.id - 1].model_name
+  simulation.value = store.user_simulations[val.id - 1]
 
   // rerouting & render components
-  getModelDoc(val.model_name).then(() => {
-    get_components_values(val.model_name)
-    const redirectPath = '/dashboard' // route.query.redirect || 'tutor-dashboard' throws ts problem
-    router.push(redirectPath)
+  getModelDoc(val).then(() => {
+    get_components_values(val).then(() => {
+      const redirectPath = '/dashboard' // route.query.redirect || 'tutor-dashboard' throws ts problem
+      router.push(redirectPath)
+    })
   })
 }
 
@@ -104,7 +109,7 @@ const url_endpoint = '/get_simuls'
 
 const { data } = await useMyFetch(url_endpoint).get().json()
 
-store.user_simulations = data.value
+// store.user_simulations = data.value
 //set state of user_simulations
 
 function pushNewSimulView() {
@@ -119,16 +124,44 @@ const fields = computed(() => {
   }
 })
 
-async function getModelDoc(model_name: string) {
-  const { data, onFetchResponse, onFetchError } = await useMyFetch('/get_model_docs/' + model_name)
+function getCsvResults(val: SimRow | undefiend) {
+  //const { data, onFetchResponse, onFetchError } = await useFetch(url).blob()
+  //const { data, onFetchResponse, onFetchError } = await useMyFetch(url_endpoint).blob()
+  let url = ''
+  if (import.meta.env.DEV) {
+    url = 'http://localhost:8000'
+  } else {
+    url = 'https://pysims-github.herokuapp.com'
+  }
+
+  //'/add_new_simulation/?step_run=false'
+
+  fetch(url + '/get_csv_results/' + 'Climate')
+    .then((res) => {
+      return res.blob()
+    })
+    .then((data) => {
+      var a = document.createElement('a')
+      a.href = window.URL.createObjectURL(data)
+      a.download = `${'Climate'}_Test` //hardcoded
+      a.click()
+    })
+}
+
+async function getModelDoc(val: SimRow) {
+  const { data, onFetchResponse, onFetchError } = await useMyFetch(
+    '/get_model_docs/' + val.model_name,
+    {
+      refetch: true
+    }
+  )
     .get()
     .json()
-  console.log(data.value)
-  store.simulation.components = Object.values(data.value)
+  //console.log(data.value)
+  simulation.value.components = Object.values(data.value)
   //console.log(JSON.stringify(store.simulation.components))
-  store.simulation.components.forEach((component) => {
+  simulation.value.components.forEach((component) => {
     component.student_control = false
-    component._value = 0
   })
 
   onFetchResponse((response) => {
@@ -145,9 +178,9 @@ async function getModelDoc(model_name: string) {
   })
 }
 
-async function get_components_values(model_name: string) {
-  const url_endpoint = '/get_components_values/' + model_name
-  const { data, onFetchError } = await useMyFetch(url_endpoint, {}).get().json()
+async function get_components_values(val: SimRow) {
+  const url_endpoint = '/get_components_values/' + val.model_name
+  const { data, onFetchResponse, onFetchError } = await useMyFetch(url_endpoint, {}).get().json()
   console.log('data are', data)
   store.simulation.components.forEach((component) => {
     component._value = data.value[component['Real Name']] // be carefull there is a glitch in .Real_name property, we cannot access it by simulation.Real_Name

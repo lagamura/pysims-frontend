@@ -33,7 +33,6 @@ const store = useStore()
 function setModelName(model: string) {
   store.simulation.model_name = model
   store.dropdown_trigger = true
-  store.JsonObj = {}
   console.log('Button on dropdown-list triggered')
 }
 </script>
