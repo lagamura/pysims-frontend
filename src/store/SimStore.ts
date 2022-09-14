@@ -10,6 +10,7 @@ export type RootState = {
   cur_simul: number
   dropdown_trigger: boolean
   JsonObj: {}
+  classrooms: string[]
 }
 
 export const useStore = defineStore({
@@ -21,11 +22,12 @@ export const useStore = defineStore({
         components: {},
         params: {},
         start_time: 0,
-        end_time: 0.125
+        end_time: 0.125 // this should be changed
       } as Simulation, //hardcoded
       cur_simul: -1,
       dropdown_trigger: false,
       JsonObj: {},
+      classrooms: [],
     } as RootState), // Warning - this should be changed, there is a discussion on use "as RootState" here: https://dev.to/carlomigueldy/getting-started-with-vue-3-pinia-store-typescript-by-building-a-grocery-list-app-19km
 
   actions: {

@@ -16,8 +16,8 @@
     </el-menu-item>
     <el-menu-item index="/about"> About </el-menu-item>
     <el-menu-item index="/dashboard"> Student Dashboard </el-menu-item>
-    <el-menu-item index="/admin-panel">Admin Panel</el-menu-item>
     <el-menu-item index="/tutor-dashboard">Tutor Dashboard</el-menu-item>
+    <el-menu-item index="/admin-panel">Admin Panel</el-menu-item>
 
     <div class="flex-grow" />
     <el-menu-item>
@@ -34,9 +34,7 @@
     </el-menu-item>
     <el-menu-item index="/sign-up"> Sign Up </el-menu-item>
     <el-menu-item index="not-yet">
-      <i inline-flex>
-        <el-icon><User /></el-icon>
-      </i>
+      <el-icon style="height: var(--el-menu-item-height)"><User /></el-icon>
     </el-menu-item>
   </el-menu>
 </template>

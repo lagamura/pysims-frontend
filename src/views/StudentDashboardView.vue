@@ -1,66 +1,61 @@
-<template :key="simulation">
+<template :key="JsonObj">
   <el-row :gutter="20">
-    <el-col :span="16">
-      <h2>Model: {{ store.simulation.model_name }}</h2>
-      <el-divider />
-
-      <h3 class="mb-4">Output</h3>
-      <!--Populate Chart-->
-      <el-row v-if="choosenChart" class="chartCard justify-center">
-        <div class="chartBox" style="width: 500px">
-          <ChartSimul
-            v-if="JsonObj"
-            :chartid="choosenChart"
-            :sim-results="JsonObj"
-            :key="choosenChart"
-          />
-        </div>
-      </el-row>
-      <el-divider />
-
-      <el-row>
-        <!-- <div v-for="(obj, index) in store.img_thumbnails" key:index>
-          <el-col>
-            <img :id="obj.img_id" alt="thumbnail-chart" width="150" height="150" :src="obj.bs64" />
-          </el-col>
-        </div> -->
-        <div v-for="(Obj, index) in JsonObj" key:index>
-          <div v-if="!CONST_VARS.includes(index)" class="chart-container">
-            <el-col>
-              <div class="chartCard">
-                <div class="chartBox">
-                  <ChartSimul
-                    v-if="JsonObj"
-                    :chartid="index"
-                    :sim-results="JsonObj"
-                    :key="JsonObj"
-                    _width="500"
-                    _height="350"
-                    @click="Populate(index.toString())"
-                  />
-                </div>
-              </div>
-            </el-col>
+    <el-col :span="18">
+      <section flex justify-between style="width: 90%">
+        <h2>Model: {{ store.simulation.model_name }}</h2>
+        <div v-if="bar_percentage > 99" class="inline-flex justify-center gap-4">
+          <div class="inline-flex justify-center gap-4 pl-20">
+            <el-input
+              v-model="simulation.simulation_name"
+              placeholder=" Simulation Name"
+              maxlength="30"
+            >
+            </el-input>
+            <el-button @click="saveResults()"> Save Simulation </el-button>
+            <el-button color="00A568" @click="getCsvResults()">Export csv</el-button>
           </div>
         </div>
+      </section>
+      <!--Populate Chart-->
+      <section v-if="choosenChart">
+        <el-divider />
+        <el-row class="chartCard">
+          <div class="chartBox" style="width: 500px">
+            <ChartSimul
+              v-if="JsonObj"
+              :chartid="choosenChart"
+              :sim-results="JsonObj"
+              :key="choosenChart"
+            />
+          </div>
+        </el-row>
+      </section>
+      <el-divider />
+
+      <el-row justify-center>
+          <div v-for="(Obj, index) in JsonObj" key:index>
+            <div v-if="!CONST_VARS.includes(index)" class="chart-container">
+              <el-col>
+                <div class="chartCard">
+                  <div class="chartBox">
+                    <ChartSimul
+                      v-if="JsonObj"
+                      :chartid="index"
+                      :sim-results="JsonObj"
+                      :key="JsonObj"
+                      @click="Populate(index.toString())"
+                    />
+                  </div>
+                </div>
+              </el-col>
+            </div>
+          </div>
       </el-row>
       <el-divider />
-      <div v-if="bar_percentage > 99" class="inline-flex justify-center gap-4">
-        <el-button color="00A568" @click="getCsvResults()">Export csv</el-button>
-        <div class="inline-flex justify-center gap-4 pl-20 border-l">
-          <el-input
-            v-model="simulation.simulation_name"
-            placeholder=" Simulation Name"
-            maxlength="20"
-          >
-          </el-input>
-          <el-button @click="saveResults()"> Save Simulation </el-button>
-        </div>
-      </div>
       <!-- <el-button @click="swipeDb()">Swipe Database</el-button> -->
     </el-col>
     <!-- This is the right side-section -->
-    <el-col :span="8" id="border_class">
+    <el-col :span="6" id="border_class">
       <div class="m-4">
         <el-button
           title="Run next Step"
@@ -97,42 +92,47 @@
         <span>duration:</span>
       </div>
       <el-divider />
-      <h3>Inputs</h3>
-      <div
-        class="inline-block justify-space-between gap-4"
-        v-for="(component, index) in store.simulation.components"
-        :key="index"
-      >
-        <span class="control-vars m-2" v-if="component.student_control">
-          <el-tooltip class="box-item" effect="dark" placement="top-start">
-            <template #content> {{ component.Units }}</template>
-            {{ component['Real Name'] }}
-          </el-tooltip>
-        </span>
-      </div>
-      <div class="mt-4" v-for="(component, index) in store.simulation.components" :key="index">
-        <div class="slider-demo-block" v-if="component.student_control">
-          <span> {{ component['Real Name'] }}</span>
+      <section>
+        <h3 text-center pb-3>Inputs</h3>
 
-          <el-slider v-model="component._value" show-input />
-          <span style="font-size: smaller"> {{ component['Units'] }}</span>
+        <div class="inputs-container">
+          <div
+            class="inline-block justify-space-between gap-4"
+            v-for="(component, index) in store.simulation.components"
+            :key="index"
+          >
+            <span class="control-vars m-2" v-if="component.student_control">
+              <el-tooltip class="box-item" effect="dark" placement="top-start">
+                <template #content> {{ component.Units }}</template>
+                {{ component['Real Name'] }}
+              </el-tooltip>
+            </span>
+          </div>
         </div>
-      </div>
+        <div class="mt-4" v-for="(component, index) in store.simulation.components" :key="index">
+          <div class="slider-demo-block" v-if="component.student_control">
+            <span> {{ component['Real Name'] }}</span>
+
+            <el-slider v-model="component._value" show-input />
+            <span style="font-size: smaller"> {{ component['Units'] }}</span>
+          </div>
+        </div>
+      </section>
       <el-divider />
-      <h3>Constants</h3>
-      <div
-        class="inline-block justify-space-between gap-4"
-        v-for="(component, index) in store.simulation.components"
-        :key="index"
-      >
-        <span class="control-vars m-2" v-if="component.Type == 'Constant'">
-          <el-tooltip class="box-item" effect="dark" placement="top-start">
-            <template #content> {{ component.Units }}</template>
-            {{ component['Real Name'] }} =
-            {{ component._value }}
-          </el-tooltip>
-        </span>
-      </div>
+      <section>
+        <h3 text-center pb-3>Constants</h3>
+        <div class="constants-container">
+          <div v-for="(component, index) in store.simulation.components" :key="index">
+            <span class="control-vars m-2" v-if="component.Type == 'Constant'">
+              <el-tooltip class="box-item" effect="dark" placement="top-start">
+                <template #content> {{ component.Units }}</template>
+                {{ component['Real Name'] }} =
+                {{ component._value }}
+              </el-tooltip>
+            </span>
+          </div>
+        </div>
+      </section>
     </el-col>
   </el-row>
 </template>
@@ -300,7 +300,6 @@ async function saveResults() {
   })
 }
 
-
 watchEffect(() => {
   if (resetdashboard) {
     reset_time()
@@ -383,12 +382,18 @@ function formatDate(date) {
   padding: 0;
   font-family: sans-serif;
 }
-
+.chartCard {
+  /* height: calc(100vh - 40px); */
+  flex: 1 0 25%;
+  align-items: center;
+  justify-content: center;
+}
 .chartBox {
-  width: 250px;
+  width: 400px; 
   padding: 20px;
   border-radius: 20px;
   border: solid 3px rgba(255, 26, 104, 1);
+  /* flex: 1 0 ; */
   background: white;
   margin: 5px;
   cursor: pointer;
@@ -400,5 +405,17 @@ function formatDate(date) {
 .slider-demo-block .el-slider {
   margin-top: 0;
   margin-left: 12px;
+}
+.inputs-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.constants-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 </style>

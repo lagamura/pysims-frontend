@@ -41,11 +41,13 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import type { ElTable } from 'element-plus'
 import { useStore } from '../store/SimStore'
+import { storeToRefs } from 'pinia'
 import { useMyFetch } from '@/composables/getjson'
 import { InfoFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
 const store = useStore()
+const { user_simulations, simulation, JsonObj } = storeToRefs(store)
 
 interface SimRow {
   id: number
@@ -68,8 +70,9 @@ const handleCurrentChange = (val: SimRow) => {
   console.log(`id is: ${currentRow.value.id}`)
   // State change//
   store.cur_simul = currentRow.value.id
-  store.JsonObj = store.user_simulations[val.id -1 ].json_data
-  store.simulation.model_name = store.user_simulations[val.id - 1].model_name
+  console.log(user_simulations.value[val.id - 1].json_data)
+  JsonObj.value = user_simulations.value[val.id - 1].json_data
+  simulation.value.model_name = user_simulations.value[val.id - 1].model_name
 
   // rerouting & render components
   getModelDoc(val.model_name).then(() => {
