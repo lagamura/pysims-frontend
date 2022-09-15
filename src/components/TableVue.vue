@@ -5,7 +5,6 @@
     :border="true"
     max-height="300"
     :default-expand-all="true"
-    style="width: 80%"
     highlight-current-row
     ref="singleTableRef"
     @current-change="handleCurrentChange"
