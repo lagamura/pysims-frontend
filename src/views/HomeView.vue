@@ -16,7 +16,7 @@
             <router-link to="/tutor-dashboard">Tutor dashboard</router-link> and choose a
             simulation-model from the list, as also the modifiable parameters that a student can
             access. Then, navigate to
-            <router-link to="/dashboard">Student dashboard</router-link> and run or step_run the the
+            <router-link to="/dashboard">Student dashboard</router-link> and run or step_run the
             simulation. At the end of the simulation, you can save it and download the csv results.
             That's it, have fun!
           </p>
