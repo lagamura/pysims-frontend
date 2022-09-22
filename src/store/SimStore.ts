@@ -1,16 +1,16 @@
-import { useInitState } from '@/composables/getjson'
-import { defineStore } from 'pinia'
-import type { Simulation } from '@/store/simulation.model'
+import { useInitState } from '@/composables/getjson';
+import { defineStore } from 'pinia';
+import type { Simulation } from '@/store/simulation.model';
 
 // useStore could be anything like useUser, useCart
 // the first argument is a unique id of the store across your application
 export type RootState = {
-  user_simulations: Simulation[]
-  simulation: Simulation
-  cur_simul: number
-  dropdown_trigger: boolean
-  classrooms: string[]
-}
+  user_simulations: Simulation[];
+  simulation: Simulation;
+  cur_simul: number;
+  dropdown_trigger: boolean;
+  classrooms: string[];
+};
 
 export const useStore = defineStore({
   id: 'Store',
@@ -25,20 +25,20 @@ export const useStore = defineStore({
 
   actions: {
     addItem(simulation: Simulation) {
-      this.user_simulations.push(simulation)
-      console.log(`simulation ${simulation} added`)
+      this.user_simulations.push(simulation);
+      console.log(`simulation ${simulation} added`);
     },
     removeItem(index: number) {
-      const i = this.user_simulations.findIndex((simulation) => simulation.id === index)
-      if (i > -1) this.user_simulations.splice(i, 1)
+      const i = this.user_simulations.findIndex((simulation) => simulation.id === index);
+      if (i > -1) this.user_simulations.splice(i, 1);
     },
     init() {
       useInitState().then((data) => {
-        this.user_simulations = data.value
-      })
+        this.user_simulations = data.value;
+      });
     },
     printSimulations() {
-      this.user_simulations
+      this.user_simulations;
     }
   }
-})
+});

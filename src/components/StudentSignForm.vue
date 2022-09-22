@@ -23,8 +23,8 @@
         <el-option
           v-for="(classroom, index) in classrooms"
           :key="classroom"
-          :label="classroom"
-          :value="classroom"
+          :label="classroom.id_name"
+          :value="classroom.id_name"
         />
       </el-select>
     </el-form-item>
@@ -37,18 +37,18 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
-import { useMyFetch } from '@/composables/getjson'
-import { ElMessage } from 'element-plus'
-import { useStore } from '../store/SimStore'
-import { storeToRefs } from 'pinia'
+import { ref, reactive } from 'vue';
+import type { FormInstance, FormRules } from 'element-plus';
+import { useMyFetch } from '@/composables/getjson';
+import { ElMessage } from 'element-plus';
+import { useStore } from '../store/SimStore';
+import { storeToRefs } from 'pinia';
 
-const store = useStore()
-const { classrooms } = storeToRefs(store)
+const store = useStore();
+const { classrooms } = storeToRefs(store);
 
 // do not use same name with ref
-const formRef = ref<FormInstance>()
+const formRef = ref<FormInstance>();
 const form = reactive<formdata>({
   firstname: '',
   surname: '',
@@ -56,15 +56,15 @@ const form = reactive<formdata>({
   email: '',
   classroom_id: '',
   department: ''
-})
+});
 
 interface formdata {
-  firstname: string
-  surname: string
-  id: number
-  email: string
-  classroom_id: string
-  department: string
+  surname: string;
+  firstname: string;
+  id: number;
+  email: string;
+  classroom_id: string;
+  department: string;
 }
 
 const rules = reactive<FormRules>({
@@ -74,32 +74,32 @@ const rules = reactive<FormRules>({
     { required: true, message: 'Please input Activity name', trigger: 'blur' },
     { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' }
   ]
-})
+});
 
 const submitForm = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return
+  if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      console.log('submit!')
-      postStudent()
+      console.log('submit!');
+      postStudent();
     } else {
-      console.log('error submit!', fields)
+      console.log('error submit!', fields);
     }
-  })
-}
+  });
+};
 
 const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
-}
+  if (!formEl) return;
+  formEl.resetFields();
+};
 
 async function postStudent(form_data?: formdata) {
-  const { onFetchResponse } = await useMyFetch('/add_student', {}).post(form)
+  const { onFetchResponse } = await useMyFetch('/add_student', {}).post(form);
   onFetchResponse(() => {
     ElMessage.success({
       message: 'Results saved succesfully',
       type: 'success'
-    })
-  })
+    });
+  });
 }
 </script>

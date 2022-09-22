@@ -1,5 +1,4 @@
 <template>
-  <section v-if="classesOn">
     <el-row :gutter="20">
       <el-col
         :span="20"
@@ -21,7 +20,7 @@
                   trigger="hover"
                   effect="light"
                   width="auto"
-                  @confirm="deleteClassroom(classroom)"
+                  @confirm="deleteClassroom(classroom.id_name)"
                 >
                   <template #reference>
                     <el-button size="small" type="danger" :icon="Delete"> </el-button>
@@ -29,7 +28,7 @@
                 </el-popconfirm>
               </div>
             </template>
-            {{ classroom }}
+            <span class="ClassName">{{ classroom.id_name }}</span>
           </el-card>
         </div>
       </el-col>
@@ -46,123 +45,78 @@
         />
       </el-col>
     </el-row>
-  </section>
-  <section v-if="!classesOn">
-    <div>
-      <h2 inline pr>Classroom: {{ classroom }}</h2>
-      <h3 inline pr italic>Number of Students: {{ students_num }}</h3>
-    </div>
-    <el-row>
-      <el-col
-        :span="20"
-        style="display: inline-flex; justify-content: space-around; flex-wrap: wrap"
-      >
-        <div v-for="(student, index) in students" key:index>
-          <el-card class="box-card">
-            <template #header>
-              <div class="header-card">
-                <el-avatar :icon="UserFilled" />
-                <div pl-3>
-                  <h4 block>
-                    {{ student.surname }}
-                  </h4>
-                  <h4 block>
-                    {{ student.id }}
-                  </h4>
-                </div>
-              </div>
-            </template>
-            <div text-center c-lightblue>
-              <span>
-                {{ student.department }}
-              </span>
-            </div>
-          </el-card>
-        </div>
-      </el-col>
-
-      <el-col :span="4">
-        <el-button text @click="dialogFormVisible = true">
-          <el-icon><Plus></Plus></el-icon>
-          <span>Add Student</span>
-        </el-button>
-        <el-dialog v-model="dialogFormVisible" title="Add Student">
-          <StudentSignForm />
-          <template #footer>
-            <span class="dialog-footer">
-              <el-button @click="dialogFormVisible = false">Cancel</el-button>
-              <el-button type="primary" @click="dialogFormVisible = false">Confirm</el-button>
-            </span>
-          </template>
-        </el-dialog>
-      </el-col>
-    </el-row>
-  </section>
+  
 </template>
 
 <script setup>
-import { ref, computed, onBeforeMount } from 'vue'
-import { useRouter } from 'vue-router'
-import { useMyFetch } from '@/composables/getjson'
-import { Delete, InfoFilled, UserFilled } from '@element-plus/icons-vue'
-import StudentSignForm from '@/components/StudentSignForm.vue'
-import { useStore } from '@/store/SimStore'
-import { storeToRefs } from 'pinia'
+import { ref, computed, watch, onBeforeMount } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { useMyFetch } from '@/composables/getjson';
+import { Delete, InfoFilled, UserFilled } from '@element-plus/icons-vue';
+import StudentSignForm from '@/components/StudentSignForm.vue';
+import { useStore } from '@/store/SimStore';
+import { storeToRefs } from 'pinia';
 
-const modal_flag = ref(false)
-const dialogFormVisible = ref(false)
-const classesOn = ref(true)
-const input = ref('')
-const students = ref()
-const classroom = ref('')
-const students_num = 13
+const router = useRouter();
+const route = useRoute();
 
-const store = useStore()
-const { classrooms } = storeToRefs(store)
+const modal_flag = ref(false);
+const dialogFormVisible = ref(false);
+const input = ref('');
+const students = ref();
+const classroom = ref('');
+const students_num = 13;
+
+const store = useStore();
+const { classrooms } = storeToRefs(store);
 
 async function fetchClasses() {
-  const { data, onFetchError } = await useMyFetch('get_classrooms', {}).get().json()
+  const { data, onFetchError } = await useMyFetch('get_classrooms', {}).get().json();
 
-  console.log(data.value)
-  classrooms.value = data.value
-  console.log(classrooms)
+  console.log(data.value);
+  classrooms.value = data.value;
+  console.log(classrooms);
 }
 
 // lifecycle hook
 onBeforeMount(() => {
-  fetchClasses()
-})
+  fetchClasses();
+});
 
-function ClassroomHandler(classroom_name) {
-  classesOn.value = false
-  classroom.value = classroom_name
-  fetchStudents(classroom.value)
+function ClassroomHandler(classroom_choosen) {
+  classroom.value = classroom_choosen;
+  router.push({ path: '/admin-panel/classes/' + classroom.value.id_name });
+
 }
 
 async function addClassroom(classname) {
   await useMyFetch('/add_classroom?' + 'classroom_name=' + classname, {}).post({
     classroom_name: classname
-  })
+  });
 
-  fetchClasses()
+  fetchClasses();
 }
 
 async function deleteClassroom(classname) {
   await useMyFetch('/delete_classroom?' + 'classroom_name=' + classname, {}).delete({
     classroom_name: classname
-  })
+  });
 
-  fetchClasses()
+  fetchClasses();
 }
 
-async function fetchStudents(classroom) {
-  const { data, onFetchError } = await useMyFetch('/get_students/' + classroom, {})
-    .get()
-    .json()
 
-  students.value = data.value
-  console.log(students.value)
-}
+
+// watch(
+//   () => route.params.classname,
+//   (new_classname) => {
+//     if (new_classname == 'classrooms') {
+//       classesOn.value = true;
+//     } else {
+//       classesOn.value = false;
+//     }
+//   }
+// );
 </script>
 <style scoped>
 .header-card {
@@ -172,5 +126,25 @@ async function fetchStudents(classroom) {
 }
 .class-button:hover {
   transform: scale(1.2);
+}
+
+.ClassName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: normal;
+  display: block;
+  width: 95px;
+}
+
+.Studentname {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.Studentname:hover {
+  text-overflow: clip;
+  white-space: normal;
+  word-break: break-all;
 }
 </style>

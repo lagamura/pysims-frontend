@@ -17,7 +17,7 @@
     <el-menu-item index="/about"> About </el-menu-item>
     <el-menu-item index="/dashboard"> Student Dashboard </el-menu-item>
     <el-menu-item index="/tutor-dashboard">Tutor Dashboard</el-menu-item>
-    <el-menu-item index="/admin-panel">Admin Panel</el-menu-item>
+    <el-menu-item index="/admin-panel/classrooms">Admin Panel</el-menu-item>
 
     <div class="flex-grow" />
     <el-menu-item>
@@ -40,15 +40,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { toggleDark } from '../composables/dark'
-import { Moon, Sunny } from '@element-plus/icons-vue'
+import { ref } from 'vue';
+import { toggleDark } from '../composables/dark';
+import { Moon, Sunny } from '@element-plus/icons-vue';
 
-const activeIndex = ref('1')
-const togglebind = ref(true)
+const activeIndex = ref('1');
+const togglebind = ref(true);
 const handleSelect = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
+  console.log(key, keyPath);
+};
 </script>
 
 <style scoped>
