@@ -33,16 +33,21 @@
           <el-checkbox class="ml" label="I agree with the terms of use " name="type" />
         </el-form-item>
       </el-form>
+      <div>
+        <el-button type="primary" @click="UthSignInhandler()" color="#E82E46">
+          Uth Sign in
+        </el-button>
+      </div>
     </el-col>
   </el-row>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
+import { ref, reactive } from 'vue';
+import type { FormInstance, FormRules } from 'element-plus';
 
 // do not use same name with ref
-const formRef = ref<FormInstance>()
+const formRef = ref<FormInstance>();
 const form = reactive({
   firstname: '',
   surname: '',
@@ -51,26 +56,27 @@ const form = reactive({
   classroom_id: '',
   department: '',
   type: []
-})
+});
 
 const rules = reactive<FormRules>({
   firstname: [{ required: true, message: 'Please input your firstname', trigger: 'blur' }],
   surname: [{ required: true, message: 'Please input your surname', trigger: 'blur' }]
-})
+});
 
 const submitForm = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return
+  if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      console.log('submit!')
+      console.log('submit!');
     } else {
-      console.log('error submit!', fields)
+      console.log('error submit!', fields);
     }
-  })
-}
+  });
+};
 
 const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
-}
+  if (!formEl) return;
+  formEl.resetFields();
+};
+
 </script>

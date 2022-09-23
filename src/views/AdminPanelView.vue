@@ -107,16 +107,6 @@ async function deleteClassroom(classname) {
 
 
 
-// watch(
-//   () => route.params.classname,
-//   (new_classname) => {
-//     if (new_classname == 'classrooms') {
-//       classesOn.value = true;
-//     } else {
-//       classesOn.value = false;
-//     }
-//   }
-// );
 </script>
 <style scoped>
 .header-card {
@@ -134,6 +124,7 @@ async function deleteClassroom(classname) {
   word-wrap: normal;
   display: block;
   width: 95px;
+  text-align: center;
 }
 
 .Studentname {
