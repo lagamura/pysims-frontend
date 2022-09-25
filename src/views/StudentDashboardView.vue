@@ -387,7 +387,7 @@ function formatDate(date) {
   width: 400px;
   padding: 20px;
   border-radius: 20px;
-  border: solid 3px rgba(255, 26, 104, 1);
+  border: solid 3px var(--el-color-primary);
   /* flex: 1 0 ; */
   background: white;
   margin: 5px;
