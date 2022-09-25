@@ -34,7 +34,7 @@
         </el-form-item>
       </el-form>
       <div>
-        <el-button type="primary" @click="UthSignInhandler()" color="#E82E46">
+        <el-button type="primary" @click="" color="#E82E46">
           Uth Sign in
         </el-button>
       </div>
@@ -45,6 +45,7 @@
 <script lang="ts" setup>
 import { ref, reactive } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
+
 
 // do not use same name with ref
 const formRef = ref<FormInstance>();
@@ -78,5 +79,6 @@ const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.resetFields();
 };
+
 
 </script>

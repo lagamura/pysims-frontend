@@ -18,6 +18,7 @@
     <el-menu-item index="/dashboard"> Student Dashboard </el-menu-item>
     <el-menu-item index="/tutor-dashboard">Tutor Dashboard</el-menu-item>
     <el-menu-item index="/admin-panel/classrooms">Admin Panel</el-menu-item>
+    <!-- <el-menu-item index="/signinuth">Signinuth</el-menu-item> -->
 
     <div class="flex-grow" />
     <el-menu-item>

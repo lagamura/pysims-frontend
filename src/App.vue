@@ -8,9 +8,9 @@
         <!-- <router-view>
         </router-view> -->
         <router-view v-slot="{ Component }">
-            <keep-alive>
-              <component :is="Component" />
-            </keep-alive>
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
         </router-view>
       </el-main>
       <el-footer><FooterVue /></el-footer>
@@ -22,11 +22,12 @@
 import NavMenu from './components/NavMenu.vue';
 import FooterVue from './components/FooterVue.vue';
 import { useStore } from './store/SimStore';
+import { computed } from '@vue/reactivity';
 
 const store = useStore();
 store.init(); //init of the state
+
+
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

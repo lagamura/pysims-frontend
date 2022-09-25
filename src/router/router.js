@@ -7,6 +7,7 @@ import SignInViewVue from '@/views/SignInView.vue'
 import AdminPanelViewVue from '@/views/AdminPanelView.vue'
 import PageNotFound404Vue from '@/components/PageNotFound404.vue'
 import ClassroomView from '@/views/ClassroomView.vue'
+import SignInUthView from '@/views/SignInUthView.vue'
 
 const routes = [
     {
@@ -53,10 +54,14 @@ const routes = [
         name: 'ClassroomView.vue',
         component: ClassroomView,
     },
+    {
+        path: '/signinuth',
+        name: 'SignInuthView.vue',
+        component: SignInUthView,
+    },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: PageNotFound404Vue },
     // if you omit the last `*`, the `/` character in params will be encoded when resolving or pushing
     { path: '/:pathMatch(.*)', name: 'bad-not-found', component: PageNotFound404Vue },
-    
 ]
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),

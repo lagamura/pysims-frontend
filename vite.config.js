@@ -33,15 +33,13 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-
-  // devServer: {
-  //   proxy: {
-  //     // string shorthand
-  //     '/api':
-  //      {
-  //       target: 'http://localhost:8000',
-  //       //changeOrigin: true
-  //     },
+  // server: {
+  //   cors: {
+  //     "origin": "*",
+  //     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  //     "preflightContinue": false,
+  //     "optionsSuccessStatus": 204
   //   }
   // }
+
 })
