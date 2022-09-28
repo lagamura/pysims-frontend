@@ -1,6 +1,6 @@
 <template>
   <el-row justify="center">
-    <el-col :lg="6" :xl="3">
+    <el-col :span="10">
       <el-form ref="formRef" :model="form" :rules="rules" status-icon label-width="120px">
         <el-form-item label="Surname" prop="surname" required>
           <el-input v-model="form.surname" />
@@ -10,6 +10,9 @@
         </el-form-item>
         <el-form-item label="Student ID" required>
           <el-input-number v-model="form.id" :controls="false" />
+        </el-form-item>
+        <el-form-item label="username" prop="username" required>
+          <el-input v-model="form.username" />
         </el-form-item>
         <el-form-item label="E-mail" prop="email" required>
           <el-input v-model="form.email" />
@@ -33,11 +36,9 @@
           <el-checkbox class="ml" label="I agree with the terms of use " name="type" />
         </el-form-item>
       </el-form>
-      <div>
-        <el-button type="primary" @click="" color="#E82E46">
-          Uth Sign in
-        </el-button>
-      </div>
+      <!-- <div>
+        <el-button type="primary" @click="" color="#E82E46"> Uth Sign in </el-button>
+      </div> -->
     </el-col>
   </el-row>
 </template>
@@ -46,13 +47,13 @@
 import { ref, reactive } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 
-
 // do not use same name with ref
 const formRef = ref<FormInstance>();
 const form = reactive({
   firstname: '',
   surname: '',
   id: 0,
+  username: '',
   email: '',
   classroom_id: '',
   department: '',
@@ -79,6 +80,4 @@ const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.resetFields();
 };
-
-
 </script>

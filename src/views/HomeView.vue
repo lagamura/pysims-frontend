@@ -2,6 +2,9 @@
   <el-row>
     <el-col>
       <div class="block-container">
+        <h3 inline>Welcome
+        <span c-blue>{{user.username}}</span>
+        </h3>
         <h3 text-center>user_simulations history</h3>
         <div class="table-container">
           <suspense>
@@ -29,13 +32,15 @@
 <script lang="ts" setup>
 import TableVue from '../components/TableVue.vue';
 
-import { useStore } from '../store/SimStore';
+import { useStore, useAuthStore } from '@/store/';
 import { storeToRefs } from 'pinia';
 import { watch, computed } from 'vue';
 
 const store = useStore();
-
 const { simulation, cur_simul } = storeToRefs(store);
+
+const authStore = useAuthStore();
+const {user} = storeToRefs(authStore)
 
 console.log(`State user_simulations:${simulation.value}`);
 
@@ -63,4 +68,5 @@ p {
   margin-left: auto;
   margin-right: auto;
 }
+
 </style>

@@ -34,9 +34,15 @@
       </div>
     </el-menu-item>
     <el-menu-item index="/sign-up"> Sign Up </el-menu-item>
-    <el-menu-item index="not-yet">
-      <el-icon style="height: var(--el-menu-item-height)"><User /></el-icon>
-    </el-menu-item>
+    <el-sub-menu index="submenu">
+      <template #title>
+        <el-icon style="height: var(--el-menu-item-height)"><User /></el-icon>
+      </template>
+      <el-menu-item-group >
+        <el-menu-item index="/logout" @click="authStore.logout()"> Logout </el-menu-item>
+        <el-menu-item index="/profile"> Profile </el-menu-item>
+      </el-menu-item-group>
+    </el-sub-menu>
   </el-menu>
 </template>
 
@@ -44,6 +50,9 @@
 import { ref } from 'vue';
 import { toggleDark } from '../composables/dark';
 import { Moon, Sunny } from '@element-plus/icons-vue';
+import { useAuthStore } from '@/store'
+
+const authStore = useAuthStore();
 
 const activeIndex = ref('1');
 const togglebind = ref(true);

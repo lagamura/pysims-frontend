@@ -3,11 +3,15 @@ import HomeView from '@/views/HomeView.vue'
 import HistoryView from '@/views/HistoryView.vue'
 import StudentDashboardView from '@/views/StudentDashboardView.vue'
 import TutorDashboardView from '@/views/TutorDashboardView.vue'
-import SignInViewVue from '@/views/SignInView.vue'
+import Register from '@/views/account/Register.vue'
 import AdminPanelViewVue from '@/views/AdminPanelView.vue'
 import PageNotFound404Vue from '@/components/PageNotFound404.vue'
 import ClassroomView from '@/views/ClassroomView.vue'
 import SignInUthView from '@/views/SignInUthView.vue'
+import pinia from "@/store/store.js";
+import accountRoutes from './account.routes';
+import usersRoutes from './users.routes';
+import { useAuthStore, useAlertStore } from '@/store';
 
 const routes = [
     {
@@ -40,14 +44,14 @@ const routes = [
     },
     {
         path: '/sign-up',
-        name: 'SignInView',
-        component: SignInViewVue
+        name: 'Register',
+        component: Register
     },
-        {
+    {
         path: '/admin-panel/:classname',
         name: 'AdminPanel',
         component: AdminPanelViewVue,
-        
+
     },
     {
         path: '/admin-panel/classes/:classname',
@@ -56,15 +60,37 @@ const routes = [
     },
     {
         path: '/signinuth',
-        name: 'SignInuthView.vue',
+        name: 'SignIn',
         component: SignInUthView,
     },
+
+
+    { ...accountRoutes },
+    { ...usersRoutes },
+
     { path: '/:pathMatch(.*)*', name: 'not-found', component: PageNotFound404Vue },
     // if you omit the last `*`, the `/` character in params will be encoded when resolving or pushing
     { path: '/:pathMatch(.*)', name: 'bad-not-found', component: PageNotFound404Vue },
 ]
-const router = createRouter({
+export const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes
 })
+
+router.beforeEach(async (to) => {
+    // clear alert on route change
+    const alertStore = useAlertStore();
+    const authStore = useAuthStore(pinia);
+
+    alertStore.clear();
+
+    // redirect to login page if not logged in and trying to access a restricted page 
+    const publicPages = ['/account/login', '/account/register'];
+    const authRequired = !publicPages.includes(to.path);
+
+    if (authRequired && !authStore.user) {
+        authStore.returnUrl = to.fullPath;
+        return '/account/login';
+    }
+});
 export default router

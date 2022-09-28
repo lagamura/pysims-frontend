@@ -5,11 +5,6 @@ import { ElMessage } from 'element-plus'
 export async function useInitState() {
   const url_endopoint = '/get_simuls'
   const { data, onFetchResponse, onFetchError } = await useMyFetch(url_endopoint).get().json()
-  //console.log(data.value)
-  // model_doc.value = Object.values(data.value)
-  // for (var obj of Object.values(data.value)){
-  //   model_doc.push(obj)
-  // }
 
   onFetchResponse((response) => {
     console.log(`data Fetched! ${response.status}`)
@@ -37,7 +32,7 @@ function URL_() {
   }
 }
 
-const URL_BASIS: string = URL_()
+export const URL_BASIS: string = URL_()
 
 export const useMyFetch = createFetch({
   baseUrl: URL_BASIS,

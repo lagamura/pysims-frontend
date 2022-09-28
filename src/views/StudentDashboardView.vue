@@ -1,7 +1,7 @@
 <template :key="simulation.simulation_name">
   <el-row :gutter="20">
     <el-col :span="18">
-      <section flex justify-between style="width: 90%">
+      <section v-auto-animate flex justify-between style="width: 90%">
         <h2>Model: {{ store.simulation.model_name }}</h2>
         <div v-if="bar_percentage > 99" class="inline-flex justify-center gap-4">
           <div class="inline-flex justify-center gap-4 pl-20">
@@ -17,7 +17,7 @@
         </div>
       </section>
       <!--Populate Chart-->
-      <section v-if="choosenChart">
+      <section v-auto-animate v-if="choosenChart">
         <el-divider />
         <el-row class="chartCard">
           <div class="chartBox" style="width: 500px">
@@ -33,7 +33,7 @@
       <el-divider />
 
       <el-row justify-center>
-        <div v-for="(Obj, index) in simulation.results" key:index>
+        <div v-auto-animate v-for="(Obj, index) in simulation.results" key:index>
           <div v-if="!CONST_VARS.includes(index)" class="chart-container">
             <el-col>
               <div class="chartCard">

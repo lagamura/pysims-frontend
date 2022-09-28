@@ -2,7 +2,7 @@
   <div class="common-layout">
     <el-container>
       <el-header>
-        <NavMenu />
+        <NavMenu  />
       </el-header>
       <el-main style="flex: 1 0 auto; min-height: 70vh">
         <!-- <router-view>
@@ -22,12 +22,9 @@
 import NavMenu from './components/NavMenu.vue';
 import FooterVue from './components/FooterVue.vue';
 import { useStore } from './store/SimStore';
-import { computed } from '@vue/reactivity';
 
 const store = useStore();
 store.init(); //init of the state
-
-
 </script>
 
 <style scoped></style>
