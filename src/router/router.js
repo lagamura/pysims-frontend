@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
+import HomeWind from '@/views/HomeWind.vue'
 import HistoryView from '@/views/HistoryView.vue'
 import StudentDashboardView from '@/views/StudentDashboardView.vue'
 import TutorDashboardView from '@/views/TutorDashboardView.vue'
@@ -64,6 +65,11 @@ const routes = [
         component: SignInUthView,
     },
 
+    {
+        path: '/myhomepage',
+        name: 'HomeWind',
+        component: HomeWind,
+    },
 
     { ...accountRoutes },
     { ...usersRoutes },

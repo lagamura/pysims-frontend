@@ -33,7 +33,7 @@
         />
       </div>
     </el-menu-item>
-    <el-menu-item index="/sign-up"> Sign Up </el-menu-item>
+    <!-- <el-menu-item index="/sign-up"> Sign Up </el-menu-item> -->
     <el-sub-menu index="submenu">
       <template #title>
         <el-icon style="height: var(--el-menu-item-height)"><User /></el-icon>

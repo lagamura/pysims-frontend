@@ -1,9 +1,11 @@
 <template>
   <el-row>
     <el-col>
+      <h1 class="text-3xl font-bold underline">Hello world!</h1>
       <div class="block-container">
-        <h3 inline>Welcome
-        <span c-blue>{{user.username}}</span>
+        <h3 inline>
+          Welcome
+          <span c-blue>{{ user.username }}</span>
         </h3>
         <h3 text-center>user_simulations history</h3>
         <div class="table-container">
@@ -40,7 +42,7 @@ const store = useStore();
 const { simulation, cur_simul } = storeToRefs(store);
 
 const authStore = useAuthStore();
-const {user} = storeToRefs(authStore)
+const { user } = storeToRefs(authStore);
 
 console.log(`State user_simulations:${simulation.value}`);
 
@@ -68,5 +70,4 @@ p {
   margin-left: auto;
   margin-right: auto;
 }
-
 </style>
