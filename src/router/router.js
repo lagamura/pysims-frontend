@@ -13,12 +13,13 @@ import pinia from "@/store/store.js";
 import accountRoutes from './account.routes';
 import usersRoutes from './users.routes';
 import { useAuthStore, useAlertStore } from '@/store';
+import SimulationsView from '@/views/SimulationsView.vue'
 
 const routes = [
     {
         path: '/',
-        name: 'HomeView',
-        component: HomeView
+        name: 'Home',
+        component: HomeWind
     },
     {
         path: '/tutor-dashboard',
@@ -34,6 +35,11 @@ const routes = [
         path: '/dashboard',
         name: 'StudentDashboardView',
         component: StudentDashboardView
+    },
+    {
+        path: '/simulations',
+        name: 'simulations',
+        component: SimulationsView
     },
     {
         path: '/about',
