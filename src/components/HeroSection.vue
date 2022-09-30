@@ -14,10 +14,9 @@
         >
           <polygon points="50,0 100,0 50,100 0,100" />
         </svg>
-
         <Popover>
           <div class="relative px-4 pt-6 sm:px-6 lg:px-8">
-            <nav
+            <!-- <nav
               class="relative flex items-center justify-between sm:h-10 lg:justify-start"
               aria-label="Global"
             >
@@ -51,7 +50,7 @@
                 >
                 <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">Log in</a>
               </div>
-            </nav>
+            </nav> -->
           </div>
 
           <transition
@@ -93,6 +92,7 @@
                     :href="item.href"
                     class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                     >{{ item.name }}</a
+
                   >
                 </div>
                 <a
@@ -153,7 +153,7 @@
 <script setup>
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue';
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
-
+import NavWind from '@/components/NavWind.vue'
 const navigation = [
   { name: 'Product', href: 'tutor-dashboard' },
   { name: 'Features', href: '#' },

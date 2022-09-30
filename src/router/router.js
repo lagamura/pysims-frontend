@@ -13,7 +13,8 @@ import pinia from "@/store/store.js";
 import accountRoutes from './account.routes';
 import usersRoutes from './users.routes';
 import { useAuthStore, useAlertStore } from '@/store';
-import SimulationsView from '@/views/SimulationsView.vue'
+import SimulationsView from '@/views/simulations/SimulationsView.vue'
+import SimsLayout from '@/views/simulations/SimsLayout.vue'
 
 const routes = [
     {
@@ -39,7 +40,11 @@ const routes = [
     {
         path: '/simulations',
         name: 'simulations',
-        component: SimulationsView
+        component: SimsLayout,
+        children: [
+            { path: '', component: SimulationsView },
+            { path: ':simulation', component: StudentDashboardView }
+        ]
     },
     {
         path: '/about',
