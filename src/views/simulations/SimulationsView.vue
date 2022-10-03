@@ -32,32 +32,40 @@
   <section class="p-20">
     <div class="mt-10 grid grid-cols-2 grid-rows-2 gap-x-4 gap-y-32">
       <div>
-        <Card />
+        <animated-component animation-type="slide-left">
+          <Card id=card_img model_name="climate" />
+        </animated-component>
       </div>
       <div class="flex max-w-md items-center rounded-lg shadow-lg p-6">
-        <span>
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-          been the industry's standard dummy text ever since the 1500s, when an unknown printer took
-          a galley of type and scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting, remaining essentially
-          unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-          Lorem Ipsum passages, and more recently with desktop publishing software like Aldus
-          PageMaker including versions of Lorem Ipsum.
-        </span>
+        <animated-component animation-type="fade">
+          <span>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+            has been the industry's standard dummy text ever since the 1500s, when an unknown
+            printer took a galley of type and scrambled it to make a type specimen book. It has
+            survived not only five centuries, but also the leap into electronic typesetting,
+            remaining essentially unchanged. It was popularised in the 1960s with the release of
+            Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
+            publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+          </span>
+        </animated-component>
       </div>
       <div class="flex max-w-lg justify-self-end items-center rounded-lg shadow-lg p-6">
-        <span>
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-          been the industry's standard dummy text ever since the 1500s, when an unknown printer took
-          a galley of type and scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting, remaining essentially
-          unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-          Lorem Ipsum passages, and more recently with desktop publishing software like Aldus
-          PageMaker including versions of Lorem Ipsum.
-        </span>
+        <animated-component animation-type="zoom">
+          <span>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+            has been the industry's standard dummy text ever since the 1500s, when an unknown
+            printer took a galley of type and scrambled it to make a type specimen book. It has
+            survived not only five centuries, but also the leap into electronic typesetting,
+            remaining essentially unchanged. It was popularised in the 1960s with the release of
+            Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
+            publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+          </span>
+        </animated-component>
       </div>
       <div>
-        <Card />
+        <animated-component animation-type="slide-right">
+          <Card id=card_img model_name="beer_game" class="" />
+        </animated-component>
       </div>
     </div>
   </section>
@@ -65,4 +73,55 @@
 
 <script setup>
 import Card from '@/components/Card.vue';
+import AnimatedComponent from '@/components/AnimatedComponent.vue';
+import { ref } from 'vue';
+const visible = ref(true);
 </script>
+
+<style scoped>
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 2s ease;
+}
+
+.slide-enter-from {
+  transform: translate(-300px);
+}
+.slide-enter-to {
+  transform: translate(0);
+}
+.slide-enter-active {
+  transition: transform 2s ease;
+}
+
+.topic-left-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.topic-right-enter {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+.topic-left-enter-active,
+.topic-right-enter-active {
+  transition: all 0.75s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+#card_img:hover {
+background-color: rgba(0, 0, 0, 0.4);
+  background-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8),
+    rgba(0, 0, 0, 0) 60%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  
+
+}
+</style>

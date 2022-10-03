@@ -15,43 +15,7 @@
           <polygon points="50,0 100,0 50,100 0,100" />
         </svg>
         <Popover>
-          <div class="relative px-4 pt-6 sm:px-6 lg:px-8">
-            <!-- <nav
-              class="relative flex items-center justify-between sm:h-10 lg:justify-start"
-              aria-label="Global"
-            >
-              <div class="flex flex-shrink-0 flex-grow items-center lg:flex-grow-0">
-                <div class="flex w-full items-center justify-between md:w-auto">
-                  <a href="#">
-                    <span class="sr-only">Your Company</span>
-                    <img
-                      alt="Your Company"
-                      class="h-8 w-auto sm:h-10"
-                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                    />
-                  </a>
-                  <div class="-mr-2 flex items-center md:hidden">
-                    <PopoverButton
-                      class="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                    >
-                      <span class="sr-only">Open main menu</span>
-                      <Bars3Icon class="h-6 w-6" aria-hidden="true" />
-                    </PopoverButton>
-                  </div>
-                </div>
-              </div>
-              <div class="hidden md:ml-10 md:block md:space-x-8 md:pr-4">
-                <a
-                  v-for="item in navigation"
-                  :key="item.name"
-                  :href="item.href"
-                  class="font-medium text-gray-500 hover:text-gray-900"
-                  >{{ item.name }}</a
-                >
-                <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">Log in</a>
-              </div>
-            </nav> -->
-          </div>
+          <div class="relative px-4 pt-6 sm:px-6 lg:px-8"></div>
 
           <transition
             enter-active-class="duration-150 ease-out"
@@ -92,7 +56,6 @@
                     :href="item.href"
                     class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                     >{{ item.name }}</a
-
                   >
                 </div>
                 <a
@@ -153,7 +116,7 @@
 <script setup>
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue';
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
-import NavWind from '@/components/NavWind.vue'
+import NavWind from '@/components/NavWind.vue';
 const navigation = [
   { name: 'Product', href: 'tutor-dashboard' },
   { name: 'Features', href: '#' },

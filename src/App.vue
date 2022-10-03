@@ -14,6 +14,8 @@ import { useStore } from './store/SimStore';
 import NavWind from '@/components/NavWind.vue'
 const store = useStore();
 store.init(); //init of the state
+
+
 </script>
 
 <style scoped></style>

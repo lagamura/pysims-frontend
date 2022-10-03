@@ -1,5 +1,5 @@
 <template>
-  <Disclosure as="nav" class="bg-gray-800 " v-slot="{ open }">
+  <Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 items-center justify-between">
         <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -31,14 +31,18 @@
                 v-for="item in navigation"
                 :key="item.name"
                 :href="item.href"
-                :class="[
-                  item.current
-                    ? 'bg-gray-900 text-white'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                  'px-3 py-2 rounded-md text-sm font-medium'
-                ]"
                 :aria-current="item.current ? 'page' : undefined"
-                >{{ item.name }}</a
+              >
+                <router-link
+                  :class="[
+                    item.current
+                      ? 'bg-gray-900 text-white'
+                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                    'px-3 py-2 rounded-md text-sm font-medium'
+                  ]"
+                  :to="item.to"
+                  >{{ item.name }}</router-link
+                ></a
               >
             </div>
           </div>
@@ -46,7 +50,7 @@
         <div
           class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0"
         >
-        <!-- Night Toggle -->
+          <!-- Night Toggle -->
           <button
             type="button"
             id="headlessui-listbox-button-4"
@@ -188,9 +192,10 @@ import {
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 
 const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false }
+  { name: 'Dashboard', to: '#', current: true },
+  { name: 'Team', to: '#', current: false },
+  { name: 'Projects', to: '#', current: false },
+  { name: 'Calendar', to: '#', current: false },
+  { name: 'Student Dashboard', to: '/simulations/climate', current: false }
 ];
 </script>
