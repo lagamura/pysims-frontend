@@ -47,10 +47,12 @@ async function getModelDoc() {
   model_doc.value = Object.values(data.value)
   store.simulation.components = Object.values(data.value)
   //console.log(JSON.stringify(store.simulation.components))
-  store.simulation.components.forEach((component) => {
-    component.student_control = false
-    component._value = null
-  })
+  
+  // This is on comments because it will change every time vars exposed!
+  // store.simulation.components.forEach((component) => {
+  //   component.student_control = false
+  //   component._value = null
+  // })
 
   onFetchResponse((response) => {
     console.log(`data Fetched! ${response.status}`)

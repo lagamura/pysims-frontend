@@ -1,5 +1,5 @@
 <template>
-  <el-container class="bg-black block p-10 text-white">
+  <el-container id="container" class="bg-black block p-10 text-white">
     <el-row :gutter="40">
       <el-col :span="8">
         <h2 class="text-cyan-300 text-xl mb-5">Model: {{ simulation.model_name }}</h2>
@@ -62,3 +62,9 @@ import TutorSelection from '../components/TutorSelection.vue';
 const store = useStore();
 const { user_simulations, simulation, cur_simul } = storeToRefs(store);
 </script>
+
+<style scoped>
+  #container {
+    display:block;
+  }
+</style>

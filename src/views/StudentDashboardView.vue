@@ -1,5 +1,5 @@
 <template :key="simulation.simulation_name">
-  <el-container class="bg-black block p-10 text-white">
+  <el-container id="container" class="bg-black block p-10 text-white">
     <el-row :gutter="20">
       <el-col :span="18">
         <section v-auto-animate flex justify-between style="width: 90%">
@@ -148,21 +148,33 @@ import { watch, ref, watchEffect } from 'vue';
 import { useStore } from '../store/SimStore';
 import { computed } from '@vue/reactivity';
 import { ElMessage } from 'element-plus';
-import { useMyFetch } from '@/composables/getjson';
+import { useMyFetch, formatDate } from '@/composables/getjson';
 import { resetdashboard } from '@/store/EventsStore';
+import { useRoute } from 'vue-router';
+
+//const router = useRouter();
+const route = useRoute();
 
 const store = useStore();
 const { simulation } = storeToRefs(store);
 const choosenChart = ref('');
 const button_flag = ref(false);
 const cur_step = ref(0);
+const FINAL_TIME = ref(0);
+const TIME_STEP = ref(0);
 
-const FINAL_TIME = simulation.value.components.filter(
-  (component) => component['Real Name'] == 'FINAL TIME'
-)[0]._value;
-const TIME_STEP = simulation.value.components.filter(
-  (component) => component['Real Name'] == 'TIME STEP'
-)[0]._value;
+console.log(`route.params.simulation is: ${route.params.simulation}`);
+simulation.value.model_name = route.params.simulation;
+getModelDoc().then(() => get_components_values())
+.then(() => {
+  FINAL_TIME.value = simulation.value.components.filter(
+    (component) => component['Real Name'] == 'FINAL TIME'
+  )[0]._value;
+  TIME_STEP.value = simulation.value.components.filter(
+    (component) => component['Real Name'] == 'TIME STEP'
+  )[0]._value;
+  console.log("Components fetched")
+});
 
 let url_endpoint = '/add_new_simulation/?step_run=false';
 
@@ -224,7 +236,7 @@ async function PostSimulation(event, step_run) {
         console.log(`Updating start_time value ${simulation.value.start_time}`);
         button_flag.value = false;
         if (!step_run) {
-          cur_step.value = FINAL_TIME / TIME_STEP;
+          cur_step.value = FINAL_TIME.value  / TIME_STEP.value;
           console.log(cur_step.value);
         }
       }
@@ -251,7 +263,7 @@ async function PostSimulation(event, step_run) {
 }
 
 const bar_percentage = computed(() =>
-  Math.round((100 / (FINAL_TIME / TIME_STEP)) * cur_step.value)
+  Math.round((100 / (FINAL_TIME.value / TIME_STEP.value)) * cur_step.value)
 );
 
 function getCsvResults() {
@@ -299,13 +311,13 @@ async function saveResults() {
   });
 }
 
-watchEffect(() => {
-  if (resetdashboard) {
-    reset_time();
-    resetdashboard.value.set_reset(false);
-    console.log('reset_completed');
-  }
-});
+// watchEffect(() => {
+//   if (resetdashboard) {
+//     reset_time();
+//     resetdashboard.value.set_reset(false);
+//     console.log('reset_completed');
+//   }
+// });
 
 if (resetdashboard.value.reset) {
   console.log('reset-activated from store');
@@ -319,22 +331,55 @@ async function swipeDb() {
   }
 }
 
-function padTo2Digits(num) {
-  return num.toString().padStart(2, '0');
+async function getModelDoc() {
+  const url_endpoint = '/get_model_docs/' + simulation.value.model_name;
+  const { data, onFetchResponse, onFetchError } = await useMyFetch(url_endpoint, {
+    refetch: true
+  })
+    .get()
+    .json();
+  //console.log(data.value)
+  simulation.value.components = Object.values(data.value);
+  //console.log(JSON.stringify(store.simulation.components))
+  simulation.value.components.forEach((component) => {
+    component.student_control = false;
+    component._value = null;
+  });
+
+  onFetchResponse((response) => {
+    console.log(`data Fetched! ${response.status}`);
+  });
+
+  onFetchError((error) => {
+    console.log(error.message);
+    console.error(error.message);
+    ElMessage.error({
+      message: 'Problem connecting to API',
+      type: 'error'
+    });
+  });
 }
 
-function formatDate(date) {
-  return (
-    [date.getFullYear(), padTo2Digits(date.getMonth() + 1), padTo2Digits(date.getDate())].join(
-      '-'
-    ) +
-    ' ' +
-    [
-      padTo2Digits(date.getHours()),
-      padTo2Digits(date.getMinutes()),
-      padTo2Digits(date.getSeconds())
-    ].join(':')
-  );
+async function get_components_values() {
+  const url_endpoint = '/get_components_values/' + simulation.value.model_name;
+  const { data, onFetchResponse, onFetchError } = await useMyFetch(url_endpoint, {}).get().json();
+  console.log('data are', data);
+  simulation.value.components.forEach((component) => {
+    component._value = data.value[component['Real Name']]; // be carefull there is a glitch in .Real_name property, we cannot access it by simulation.Real_Name
+  });
+  simulation.value.start_time = 0;
+  simulation.value.end_time = simulation.value.components.filter(
+    (component) => component['Real Name'] == 'TIME STEP'
+  )[0]._value;
+
+  onFetchError((error) => {
+    console.log(error.message);
+    console.error(error.message);
+    ElMessage.error({
+      message: 'Problem connecting to API',
+      type: 'error'
+    });
+  });
 }
 </script>
 
@@ -416,5 +461,9 @@ function formatDate(date) {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+}
+
+#container {
+  display: block;
 }
 </style>

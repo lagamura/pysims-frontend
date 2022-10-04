@@ -4,11 +4,13 @@
   </section>
   <section>
     <Features />
+    <!-- this component overflows -->
   </section>
   <section>
     <Team />
   </section>
   <FooterComp />
+    <!-- this component overflows -->
 </template>
 
 <script setup>

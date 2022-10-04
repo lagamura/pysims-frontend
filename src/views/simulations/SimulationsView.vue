@@ -33,7 +33,7 @@
     <div class="mt-10 grid grid-cols-2 grid-rows-2 gap-x-4 gap-y-32">
       <div>
         <animated-component animation-type="slide-left">
-          <Card id=card_img model_name="climate" />
+          <Card id=card_img model_name="Climate" />
         </animated-component>
       </div>
       <div class="flex max-w-md items-center rounded-lg shadow-lg p-6">
@@ -76,6 +76,9 @@ import Card from '@/components/Card.vue';
 import AnimatedComponent from '@/components/AnimatedComponent.vue';
 import { ref } from 'vue';
 const visible = ref(true);
+
+
+
 </script>
 
 <style scoped>
