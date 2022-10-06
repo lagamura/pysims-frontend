@@ -12,27 +12,32 @@
       />
     </div>
   </div>
-  <button class="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" @click="updateVarsExposed()"> Update Vars Exposed</button>
+  <el-button @click="updateVarsExposed()" class="mt-4"> Update Vars Exposed</el-button>
 </template>
 
 <script setup>
 import { Check, Close } from '@element-plus/icons-vue';
 import { useStore } from '../store/SimStore';
 import { storeToRefs } from 'pinia';
+import { useMyFetch } from '@/composables';
 
 const store = useStore();
 const { simulation } = storeToRefs(store); //access params from store as ref
-const ExposedVars = new Array();
 
 async function updateVarsExposed() {
+  let ExposedVars = new Array();
   simulation.value.components.forEach((component) => {
     if (component.student_control == true) {
-      ExposedVars.append(component.Py_Name);
+      console.log(component['Py Name']);
+      console.log(component['Real Name']);
+      ExposedVars.push(component['Real Name']);
     }
   });
+  ExposedVars = Object.assign({}, ExposedVars);
+  console.log(ExposedVars);
 
-  await useMyFetch(`/${simulation.value.model_name}/update_vars_exposed`, {}).put(ExposedVars);
+  await useMyFetch(`update_vars_exposed/${simulation.value.model_name}`, {}).put(
+    (ExposedVars)
+  );
 }
 </script>
-
-<style></style>

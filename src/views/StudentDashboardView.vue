@@ -165,16 +165,18 @@ const TIME_STEP = ref(0);
 
 console.log(`route.params.simulation is: ${route.params.simulation}`);
 simulation.value.model_name = route.params.simulation;
-getModelDoc().then(() => get_components_values())
-.then(() => {
-  FINAL_TIME.value = simulation.value.components.filter(
-    (component) => component['Real Name'] == 'FINAL TIME'
-  )[0]._value;
-  TIME_STEP.value = simulation.value.components.filter(
-    (component) => component['Real Name'] == 'TIME STEP'
-  )[0]._value;
-  console.log("Components fetched")
-});
+getModelDoc()
+  .then(() => get_components_values())
+  .then(() => getVarsExposed())
+  .then(() => {
+    FINAL_TIME.value = simulation.value.components.filter(
+      (component) => component['Real Name'] == 'FINAL TIME'
+    )[0]._value;
+    TIME_STEP.value = simulation.value.components.filter(
+      (component) => component['Real Name'] == 'TIME STEP'
+    )[0]._value;
+    console.log('Components fetched');
+  });
 
 let url_endpoint = '/add_new_simulation/?step_run=false';
 
@@ -236,7 +238,7 @@ async function PostSimulation(event, step_run) {
         console.log(`Updating start_time value ${simulation.value.start_time}`);
         button_flag.value = false;
         if (!step_run) {
-          cur_step.value = FINAL_TIME.value  / TIME_STEP.value;
+          cur_step.value = FINAL_TIME.value / TIME_STEP.value;
           console.log(cur_step.value);
         }
       }
@@ -363,7 +365,7 @@ async function getModelDoc() {
 async function get_components_values() {
   const url_endpoint = '/get_components_values/' + simulation.value.model_name;
   const { data, onFetchResponse, onFetchError } = await useMyFetch(url_endpoint, {}).get().json();
-  console.log('data are', data);
+  // console.log('data are', data);
   simulation.value.components.forEach((component) => {
     component._value = data.value[component['Real Name']]; // be carefull there is a glitch in .Real_name property, we cannot access it by simulation.Real_Name
   });
@@ -378,6 +380,23 @@ async function get_components_values() {
     ElMessage.error({
       message: 'Problem connecting to API',
       type: 'error'
+    });
+  });
+}
+
+async function getVarsExposed() {
+  const { data } = await useMyFetch(`/get_vars_exposed/${simulation.value.model_name}`, {})
+    .get()
+    .json();
+  console.log(data);
+  const vars_exposed = data.value;
+  console.log(vars_exposed);
+  Object.values(vars_exposed).forEach((var_exposed) => {
+    console.log(var_exposed);
+    simulation.value.components.forEach((component) => {
+      if (component['Real Name'] == var_exposed) {
+        component.student_control = true;
+      }
     });
   });
 }
