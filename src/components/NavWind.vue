@@ -194,7 +194,7 @@ import {
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 
 const navigation = [
-  { name: 'Dashboard', to: '#', current: true },
+  { name: 'Simulations', to: '/simulations', current: true },
   { name: 'Team', to: '#', current: false },
   { name: 'Student Dashboard', to: '/simulations/climate', current: false },
   { name: 'Tutor Dashboard', to: '/tutor-dashboard', current: false }

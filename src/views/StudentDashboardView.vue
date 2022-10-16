@@ -1,9 +1,9 @@
 <template :key="simulation.simulation_name">
-  <el-container id="container" class="bg-black block p-10 text-white">
-    <el-row :gutter="20">
+  <el-container id="container" class="min-h-screen bg-black block p-10 text-white">
+    <el-row :gutter="20" class="GraphsContainer">
       <el-col :span="18">
-        <section v-auto-animate flex justify-between style="width: 90%">
-          <h2>Model: {{ store.simulation.model_name }}</h2>
+        <section v-auto-animate class="flex justify-between" style="width: 90%">
+          <h2 class="text-cyan-300 text-xl">Model: {{ store.simulation.model_name }}</h2>
           <div v-if="bar_percentage > 99" class="inline-flex justify-center gap-4">
             <div class="inline-flex justify-center gap-4 pl-20">
               <el-input
@@ -20,8 +20,8 @@
         <!--Populate Chart-->
         <section v-auto-animate v-if="choosenChart">
           <el-divider />
-          <el-row class="chartCard">
-            <div class="chartBox" style="width: 500px">
+          <el-row class="chartCard ">
+            <div class="chartBox">
               <ChartSimul
                 v-if="simulation.results"
                 :chartid="choosenChart"
@@ -33,22 +33,20 @@
         </section>
         <el-divider />
 
-        <el-row justify-center>
-          <div v-auto-animate v-for="(Obj, index) in simulation.results" key:index>
+        <el-row class="justify-center items-center ">
+          <div class="grow basis-1/2" v-for="(Obj, index) in simulation.results" key:index>
             <div v-if="!CONST_VARS.includes(index)" class="chart-container">
-              <el-col>
-                <div class="chartCard">
-                  <div class="chartBox">
-                    <ChartSimul
-                      v-if="simulation.results"
-                      :chartid="index"
-                      :sim-results="simulation.results"
-                      :key="simulation.results"
-                      @click="Populate(index.toString())"
-                    />
-                  </div>
+              <div class="chartCard">
+                <div class="chartBox">
+                  <ChartSimul
+                    v-if="simulation.results"
+                    :chartid="index"
+                    :sim-results="simulation.results"
+                    :key="simulation.results"
+                    @click="Populate(index.toString())"
+                  />
                 </div>
-              </el-col>
+              </div>
             </div>
           </div>
         </el-row>
@@ -176,6 +174,7 @@ getModelDoc()
       (component) => component['Real Name'] == 'TIME STEP'
     )[0]._value;
     console.log('Components fetched');
+    simulation.value.params = {};
   });
 
 let url_endpoint = '/add_new_simulation/?step_run=false';
@@ -211,7 +210,8 @@ async function PostSimulation(event, step_run) {
 
     simulation.value.components.forEach((component) => {
       if (component._value && component.student_control) {
-        store.simulation.params[component['Real Name']] = component._value; // here we access directly the object from store because we add properties in params - see more for references
+        console.log(component['Real Name']);
+        simulation.value.params[component['Real Name']] = component._value; // here we access directly the object from store because we add properties in params - see more for references
       }
     });
 
@@ -446,13 +446,23 @@ async function getVarsExposed() {
   font-family: sans-serif;
 }
 .chartCard {
-  /* height: calc(100vh - 40px); */
+  /* height: calc(100vh - 40px);  */
   flex: 1 0 25%;
   align-items: center;
-  justify-content: center;
+  justify-content: center; 
 }
 .chartBox {
-  width: 400px;
+  width:500px;
+  padding: 20px;
+  border-radius: 20px;
+  border: solid 3px var(--el-color-primary-light-3);
+  /* flex: 1 0 ; */
+  background: white;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.chartBoxPopulated {
   padding: 20px;
   border-radius: 20px;
   border: solid 3px var(--el-color-primary-light-3);
@@ -484,5 +494,9 @@ async function getVarsExposed() {
 
 #container {
   display: block;
+}
+
+.GraphsContainer {
+  min-height: 90%;
 }
 </style>

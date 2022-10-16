@@ -20,7 +20,8 @@ export const useStore = defineStore({
       simulation: {} as Simulation, //hardcoded
       cur_simul: -1,
       dropdown_trigger: false,
-      classrooms: []
+      classrooms: [],
+      
     } as RootState), // Warning - this should be changed, there is a discussion on use "as RootState" here: https://dev.to/carlomigueldy/getting-started-with-vue-3-pinia-store-typescript-by-building-a-grocery-list-app-19km
 
   actions: {

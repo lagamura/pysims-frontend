@@ -14,7 +14,7 @@
         </header>
         <!-- end section header -->
         <!-- row -->
-        <div class="flex flex-wrap flex-row -mx-4 justify-center">
+        <div class="flex flex-wrap flex-row -mx-4 justify-center dark:text-white">
             <div class="flex-shrink max-w-full px-4 w-2/3 sm:w-1/2 md:w-5/12 lg:w-1/4 xl:px-6">
                 <div class="relative overflow-hidden bg-white dark:bg-gray-800 mb-12 hover-grayscale-0 wow fadeInUp" data-wow-duration="1s" style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
                     <!-- team block -->
