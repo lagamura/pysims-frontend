@@ -29,3 +29,5 @@ coverage
 heat_to_loss.json
 response.json
 src/components/test.json
+
+/pysimsapp

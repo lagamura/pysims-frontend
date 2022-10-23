@@ -20,7 +20,7 @@
         <!--Populate Chart-->
         <section v-auto-animate v-if="choosenChart">
           <el-divider />
-          <el-row class="chartCard ">
+          <el-row class="chartCard">
             <div class="chartBox">
               <ChartSimul
                 v-if="simulation.results"
@@ -33,7 +33,7 @@
         </section>
         <el-divider />
 
-        <el-row class="justify-center items-center ">
+        <el-row class="justify-center items-center">
           <div class="grow basis-1/2" v-for="(Obj, index) in simulation.results" key:index>
             <div v-if="!CONST_VARS.includes(index)" class="chart-container">
               <div class="chartCard">
@@ -49,8 +49,19 @@
               </div>
             </div>
           </div>
+          <el-divider />
+
+          <!-- <div class="justify-center items-center">
+            <div class="grow basis-1/2">
+              <div class="chartCard">
+                <div class="chartBox">
+                  <RadarChart />
+                </div>
+              </div>
+            </div>
+          </div> -->
         </el-row>
-        <el-divider />
+
         <!-- <el-button @click="swipeDb()">Swipe Database</el-button> -->
       </el-col>
       <!-- This is the right side-section -->
@@ -139,6 +150,7 @@
 
 <script setup>
 import ChartSimul from '@/components/ChartSimul.vue';
+import RadarChart from '@/components/RadarChart.vue';
 import PopOver from '@/components/PopOver.vue';
 
 import { storeToRefs } from 'pinia';
@@ -449,10 +461,10 @@ async function getVarsExposed() {
   /* height: calc(100vh - 40px);  */
   flex: 1 0 25%;
   align-items: center;
-  justify-content: center; 
+  justify-content: center;
 }
 .chartBox {
-  width:500px;
+  width: 500px;
   padding: 20px;
   border-radius: 20px;
   border: solid 3px var(--el-color-primary-light-3);
