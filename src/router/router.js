@@ -15,6 +15,7 @@ import usersRoutes from './users.routes';
 import { useAuthStore, useAlertStore } from '@/store';
 import SimulationsView from '@/views/simulations/SimulationsView.vue'
 import SimsLayout from '@/views/simulations/SimsLayout.vue'
+import UserProfile from '@/views/UserProfile.vue'
 
 const routes = [
     {
@@ -80,6 +81,12 @@ const routes = [
         path: '/myhomepage',
         name: 'HomeWind',
         component: HomeWind,
+    },
+
+    {
+        path: '/profile',
+        name: 'UserProfile',
+        component: UserProfile,
     },
 
     { ...accountRoutes },

@@ -1,9 +1,9 @@
 <template :key="simulation.simulation_name">
-  <el-container id="container" class="min-h-screen bg-black block p-10 text-white">
+  <el-container id="container" class="min-h-screen block p-10">
     <el-row :gutter="20" class="GraphsContainer">
       <el-col :span="18">
         <section v-auto-animate class="flex justify-between" style="width: 90%">
-          <h2 class="text-cyan-300 text-xl">Model: {{ store.simulation.model_name }}</h2>
+          <h2 class="dark:text-cyan-300 text-xl">Model: {{ store.simulation.model_name }}</h2>
           <div v-if="bar_percentage > 99" class="inline-flex justify-center gap-4">
             <div class="inline-flex justify-center gap-4 pl-20">
               <el-input
