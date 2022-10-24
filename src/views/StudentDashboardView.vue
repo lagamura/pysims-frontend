@@ -276,9 +276,11 @@ async function PostSimulation(event, step_run) {
   }
 }
 
-const bar_percentage = computed(() =>
-  Math.round((100 / (FINAL_TIME.value / TIME_STEP.value)) * cur_step.value)
-);
+const bar_percentage = computed(() => {
+  if (!(FINAL_TIME.value / TIME_STEP.value)) return 0;
+
+  return Math.round((100 / (FINAL_TIME.value / TIME_STEP.value)) * cur_step.value);
+});
 
 function getCsvResults() {
   //const { data, onFetchResponse, onFetchError } = await useFetch(url).blob()
