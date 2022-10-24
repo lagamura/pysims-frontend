@@ -23,7 +23,7 @@ export async function useInitState() {
   return data
 }
 
-
+/*
 function URL_() {
   if (import.meta.env.DEV) {
     return 'http://localhost:8000'
@@ -31,11 +31,12 @@ function URL_() {
     return 'https://pysims-github.herokuapp.com'
   }
 }
+*/
 
-export const URL_BASIS: string = URL_()
+// export const URL_BASIS: string = URL_()
 
 export const useMyFetch = createFetch({
-  baseUrl: URL_BASIS,
+  baseUrl: '/api',
   options: {
     // async beforeFetch({ options }) {
     //   const myToken = await getMyToken()
