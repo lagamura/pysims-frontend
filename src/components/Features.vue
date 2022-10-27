@@ -32,7 +32,7 @@ const features = [
   {
     name: 'Run System Dynamics Models Online',
     description:
-      'Using PySD we are offering simulaitons on the go',
+      'Using PySD we are offering simulations on the go',
     icon: GlobeAltIcon,
   },
   {

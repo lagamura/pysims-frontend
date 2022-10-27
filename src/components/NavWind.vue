@@ -154,6 +154,7 @@
                 <MenuItem v-slot="{ active }">
                   <a
                     href="#"
+                    @click="logout()"
                     :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
                     >Sign out</a
                   >
@@ -198,7 +199,7 @@ import {
 } from '@headlessui/vue';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 import { toggleDark } from '../composables/dark';
-
+import { useAuthStore } from '@/store';
 
 const navigation = [
   { name: 'Simulations', to: '/simulations', current: true },
@@ -206,4 +207,6 @@ const navigation = [
   { name: 'Student Dashboard', to: '/simulations/climate', current: false },
   { name: 'Tutor Dashboard', to: '/tutor-dashboard', current: false }
 ];
+
+const { logout } = useAuthStore();
 </script>

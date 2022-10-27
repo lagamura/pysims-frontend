@@ -6,8 +6,14 @@
     <el-form-item label="Firstname" prop="firstname">
       <el-input v-model="form.firstname" />
     </el-form-item>
+    <el-form-item label="Username" prop="username">
+      <el-input v-model="form.username" />
+    </el-form-item>
     <el-form-item label="Student ID" prop="id">
       <el-input-number v-model="form.id" :controls="false" />
+    </el-form-item>
+    <el-form-item label="password" prop="password">
+      <el-input v-model="form.password" type="password" placeholder="type a password" show-password />
     </el-form-item>
     <el-form-item label="E-mail">
       <el-input v-model="form.email" />
@@ -30,29 +36,44 @@
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" @click="submitForm(formRef)"> Add Student </el-button>
+      <el-button type="primary" @click="submitForm(formRef)"> Register </el-button>
       <el-button @click="resetForm(formRef)">Reset</el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onBeforeMount } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import { useMyFetch } from '@/composables/getjson';
 import { ElMessage } from 'element-plus';
 import { useStore } from '../store/SimStore';
 import { storeToRefs } from 'pinia';
+import { router } from '@/router';
 
 const store = useStore();
 const { classrooms } = storeToRefs(store);
+
+async function fetchClasses() {
+  const { data, onFetchError } = await useMyFetch('get_classrooms', {}).get().json();
+
+  console.log(data.value);
+  classrooms.value = data.value;
+  console.log(classrooms);
+}
+
+onBeforeMount(() => {
+  fetchClasses();
+});
 
 // do not use same name with ref
 const formRef = ref<FormInstance>();
 const form = reactive<formdata>({
   firstname: '',
   surname: '',
+  username: '',
   id: 0,
+  password: '',
   email: '',
   classroom_id: '',
   department: ''
@@ -61,7 +82,9 @@ const form = reactive<formdata>({
 interface formdata {
   surname: string;
   firstname: string;
+  username: string;
   id: number;
+  password: string;
   email: string;
   classroom_id: string;
   department: string;
@@ -80,8 +103,10 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      console.log('submit!');
-      postStudent();
+      console.log('user_validated!');
+      postStudent().then(() => {
+        router.push('/')
+      });
     } else {
       console.log('error submit!', fields);
     }

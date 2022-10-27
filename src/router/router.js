@@ -26,7 +26,16 @@ const routes = [
     {
         path: '/tutor-dashboard',
         name: 'TutorDashboard',
-        component: TutorDashboardView
+        component: TutorDashboardView,
+        // beforeEnter: (to, from) => {
+        //     if (!authStore.user_details.isAdmin()) {
+        //         alert("cannot access this page - is only for admin users")
+        //         return false
+        //     }
+        //     else {
+        //         return true
+        //     }
+        // }
     },
     {
         path: '/history',
