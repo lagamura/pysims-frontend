@@ -20,6 +20,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 
 /* This block is for entering - hiddening elements in dom. It was used on vue-animation*/
+// link: https://michael-verschoof.medium.com/create-an-animated-vue-3-component-when-scrolling-into-view-f8e793e221c8
 import type { Directive, DirectiveBinding, VNode } from 'vue';
 
 export const appear: Directive = {
@@ -31,9 +32,9 @@ export const appear: Directive = {
       return;
     }
     if (!binding.value) {
-      node.transition.leave(element, () => {
-        element.style.visibility = 'hidden';
-      });
+      // node.transition.leave(element, () => {
+      //   element.style.visibility = 'hidden';
+      // }); // changed that for better visual effect
       return;
     }
     node.transition.beforeEnter(element);
