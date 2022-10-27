@@ -29,23 +29,25 @@
           </div>
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
-              <a
-                v-for="item in navigation"
-                :key="item.name"
-                :href="item.href"
-                :aria-current="item.current ? 'page' : undefined"
-              >
-                <router-link
-                  :class="[
-                    item.current
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'px-3 py-2 rounded-md text-sm font-medium'
-                  ]"
-                  :to="item.to"
-                  >{{ item.name }}</router-link
-                ></a
-              >
+              <div v-for="item in navigation">
+                <a
+                  v-if="item.open || user_details.access_level == 'admin_access' "
+                  :key="item.name"
+                  :href="item.href"
+                  :aria-current="item.current ? 'page' : undefined"
+                >
+                  <router-link
+                    :class="[
+                      item.current
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      'px-3 py-2 rounded-md text-sm font-medium'
+                    ]"
+                    :to="item.to"
+                    >{{ item.name }}</router-link
+                  ></a
+                >
+              </div>
             </div>
           </div>
         </div>
@@ -201,11 +203,13 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 import { toggleDark } from '../composables/dark';
 import { useAuthStore } from '@/store';
 
+const { user_details } = useAuthStore()
+
 const navigation = [
-  { name: 'Simulations', to: '/simulations', current: true },
-  { name: 'Team', to: '#', current: false },
-  { name: 'Student Dashboard', to: '/simulations/climate', current: false },
-  { name: 'Tutor Dashboard', to: '/tutor-dashboard', current: false }
+  { name: 'Simulations', to: '/simulations', current: false, open: true },
+  { name: 'Team', to: '#', current: false, open: true },
+  { name: 'Student Dashboard', to: '/simulations/climate', current: false, open: true },
+  { name: 'Tutor Dashboard', to: '/tutor-dashboard', current: false, open: false }
 ];
 
 const { logout } = useAuthStore();

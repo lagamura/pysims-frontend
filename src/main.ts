@@ -1,7 +1,8 @@
 import router from './router/router';
-import store from '@/store/store.js';
+//import from '@/store/store.js';
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue';
 import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 import App from './App.vue';
 import '@/style.css';
 
@@ -12,11 +13,13 @@ import './styles/index.scss';
 
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 
+const pinia = createPinia();
 const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
 }
 
+/* This block is for entering - hiddening elements in dom. It was used on vue-animation*/
 import type { Directive, DirectiveBinding, VNode } from 'vue';
 
 export const appear: Directive = {
@@ -38,8 +41,9 @@ export const appear: Directive = {
     node.transition.enter(element);
   }
 };
+/* end block */
 
-app.use(store);
+app.use(pinia);
 app.use(autoAnimatePlugin);
 app.use(ElementPlus);
 app.use(router).directive('appear', appear);

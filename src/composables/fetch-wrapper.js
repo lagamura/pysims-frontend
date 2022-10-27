@@ -35,7 +35,7 @@ function authHeader(url) {
     if (isLoggedIn && isApiUrl) {
         return { Authorization: `Bearer ${user.access_token}` };
     } else {
-        alert("Not fixed yet - error token")
+        //alert("Not fixed yet - error token")
         return {};
     }
 }

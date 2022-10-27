@@ -27,15 +27,17 @@ const routes = [
         path: '/tutor-dashboard',
         name: 'TutorDashboard',
         component: TutorDashboardView,
-        // beforeEnter: (to, from) => {
-        //     if (!authStore.user_details.isAdmin()) {
-        //         alert("cannot access this page - is only for admin users")
-        //         return false
-        //     }
-        //     else {
-        //         return true
-        //     }
-        // }
+        beforeEnter: (to, from) => {
+            console.log('beforeEnter TutorDashboard')
+            const authStore = useAuthStore(pinia);
+            if (!authStore.isAdmin()) {
+                alert("cannot access this page - is only for admin users")
+                return false
+            }
+            else {
+                return true
+            }
+        }
     },
     {
         path: '/history',
